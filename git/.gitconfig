@@ -1,0 +1,17 @@
+[user]
+	name  = Sebastien Varrette
+	email = Sebastien.Varrette@uni.lu
+        signingkey = 0xDD01D5C0
+[alias]
+  	up = pull origin
+	pu = push origin
+  	st = status
+  	di = diff
+  	ci = commit
+	br = branch
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[core]
+	autocrlf = input
