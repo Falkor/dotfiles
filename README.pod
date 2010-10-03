@@ -1,0 +1,20 @@
+=head1 Sebastien Varrette Dot Files
+
+These are my configuration files for bash, git, vim etc. so as to set up a
+system the way I like it. 
+
+
+=head2 Installation
+
+   git clone git://github.com/Falkor/dotfiles ~/.dotfiles
+   cd 
+   ln -s .dotfiles/bash/.bashrc   .
+   ln -s .dotfiles/vim/.vimrc     .
+   ln -s .dotfiles/git/.gitconfig .
+
+One day I will take some time to do an installation script ;)
+
+=head2 Environment
+
+I am running primarily on Mac OS X, otherwise on Debian so these config files
+will likely work on your system, eventually with a little tweaking. 
