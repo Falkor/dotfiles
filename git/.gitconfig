@@ -38,3 +38,5 @@
 	branch = auto
 [core]
 	autocrlf = input
+        pager = less -FRSX
+
