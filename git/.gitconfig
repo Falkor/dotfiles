@@ -26,16 +26,33 @@
   	df = diff
   	ci = commit
 	br = branch
-        w = whatchanged --abbrev-commit
+        w  = whatchanged --abbrev-commit
         ls = ls-files
         gr = log --graph --oneline --decorate
         # From http://progit.org/book/ch2-11.html
         unstage = reset HEAD --
         last = log -1 HEAD
 [color]
-	diff = auto
+	diff   = auto
 	status = auto
 	branch = auto
+
+[color "branch"]
+        current = yellow reverse
+        local   = green
+        remote  = red
+
+[color "diff"]
+         meta = yellow bold
+#         frag = magenta bold
+#         Old = red bold
+#         new = green bold
+
+ [color "status"]
+         added =  magenta bold
+         changed = green
+         untracked = red
+
 [core]
 	autocrlf = input
         pager = less -FRSX
