@@ -86,7 +86,6 @@ fi
 test -n "$LS_COMMON" &&
 alias ls="command ls $LS_COMMON"
 
-
 # these use the ls aliases above
 alias ll="ls -l"
 alias la="ll -a"
@@ -96,8 +95,8 @@ alias l.="ls -d .*"
 #  ALIASES
 # ----------------------------------------------------------------------
 # Mandatory aliases to confirm destructive operations
-alias cp='cp -i'
-alias mv='mv -i'
+alias cp='cp -iv'
+alias mv='mv -iv'
 alias rm='rm -i'
 
 alias ..='cd ..'
