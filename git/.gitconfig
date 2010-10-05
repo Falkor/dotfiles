@@ -13,6 +13,8 @@
 #          |___/                            |___/ 
 #
 ################################################################################
+# Resources:
+#  - http://stackoverflow.com/questions/267761/what-does-your-gitconfig-contain
 [user]
 	name  = Sebastien Varrette
 	email = Sebastien.Varrette@uni.lu
@@ -24,6 +26,9 @@
   	df = diff
   	ci = commit
 	br = branch
+        w = whatchanged --abbrev-commit
+        ls = ls-files
+        gr = log --graph --oneline --decorate
         # From http://progit.org/book/ch2-11.html
         unstage = reset HEAD --
         last = log -1 HEAD
