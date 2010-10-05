@@ -27,7 +27,6 @@
         # From http://progit.org/book/ch2-11.html
         unstage = reset HEAD --
         last = log -1 HEAD
-	wu = log --stat origin..@{0}
 [color]
 	diff = auto
 	status = auto
