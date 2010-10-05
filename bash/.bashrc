@@ -75,9 +75,17 @@ test -n "$dircolors" && {
 }
 unset dircolors
 
+if [ "$UNAME" = Darwin ]; then   
+    # check if you're using gnu core-utils then use --color
+    test "`which ls`" = "/opt/local/bin/ls" && {
+        LS_COMMON="$LS_COMMON --color"
+    }
+fi
+
 # setup the main ls alias if we've established common args
 test -n "$LS_COMMON" &&
-alias ls="command ls $LS_COMMON --color"
+alias ls="command ls $LS_COMMON"
+
 
 # these use the ls aliases above
 alias ll="ls -l"
@@ -88,9 +96,9 @@ alias l.="ls -d .*"
 #  ALIASES
 # ----------------------------------------------------------------------
 # Mandatory aliases to confirm destructive operations
-alias cp='cp -iv'
-alias mv='mv -iv'
-alias rm='rm -iv'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
 
 alias ..='cd ..'
 # Color aliases
