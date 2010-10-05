@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+################################################################################
+#  git-changelog -- populate a ChangeLog fie from the commit messages
+#                   see http://github.com/Falkor/dotfiles
+#
+#  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+#                http://varrette.gforge.uni.lu
+#
+#             _ _             _                            _             
+#        __ _(_) |_       ___| |__   __ _ _ __   __ _  ___| | ___   __ _ 
+#       / _` | | __|____ / __| '_ \ / _` | '_ \ / _` |/ _ \ |/ _ \ / _` |
+#      | (_| | | ||_____| (__| | | | (_| | | | | (_| |  __/ | (_) | (_| |
+#       \__, |_|\__|     \___|_| |_|\__,_|_| |_|\__, |\___|_|\___/ \__, |
+#       |___/                                   |___/              |___/ 
+#
+################################################################################
+# This file is NOT part of GIT
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program.  If not, see <http://www.gnu.org/licenses/>.
+################################################################################
+# Courtesy from http://snipplr.com/view/6261/ruby-git-changelog/ 
+
+cmd=`git log --pretty='format:%ci::%an <%ae>::%s'`
+
+list = {}
+list_order = []
+
+cmd.each do |l|
+  date, author, subject = l.chomp.split("::")
+  date, time, zone = date.split(" ")
+
+  id = "#{date}\t#{author}"
+  if not list[id]
+    list[id] = []
+    list_order << {:id => id, :value => list[id]}
+  end
+  list[id] << subject
+end
+
+# list.each do |id, value|
+list_order.each do |i|
+  id = i[:id]
+  value = i[:value]
+
+  puts "#{id}"
+  puts value.map { |e| "\t* #{e}" }.join("\n")
+  puts "\n"
+end
