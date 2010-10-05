@@ -48,14 +48,41 @@ test -r /etc/bashrc &&
       . /etc/bashrc
 
 # shell opts. see bash(1) for details
-shopt -s cdspell                 >/dev/null 2>&1
-shopt -s extglob                 >/dev/null 2>&1
-shopt -s hostcomplete            >/dev/null 2>&1
-shopt -s no_empty_cmd_completion >/dev/null 2>&1
-shopt -u mailwarn                >/dev/null 2>&1
+# shopt -s cdspell                 >/dev/null 2>&1
+# shopt -s extglob                 >/dev/null 2>&1
+# shopt -s hostcomplete            >/dev/null 2>&1
+# shopt -s no_empty_cmd_completion >/dev/null 2>&1
+# shopt -u mailwarn                >/dev/null 2>&1
 
 # default umask
 umask 0022
+
+# ----------------------------------------------------------------------
+# LS AND DIRCOLORS
+# ----------------------------------------------------------------------
+
+# we always pass these to ls(1)
+LS_COMMON="-hBG"
+
+# if the dircolors utility is available, set that up to
+dircolors="$(type -P gdircolors dircolors | head -1)"
+test -n "$dircolors" && {
+    COLORS=/etc/DIR_COLORS
+    test -e "/etc/DIR_COLORS.$TERM"   && COLORS="/etc/DIR_COLORS.$TERM"
+    test -e "$HOME/.dircolors"        && COLORS="$HOME/.dircolors"
+    test ! -e "$COLORS"               && COLORS=
+    eval `$dircolors --sh $COLORS`
+}
+unset dircolors
+
+# setup the main ls alias if we've established common args
+test -n "$LS_COMMON" &&
+alias ls="command ls $LS_COMMON --color"
+
+# these use the ls aliases above
+alias ll="ls -l"
+alias la="ll -a"
+alias l.="ls -d .*"
 
 # ----------------------------------------------------------------------
 #  ALIASES
@@ -65,16 +92,7 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -iv'
 
-# Other classical aliases
-if [ "$UNAME" = Darwin ]; then
-    alias ls='ls -G'
-else 
-    alias ls='ls --color'
-fi
-alias ll='ls -l'
-alias la='ll -a'
 alias ..='cd ..'
-
 # Color aliases
 alias grep='grep --color=auto'
 #alias fgrep='fgrep --color=auto'
@@ -99,11 +117,11 @@ case "$0" in
 esac
 
 # enable en_US locale w/ ISO-8859-15 encodings if not already configured
-: ${LANG:="en_US.ISO-8859-15"}
-: ${LANGUAGE:="en"}
-: ${LC_CTYPE:="en_US.ISO-8859-15"}
-: ${LC_ALL:="en_US.ISO-8859-15"}
-export LANG LANGUAGE LC_CTYPE LC_ALL
+# : ${LANG:="en_US.ISO-8859-15"}
+# : ${LANGUAGE:="en"}
+# : ${LC_CTYPE:="en_US.ISO-8859-15"}
+# : ${LC_ALL:="en_US.ISO-8859-15"}
+# export LANG LANGUAGE LC_CTYPE LC_ALL
 
 # ----------------------------------------------------------------------
 # PATH
@@ -114,7 +132,7 @@ PATH="/usr/local/bin:$PATH"
 
 # put ~/bin on PATH if you have it
 if [ -d "$HOME/bin" ]; then 
-    PATH="$HOME/bin:$PATH"
+    PATH="$PATH:$HOME/bin:."
 fi
 
 # Old version of PATH: 
@@ -207,6 +225,32 @@ fi
 export PAGER MANPAGER
 
 # ----------------------------------------------------------------------
+# BASH COMPLETION
+# ----------------------------------------------------------------------
+
+test -z "$BASH_COMPLETION" && {
+    bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
+    test -n "$PS1" && test $bmajor -gt 1 && {
+        # search for a bash_completion file to source
+        for f in /usr/local/etc/bash_completion \
+                 /opt/local/etc/bash_completion \
+                 /etc/bash_completion
+        do
+            test -f $f && {
+                . $f
+                break
+            }
+        done
+    }
+    unset bash bmajor bminor
+}
+
+# override and disable tilde expansion
+_expand() {
+    return 0
+}
+
+# ----------------------------------------------------------------------
 # VERSION CONTROL SYSTEM - CVS, SVN and GIT 
 # ----------------------------------------------------------------------
 # === CVS ===
@@ -234,62 +278,29 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 
 # GIT bash completion and access to __git_ps1 is set in
 # /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file. 
-
-# ----------------------------------------------------------------------
-# BASH COMPLETION
-# ----------------------------------------------------------------------
-# if [ -f /opt/local/etc/bash_completion ]; then
-# 	. /opt/local/etc/bash_completion
-# fi
-
-test -z "$BASH_COMPLETION" && {
-    bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-    test -n "$PS1" && test $bmajor -gt 1 && {
-        # search for a bash_completion file to source
-        for f in /usr/local/etc/bash_completion \
-                 /usr/pkg/etc/bash_completion \
-                 /opt/local/etc/bash_completion \
-                 /etc/bash_completion
-        do
-            test -f $f && {
-                . $f
-                break
-            }
-        done
-    }
-    unset bash bmajor bminor
-}
-
-# override and disable tilde expansion
-_expand() {
-    return 0
-}
+if [ -f /opt/local/etc/bash_completion ]; then
+	. /opt/local/etc/bash_completion
+fi
 
 # ----------------------------------------------------------------------
 # PROMPT
 # ----------------------------------------------------------------------
+# Previous version:
+#PS1='\[\e[36;1m\][\t]\[\e[0m\]:$?: \u@\[\e[4;36m\]\h\[\e[0m\] \[\e[34;1m\]\W\[\e[0m\]\[\e[0;32m\]$(__git_ps1 "(%s)")$(__svn_ps1)\[\e[0m\]> '
 
 # Define some colors to use in the prompt
-RESET_COLOR="\[\033[0m\]"
-
-LIGHT_WHITE="\[\033[1;37m\]"
-WHITE="\[\033[0;37m\]"
-GRAY="\[\033[1;30m\]"
-BLACK="\[\033[0;30m\]"
-RED="\[\033[0;31m\]"
-LIGHT_RED="\[\033[1;31m\]"
-GREEN="\[\033[0;32m\]"
-LIGHT_GREEN="\[\033[1;32m\]"
-YELLOW="\[\033[0;33m\]"
-LIGHT_YELLOW="\[\033[1;33m\]"
-BLUE="\[\033[0;34m\]"
-LIGHT_BLUE="\[\033[1;34m\]"
-MAGENTA="\[\033[0;35m\]"
-LIGHT_MAGENTA="\[\033[1;35m\]"
-CYAN="\[\033[0;36m\]"
-CYAN_UNDERLINE="[\033[4;36m\]"
-LIGHT_CYAN="\[\033[1;36m\]"
-SCREEN_ESC="\[\033k\033\134\]"
+RESET_COLOR="\[\e[0m\]"
+# B&W
+WHITE="\[\e[0;37m\]"
+GRAY="\[\e[1;30m\]"
+BLACK="\[\e[0;30m\]"
+# RGB
+RED="\[\e[0;31m\]"
+GREEN="\[\e[0;32m\]"
+BLUE="\[\e[34;1m\]"
+# other
+LIGHT_CYAN="\[\e[36;1m\]"
+CYAN_UNDERLINE="\[\e[4;36m\]"
 
 # Configure user color and prompt type depending on whoami
 if [ "$LOGNAME" = "root" ]; then
@@ -303,31 +314,36 @@ fi
 # Simple (basic) prompt
 __set_simple_prompt() {
     unset PROMPT_COMMAND
-    PS1="[\u@\h] \w ${P}"
-    PS2="> "
+    PS1="[\u@\h] \w ${P}> "
 }
 
 # most compact version
 __set_compact_prompt() {
     unset PROMPT_COMMAND
-    PS1="${COLOR_USER}${P}${RESET_COLOR}"
-    PS2="> "
+    PS1="${COLOR_USER}${P}${RESET_COLOR}> "
 }
 
-# my prompt:  
+###########
+# my prompt; the format is as follows:
+#
 #    [hh:mm:ss]:$?: username@hostname workingdir(svn/git status)$> 
 #    `--------'  ^  `------' `------' `--------'`--------------'
 #       cyan     |  root:red   cyan      light     green 
 #                |           underline   blue   (absent if not relevant)
 #           exit code of 
 #        the previous command 
+#
+# The git/svn status part is quite interesting: if you are in a directory under
+# version control, you have the following information in the prompt: 
+#   - under GIT: current branch name, followed by a '*' if the repository has
+#                uncommitted changes, followed by a '+' if some elements were
+#                'git add'ed but not commited. 
+#   - under SVN: show (svn:XX[M]) where XX is the current revision number,
+#                followed by 'M' if the repository has uncommitted changes
+#
 __set_my_prompt() {
-    unset PROMPT_COMMAND
-    PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR} ${LIGHT_BLUE}\W${GREEN}$(__git_ps1 "(%s)")$(__svn_ps1)${RESET_COLOR}${P}"
-    PS2="> "
+    PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
 }
-# Previous version:
-#PS1='\[\e[36;1m\][\t]\[\e[0m\]:$?: \u@\[\e[4;36m\]\h\[\e[0m\] \[\e[34;1m\]\W\[\e[0m\]\[\e[0;32m\]$(__git_ps1 "(%s)")$(__svn_ps1)\[\e[0m\]> '
 
 
 # --------------------------------------------------------------------
@@ -383,11 +399,12 @@ MANPATH=$(puniq $MANPATH)
 if [ -n "$PS1" ]; then 
     __set_my_prompt
 fi
+export PS1
 
 # MOTD
 test -n "$INTERACTIVE" -a -n "$LOGIN" && {
     uname -npsr
-    w
+    uptime
 }
 
 export PKG_CONFIG_PATH
