@@ -81,6 +81,9 @@ if [ "$UNAME" = Darwin ]; then
         LS_COMMON="$LS_COMMON --color"
     }
 fi
+if [ "$UNAME" = Linux ]; then   
+    LS_COMMON="$LS_COMMON --color"
+fi
 
 # setup the main ls alias if we've established common args
 test -n "$LS_COMMON" &&
