@@ -141,6 +141,7 @@ PATH="/usr/local/bin:$PATH"
 if [ -d "$HOME/bin" ]; then 
     PATH="$PATH:$HOME/bin:."
 fi
+MANPATH="/usr/share/man:/usr/local/share/man:$MANPATH"
 
 # Old version of PATH: 
 #PATH=/sw/bin:/sw/sbin:/Applications/Tools/Emacs.app/Contents/MacOS:/bin:/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/usr/local/teTeX/bin/powerpc-apple-darwin-current:/usr/X11R6/bin:/usr/local/mysql/bin:$HOME/bin:/opt/local/bin:.
