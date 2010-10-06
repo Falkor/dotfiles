@@ -48,11 +48,11 @@ test -r /etc/bashrc &&
       . /etc/bashrc
 
 # shell opts. see bash(1) for details
-# shopt -s cdspell                 >/dev/null 2>&1
-# shopt -s extglob                 >/dev/null 2>&1
-# shopt -s hostcomplete            >/dev/null 2>&1
-# shopt -s no_empty_cmd_completion >/dev/null 2>&1
-# shopt -u mailwarn                >/dev/null 2>&1
+shopt -s cdspell                 >/dev/null 2>&1
+shopt -s extglob                 >/dev/null 2>&1
+shopt -s hostcomplete            >/dev/null 2>&1
+shopt -s no_empty_cmd_completion >/dev/null 2>&1
+shopt -u mailwarn                >/dev/null 2>&1
 
 # default umask
 umask 0022
@@ -315,7 +315,7 @@ if [ "$LOGNAME" = "root" ]; then
     P="#"
 else
     COLOR_USER="${WHITE}"
-    P="\$"
+    P=""
 fi
 
 # Simple (basic) prompt
