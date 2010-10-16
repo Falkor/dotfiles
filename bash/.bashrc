@@ -36,8 +36,8 @@
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
 
-# Colored output from ls is nice
-export CLICOLOR=1
+# Get ride of mail notification
+unset MAILCHECK
 
 # ----------------------------------------------------------------------
 #  SHELL OPTIONS
@@ -60,9 +60,11 @@ umask 0022
 # ----------------------------------------------------------------------
 # LS AND DIRCOLORS
 # ----------------------------------------------------------------------
+# Colored output from ls is nice
+export CLICOLOR=1
 
 # we always pass these to ls(1)
-LS_COMMON="-hBG"
+LS_COMMON="-hB"
 
 # if the dircolors utility is available, set that up to
 dircolors="$(type -P gdircolors dircolors | head -1)"
@@ -76,12 +78,12 @@ test -n "$dircolors" && {
 unset dircolors
 
 if [ "$UNAME" = Darwin ]; then   
+    LS_COMMON="$LS_COMMON -G"
     # check if you're using gnu core-utils then use --color
     test "`which ls`" = "/opt/local/bin/ls" && {
         LS_COMMON="$LS_COMMON --color"
     }
-fi
-if [ "$UNAME" = Linux ]; then   
+elif [ "$UNAME" = Linux ]; then   
     LS_COMMON="$LS_COMMON --color"
 fi
 
@@ -256,17 +258,11 @@ test -z "$BASH_COMPLETION" && {
     unset bash bmajor bminor
 }
 
-# override and disable tilde expansion
-_expand() {
-    return 0
-}
-
 # ----------------------------------------------------------------------
 # VERSION CONTROL SYSTEM - CVS, SVN and GIT 
 # ----------------------------------------------------------------------
 # === CVS ===
 export CVS_RSH='ssh'
-export CVSROOT=':ext:varrette@achab.imag.fr:/var/lib/cvs'
 
 # === SVN ===
 export SVN_EDITOR=$EDITOR
@@ -352,9 +348,12 @@ __set_compact_prompt() {
 #   - under SVN: show (svn:XX[M]) where XX is the current revision number,
 #                followed by 'M' if the repository has uncommitted changes
 #
+# This prompt is perfect for terminal with black background, in my case the
+# Vizor color set (see http://visor.binaryage.com/)
 __set_my_prompt() {
     PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
 }
+# TODO: define the same for white background.
 
 
 # --------------------------------------------------------------------
@@ -374,18 +373,61 @@ __set_my_prompt() {
 
 
 # --------------------------------------------------------------------
-# PATH MANIPULATION FUNCTIONS
+# PATH MANIPULATION FUNCTIONS (thanks rtomayko ;) )
 # --------------------------------------------------------------------
 ######
-# Usage: pls [<var>]
 # List path entries of PATH or environment variable <var>.
+# Usage: pls [<var>]
 ###
 pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
 ######
-# Usage: puniq [<path>] (thanks rtomayko ;) )
+# Shift <num> entries off the front of PATH or environment var <var>.
+# with the <var> option. 
+# Usage:  pshift [-n <num>] [<var>]
+# Useful: pshift $(pwd)
+####
+pshift () {
+    local n=1
+    [ "$1" = "-n" ] && { n=$(( $2 + 1 )); shift 2; }
+    eval "${1:-PATH}='$(pls |tail -n +$n |tr '\n' :)'"
+}
+
+######
+# Pop <num> entries off the end of PATH or environment variable <var>.
+# Usage: ppop [-n <num>] [<var>]
+####
+ppop () {
+    local n=1 i=0
+    [ "$1" = "-n" ] && { n=$2; shift 2; }
+    while [ $i -lt $n ]
+    do eval "${1:-PATH}='\${${1:-PATH}%:*}'"
+       i=$(( i + 1 ))
+    done
+}
+
+######
+# Remove <path> from PATH or environment variable <var>.
+# Usage: prm <path> [<var>]
+####
+prm () { eval "${2:-PATH}='$(pls $2 |grep -v "^$1\$" |tr '\n' :)'"; }
+
+######
+# Shift <path> onto the beginning of PATH or environment variable <var>.
+# Usage: punshift <path> [<var>]
+#####
+punshift () { eval "${2:-PATH}='$1:$(eval echo \$${2:-PATH})'"; }
+
+#######
+# push <path>
+# Usage: ppush <path> [<var>]
+####
+ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
+
+######
 # Remove duplicate entries from a PATH style value while retaining
 # the original order. Use PATH if no <path> is given.
+# Usage: puniq [<path>] 
 #
 # Example:
 #   $ puniq /usr/bin:/usr/local/bin:/usr/bin
