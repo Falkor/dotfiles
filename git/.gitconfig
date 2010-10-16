@@ -24,7 +24,7 @@
 	pu = push origin
   	st = status
   	df = diff
-  	ci = commit
+  	ci = commit -s
 	br = branch
         w  = whatchanged --abbrev-commit
         ls = ls-files
@@ -32,6 +32,7 @@
         # From http://progit.org/book/ch2-11.html
         unstage = reset HEAD --
         last = log -1 HEAD
+	amend = commit --amend
 [color]
 	diff   = auto
 	status = auto
