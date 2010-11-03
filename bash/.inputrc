@@ -1,0 +1,37 @@
+################################################################################
+#  .inputrc -- my personal Readline configuration  
+#             see http://github.com/Falkor/dotfiles
+#
+#  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+#                http://varrette.gforge.uni.lu
+#                 _                   _            
+#                (_)_ __  _ __  _   _| |_ _ __ ___ 
+#                | | '_ \| '_ \| | | | __| '__/ __|
+#               _| | | | | |_) | |_| | |_| | | (__ 
+#              (_)_|_| |_| .__/ \__,_|\__|_|  \___|
+#                        |_|                       
+################################################################################
+# Resource
+# - http://github.com/rtomayko/dotfiles/blob/rtomayko/.inputrc
+
+# do not bell on tab-completion
+set bell-style bell
+
+set expand-tilde off
+set input-meta off
+set convert-meta on
+set output-meta off
+set horizontal-scroll-mode off
+set history-preserve-point on
+set mark-directories on
+set mark-symlinked-directories on
+set match-hidden-files off
+
+# completion settings
+set page-completions off
+set completion-query-items 2000
+set completion-ignore-case off
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set completion-prefix-display-length 10
+set print-completions-horizontally off
