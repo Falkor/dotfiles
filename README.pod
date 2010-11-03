@@ -8,9 +8,11 @@ system the way I like it.
 
    git clone git://github.com/Falkor/dotfiles ~/.dotfiles
    cd 
-   ln -s .dotfiles/bash/.bashrc   .
-   ln -s .dotfiles/vim/.vimrc     .
-   ln -s .dotfiles/git/.gitconfig .
+   mv .bashrc .bashrc.old
+   ln -s .dotfiles/bash/.bashrc    .
+   ln -s .dotfiles/bash/.inputrc   .
+   ln -s .dotfiles/vim/.vimrc      .
+   ln -s .dotfiles/git/.gitconfig  .
 
 One day I will take some time to do an installation script ;)
 

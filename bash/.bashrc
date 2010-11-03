@@ -36,6 +36,12 @@
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
 
+# complete hostnames from this file
+: ${HOSTFILE=~/.ssh/known_hosts}
+
+# readline config
+: ${INPUTRC=~/.inputrc}
+
 # Get ride of mail notification
 unset MAILCHECK
 
@@ -48,10 +54,12 @@ test -r /etc/bashrc &&
       . /etc/bashrc
 
 # shell opts. see bash(1) for details
-shopt -s cdspell                 >/dev/null 2>&1
-shopt -s extglob                 >/dev/null 2>&1
-shopt -s hostcomplete            >/dev/null 2>&1
-shopt -s no_empty_cmd_completion >/dev/null 2>&1
+shopt -s cdspell                 >/dev/null 2>&1  # correct minor errors in the spelling
+                                                  # of a directory in a cd command 
+shopt -s extglob                 >/dev/null 2>&1  # extended pattern matching
+shopt -s hostcomplete            >/dev/null 2>&1  # perform hostname completion
+                                                  # on '@'
+#shopt -s no_empty_cmd_completion >/dev/null 2>&1
 shopt -u mailwarn                >/dev/null 2>&1
 
 # default umask
@@ -78,10 +86,11 @@ test -n "$dircolors" && {
 unset dircolors
 
 if [ "$UNAME" = Darwin ]; then   
-    LS_COMMON="$LS_COMMON -G"
     # check if you're using gnu core-utils then use --color
     test "`which ls`" = "/opt/local/bin/ls" && {
         LS_COMMON="$LS_COMMON --color"
+    } || {
+        LS_COMMON="$LS_COMMON -G"
     }
 elif [ "$UNAME" = Linux ]; then   
     LS_COMMON="$LS_COMMON --color"
@@ -112,6 +121,8 @@ alias grep='grep --color=auto'
 
 alias p='pushd'
 alias pingg='ping www.google.fr'
+alias du1='du -h --max-depth=1'
+
 
 # ----------------------------------------------------------------------
 # ENVIRONMENT CONFIGURATION
@@ -194,6 +205,7 @@ if [ "$UNAME" = Darwin ]; then
 
         # nice little port alias
         alias port="sudo nice -n +18 ${PORTS}/bin/port"
+	alias git-svn='git svn'
     }
 
     # You probably want to install OpenTerminal (see
