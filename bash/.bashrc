@@ -1,14 +1,14 @@
 #! /bin/bash
 ################################################################################
-#  .bashrc -- my personal Bourne-Again shell (aka bash) configuration  
+#  .bashrc -- my personal Bourne-Again shell (aka bash) configuration
 #             see http://github.com/Falkor/dotfiles
 #
 #  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 #                http://varrette.gforge.uni.lu
-#                   _               _              
-#                  | |__   __ _ ___| |__  _ __ ___ 
+#                   _               _
+#                  | |__   __ _ ___| |__  _ __ ___
 #                  | '_ \ / _` / __| '_ \| '__/ __|
-#               _  | |_) | (_| \__ \ | | | | | (__ 
+#               _  | |_) | (_| \__ \ | | | | | (__
 #              (_) |_.__/ \__,_|___/_| |_|_|  \___|
 #
 ################################################################################
@@ -27,7 +27,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-# Resources: 
+# Resources:
 #  - http://bitbucket.org/dmpayton/dotfiles/src/tip/.bashrc
 #  - http://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc
 
@@ -51,11 +51,11 @@ unset MAILCHECK
 
 # bring in system bashrc
 test -r /etc/bashrc &&
-      . /etc/bashrc
+. /etc/bashrc
 
 # shell opts. see bash(1) for details
 shopt -s cdspell                 >/dev/null 2>&1  # correct minor errors in the spelling
-                                                  # of a directory in a cd command 
+                                                  # of a directory in a cd command
 shopt -s extglob                 >/dev/null 2>&1  # extended pattern matching
 shopt -s hostcomplete            >/dev/null 2>&1  # perform hostname completion
                                                   # on '@'
@@ -85,14 +85,14 @@ test -n "$dircolors" && {
 }
 unset dircolors
 
-if [ "$UNAME" = Darwin ]; then   
+if [ "$UNAME" = Darwin ]; then
     # check if you're using gnu core-utils then use --color
     test "`which ls`" = "/opt/local/bin/ls" && {
         LS_COMMON="$LS_COMMON --color"
     } || {
         LS_COMMON="$LS_COMMON -G"
     }
-elif [ "$UNAME" = Linux ]; then   
+elif [ "$UNAME" = Linux ]; then
     LS_COMMON="$LS_COMMON --color"
 fi
 
@@ -154,12 +154,12 @@ PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:$PATH"
 
 # put ~/bin on PATH if you have it
-if [ -d "$HOME/bin" ]; then 
+if [ -d "$HOME/bin" ]; then
     PATH="$PATH:$HOME/bin:."
 fi
 MANPATH="/usr/share/man:/usr/local/share/man:$MANPATH"
 
-# Old version of PATH: 
+# Old version of PATH:
 #PATH=/sw/bin:/sw/sbin:/Applications/Tools/Emacs.app/Contents/MacOS:/bin:/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/usr/local/teTeX/bin/powerpc-apple-darwin-current:/usr/X11R6/bin:/usr/local/mysql/bin:$HOME/bin:/opt/local/bin:.
 
 # Avispa settings
@@ -178,9 +178,9 @@ DYLD_FALLBACK_LIBRARY_PATH=${LIBRARY_PATH}
 # ----------------------------------------------------------------------
 # MACOS X / DARWIN SPECIFIC
 # ----------------------------------------------------------------------
-if [ "$UNAME" = Darwin ]; then   
+if [ "$UNAME" = Darwin ]; then
     # Fink paths (see http://www.finkproject.org/), may be set via /sw/bin/pathsetup.sh
-    # after install 
+    # after install
     test -x /sw -a ! -L /sw && {
         FINK=/sw
 
@@ -205,11 +205,11 @@ if [ "$UNAME" = Darwin ]; then
 
         # nice little port alias
         alias port="sudo nice -n +18 ${PORTS}/bin/port"
-	alias git-svn='git svn'
+        alias git-svn='git svn'
     }
 
     # You probably want to install OpenTerminal (see
-    # http://homepage.mac.com/thomasw/OpenTerminal/) 
+    # http://homepage.mac.com/thomasw/OpenTerminal/)
     # Just adapt the path to the OpenTerminal.app here
     OPENTERMINAL="/Applications/Utilities/OpenTerminal.app"
     if [ -d "$OPENTERMINAL" ]; then
@@ -223,7 +223,8 @@ if [ "$UNAME" = Darwin ]; then
     export ANT_HOME JAVA_HOME
 
     # Alias so as to be able to call easily emacs etc. from terminal
-    alias emacs='open -a Emacs.app'
+    alias emacs='open -a Aquamacs.app'
+    alias aquamacs='open -a Aquamacs.app'
     alias skim='open -a Skim.app'
 
     # Finalize the Paths
@@ -258,8 +259,8 @@ test -z "$BASH_COMPLETION" && {
     test -n "$PS1" && test $bmajor -gt 1 && {
         # search for a bash_completion file to source
         for f in /usr/local/etc/bash_completion \
-                 /opt/local/etc/bash_completion \
-                 /etc/bash_completion
+            /opt/local/etc/bash_completion \
+            /etc/bash_completion
         do
             test -f $f && {
                 . $f
@@ -271,7 +272,7 @@ test -z "$BASH_COMPLETION" && {
 }
 
 # ----------------------------------------------------------------------
-# VERSION CONTROL SYSTEM - CVS, SVN and GIT 
+# VERSION CONTROL SYSTEM - CVS, SVN and GIT
 # ----------------------------------------------------------------------
 # === CVS ===
 export CVS_RSH='ssh'
@@ -296,9 +297,9 @@ export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
 export GIT_PS1_SHOWDIRTYSTATE=1
 
 # GIT bash completion and access to __git_ps1 is set in
-# /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file. 
+# /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file.
 if [ -f /opt/local/etc/bash_completion ]; then
-	. /opt/local/etc/bash_completion
+    . /opt/local/etc/bash_completion
 fi
 
 # ----------------------------------------------------------------------
@@ -345,18 +346,18 @@ __set_compact_prompt() {
 ###########
 # my prompt; the format is as follows:
 #
-#    [hh:mm:ss]:$?: username@hostname workingdir(svn/git status)$> 
+#    [hh:mm:ss]:$?: username@hostname workingdir(svn/git status)$>
 #    `--------'  ^  `------' `------' `--------'`--------------'
-#       cyan     |  root:red   cyan      light     green 
+#       cyan     |  root:red   cyan      light     green
 #                |           underline   blue   (absent if not relevant)
-#           exit code of 
-#        the previous command 
+#           exit code of
+#        the previous command
 #
 # The git/svn status part is quite interesting: if you are in a directory under
-# version control, you have the following information in the prompt: 
+# version control, you have the following information in the prompt:
 #   - under GIT: current branch name, followed by a '*' if the repository has
 #                uncommitted changes, followed by a '+' if some elements were
-#                'git add'ed but not commited. 
+#                'git add'ed but not commited.
 #   - under SVN: show (svn:XX[M]) where XX is the current revision number,
 #                followed by 'M' if the repository has uncommitted changes
 #
@@ -373,14 +374,14 @@ __set_my_prompt() {
 # --------------------------------------------------------------------
 # # ssh-agent initialization - using keychain
 # #if [ ! -e "$SSH_AUTH_SOCK" ]; then
-# #	eval `ssh-agent` 1>/dev/null;   
+# # eval `ssh-agent` 1>/dev/null;
 # #keychain --clear --noask ~/.ssh/id_dsa
 # #. ~/.keychain/${HOSTNAME}-sh
 
 # # gpg-agent initialization
 # #if [ ! -e "$GPG_AGENT_INFO" ]; then
 # #        eval `gpg-agent --daemon > $HOME/.gpg-agent-info`;
-# #	source $HOME/.gpg-agent-info;
+# # source $HOME/.gpg-agent-info;
 # #fi
 
 
@@ -395,7 +396,7 @@ pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
 ######
 # Shift <num> entries off the front of PATH or environment var <var>.
-# with the <var> option. 
+# with the <var> option.
 # Usage:  pshift [-n <num>] [<var>]
 # Useful: pshift $(pwd)
 ####
@@ -414,7 +415,7 @@ ppop () {
     [ "$1" = "-n" ] && { n=$2; shift 2; }
     while [ $i -lt $n ]
     do eval "${1:-PATH}='\${${1:-PATH}%:*}'"
-       i=$(( i + 1 ))
+        i=$(( i + 1 ))
     done
 }
 
@@ -439,7 +440,7 @@ ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
 ######
 # Remove duplicate entries from a PATH style value while retaining
 # the original order. Use PATH if no <path> is given.
-# Usage: puniq [<path>] 
+# Usage: puniq [<path>]
 #
 # Example:
 #   $ puniq /usr/bin:/usr/local/bin:/usr/bin
@@ -461,7 +462,7 @@ MANPATH=$(puniq $MANPATH)
 #export CDPATH=.:~/svn/gforge.uni.lu
 
 # Set the color prompt by default when interactive
-if [ -n "$PS1" ]; then 
+if [ -n "$PS1" ]; then
     __set_my_prompt
 fi
 export PS1
@@ -476,8 +477,8 @@ export PKG_CONFIG_PATH
 export C_INCLUDE_PATH   CPLUS_INCLUDE_PATH   LIBRARY_PATH   DYLD_FALLBACK_LIBRARY_PATH
 
 # Eventually load you private settings (not exposed here)
-test -f ~/.bash_private && 
-      . ~/.bash_private
+test -f ~/.bash_private &&
+. ~/.bash_private
 
 
 # I hate this ring
