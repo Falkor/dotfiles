@@ -232,6 +232,11 @@ if [ "$UNAME" = Darwin ]; then
     DYLD_FALLBACK_LIBRARY_PATH=${LIBRARY_PATH}
 fi
 
+# RVM specific (see http://beginrescueend.com/)
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+
+
+
 # ----------------------------------------------------------------------
 # PAGER / EDITOR
 # ----------------------------------------------------------------------
