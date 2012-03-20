@@ -312,8 +312,11 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # Previous version:
 #PS1='\[\e[36;1m\][\t]\[\e[0m\]:$?: \u@\[\e[4;36m\]\h\[\e[0m\] \[\e[34;1m\]\W\[\e[0m\]\[\e[0;32m\]$(__git_ps1 "(%s)")$(__svn_ps1)\[\e[0m\]> '
 
+DOMAIN=`hostname -f | cut -d '.' -f 2`
+
 # Define some colors to use in the prompt
 RESET_COLOR="\[\e[0m\]"
+BOLD_COLOR="\[\e[1m\]"
 # B&W
 WHITE="\[\e[0;37m\]"
 GRAY="\[\e[1;30m\]"
@@ -338,7 +341,7 @@ fi
 # Simple (basic) prompt
 __set_simple_prompt() {
     unset PROMPT_COMMAND
-    PS1="[\u@\h] \w ${P}> "
+    PS1="[\u@\h] \w(${DOMAIN}) ${P}> "
 }
 
 # most compact version
@@ -350,10 +353,10 @@ __set_compact_prompt() {
 ###########
 # my prompt; the format is as follows:
 #
-#    [hh:mm:ss]:$?: username@hostname workingdir(svn/git status)$>
-#    `--------'  ^  `------' `------' `--------'`--------------'
-#       cyan     |  root:red   cyan      light     green
-#                |           underline   blue   (absent if not relevant)
+#    [hh:mm:ss]:$?: username@hostname(domain) workingdir(svn/git status)$>
+#    `--------'  ^  `------' `------'         `--------'`--------------'
+#       cyan     |  root:red   cyan              light     green
+#                |           underline            blue   (absent if not relevant)
 #           exit code of
 #        the previous command
 #
@@ -368,7 +371,7 @@ __set_compact_prompt() {
 # This prompt is perfect for terminal with black background, in my case the
 # Vizor color set (see http://visor.binaryage.com/)
 __set_my_prompt() {
-    PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:\$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
+  PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR}${BOLD_COLOR}(${DOMAIN})${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
 }
 # TODO: define the same for white background.
 
