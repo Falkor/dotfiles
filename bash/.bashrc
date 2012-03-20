@@ -119,10 +119,9 @@ alias grep='grep --color=auto'
 #alias fgrep='fgrep --color=auto'
 #alias egrep='egrep --color=auto'
 
-alias p='pushd'
-alias pingg='ping www.google.fr'
-alias du1='du -h --max-depth=1'
-
+if [ -f ~/.bash_aliases ]; then 
+	. ~/.bash_aliases
+fi
 
 # ----------------------------------------------------------------------
 # ENVIRONMENT CONFIGURATION
@@ -204,8 +203,8 @@ if [ "$UNAME" = Darwin ]; then
         LIBRARY_PATH=:${PORTS}/lib:${LIBRARY_PATH}
 
         # nice little port alias
-        alias port="sudo nice -n +18 ${PORTS}/bin/port"
-        alias git-svn='git svn'
+        #alias port="sudo nice -n +18 ${PORTS}/bin/port"
+        #alias git-svn='git svn'
     }
 
     # You probably want to install OpenTerminal (see
@@ -303,9 +302,9 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 
 # GIT bash completion and access to __git_ps1 is set in
 # /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file.
-if [ -f /opt/local/etc/bash_completion ]; then
-    . /opt/local/etc/bash_completion
-fi
+#if [ -f /opt/local/etc/bash_completion ]; then
+#    . /opt/local/etc/bash_completion
+#fi
 
 # ----------------------------------------------------------------------
 # PROMPT
@@ -369,7 +368,7 @@ __set_compact_prompt() {
 # This prompt is perfect for terminal with black background, in my case the
 # Vizor color set (see http://visor.binaryage.com/)
 __set_my_prompt() {
-    PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
+    PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:\$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
 }
 # TODO: define the same for white background.
 

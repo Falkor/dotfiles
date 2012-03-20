@@ -34,8 +34,8 @@
         last = log -1 HEAD
 	amend = commit --amend
 	# From http://j.shirley.im/tech/git-flow/
-	feature-start = !git flow feature start $1
-	feature-finish = !git flow feature finish $1 && git push
+	feature-start = flow feature start
+	feature-finish = ! git flow feature finish
 [color]
 	diff   = auto
 	status = auto
