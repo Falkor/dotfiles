@@ -288,9 +288,10 @@ export SVN_EDITOR=$EDITOR
 ## display the current subversion revision (to be used later in the prompt)
 __svn_ps1() {
     local svnversion=`svnversion`
-    #if [[ -d ".svn" ]]; then
-    if [ "$svnversion" != "Unversioned directory" ]; then
-        printf " (svn:%s)" `svnversion`
+    # Continue if $svnversion is numerical
+    if let $svnversion 2>/dev/null  
+    then
+        printf " (svn:%s)" $svnversion
     fi
 }
 
