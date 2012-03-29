@@ -284,9 +284,12 @@ export CVS_RSH='ssh'
 # === SVN ===
 export SVN_EDITOR=$EDITOR
 
+
 ## display the current subversion revision (to be used later in the prompt)
 __svn_ps1() {
-    if [[ -d ".svn" ]]; then
+    local svnversion=`svnversion`
+    #if [[ -d ".svn" ]]; then
+    if [ "$svnversion" != "Unversioned directory" ]; then
         printf " (svn:%s)" `svnversion`
     fi
 }
