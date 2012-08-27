@@ -119,8 +119,8 @@ alias grep='grep --color=auto'
 #alias fgrep='fgrep --color=auto'
 #alias egrep='egrep --color=auto'
 
-if [ -f ~/.bash_aliases ]; then 
-	. ~/.bash_aliases
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
 fi
 
 # ----------------------------------------------------------------------
@@ -186,7 +186,7 @@ if [ "$UNAME" = Darwin ]; then
     test -x /opt/sw -a ! -L /opt/sw && {
         FINK=/opt/sw
     }
-    if [ -n "${FINK}" ]; then 
+    if [ -n "${FINK}" ]; then
         # adapt the various PATHs
         PATH="$FINK/bin:$FINK/sbin:$PATH"
         MANPATH="$FINK/share/man:$MANPATH"
@@ -293,7 +293,7 @@ export SVN_EDITOR=$EDITOR
 __svn_ps1() {
     local svnversion=`svnversion | sed -e "s/[:M]//g"`
     # Continue if $svnversion is numerical
-    if let $svnversion 2>/dev/null  
+    if let $svnversion 2>/dev/null
     then
         printf " (svn:%s)" `svnversion`
     fi
@@ -320,8 +320,6 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # Previous version:
 #PS1='\[\e[36;1m\][\t]\[\e[0m\]:$?: \u@\[\e[4;36m\]\h\[\e[0m\] \[\e[34;1m\]\W\[\e[0m\]\[\e[0;32m\]$(__git_ps1 "(%s)")$(__svn_ps1)\[\e[0m\]> '
 
-DOMAIN=`hostname -f | cut -d '.' -f 2`
-
 # Define some colors to use in the prompt
 RESET_COLOR="\[\e[0m\]"
 BOLD_COLOR="\[\e[1m\]"
@@ -346,6 +344,40 @@ else
     P=""
 fi
 
+# Configure a set of useful variables for the prompt
+DOMAIN=`hostname -f | cut -d '.' -f 2`
+# get virtualization  virtualization
+XENTYPE=""
+if [ -d "/sys/bus/xen" ]; then
+    if [ -f "/proc/xen/capabilities" ]; then
+        XENTYPE=",Dom0"
+    else 
+        XENTYPE=",domU"
+    fi
+fi
+# Test the PS1_EXTRA variable
+if [ -z "${PS1_EXTRA}" -a -f "/proc/cmdline" ]; then 
+    # Here PS1_EXTRA is not set and/or empty, check additionally if it has not
+    # been set via kernel comment
+    kernel_ps1_extra="$(grep PS1_EXTRA /proc/cmdline)" 
+    if [ -n "${kernel_ps1_extra}" ]; then 
+        PS1_EXTRA=` sed -e "s/.*PS1_EXTRA=\"\?\([^ ^\t^\"]\+\)\"\?.*/\1/g" /proc/cmdline `
+    fi 
+fi
+PS1_EXTRAINFO="${BOLD_COLOR}${DOMAIN}${XENTYPE}${RESET_COLOR}"
+if [ -n "${PS1_EXTRA}" ]; then 
+    PS1_EXTRAINFO="${PS1_EXTRAINFO},${RED}${PS1_EXTRA}${RESET_COLOR}"
+fi 
+
+
+# This function is called from a subshell in $PS1, to provide a colorized smiley
+# depending on the exit status of the last run command. 
+# Exit status 130 is also considered as good as it corresponds to a CTRL-D 
+# cf http://www.unicode.org/charts/PDF/U1F600.pdf
+__colorized_exit_status() { 
+    printf -- "\`if [[ \$? = 0 || \$? = 130  ]]; then echo -e '\[\e[01;32m\]\xE2\x98\xBA'; else echo -e '\[\e[01;31m\]\xE2\x98\xB9'; fi\`"
+}
+
 # Simple (basic) prompt
 __set_simple_prompt() {
     unset PROMPT_COMMAND
@@ -361,7 +393,7 @@ __set_compact_prompt() {
 ###########
 # my prompt; the format is as follows:
 #
-#    [hh:mm:ss]:$?: username@hostname(domain) workingdir(svn/git status)$>
+#    [hh:mm:ss]:$?: username@hostname(domain[,xentype][,extrainfo]) workingdir(svn/git status)$>
 #    `--------'  ^  `------' `------'         `--------'`--------------'
 #       cyan     |  root:red   cyan              light     green
 #                |           underline            blue   (absent if not relevant)
@@ -376,10 +408,16 @@ __set_compact_prompt() {
 #   - under SVN: show (svn:XX[M]) where XX is the current revision number,
 #                followed by 'M' if the repository has uncommitted changes
 #
+# `domain` reflect the current domain of the machine that run the prompt
+# (guessed from hostname -f)
+# `xentype` is DOM0 or domU depending if the machine is a Xen dom0 or domU
+# Finally, is the environment variable PS1_EXTRA is set (or passed to the
+# kernel), then its content is displayed here. 
+#
 # This prompt is perfect for terminal with black background, in my case the
-# Vizor color set (see http://visor.binaryage.com/)
+# Vizor color set (see http://visor.binaryage.com/) or iTerm2
 __set_my_prompt() {
-  PS1="${LIGHT_CYAN}[\t]${RESET_COLOR}:$?: ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR}${BOLD_COLOR}(${DOMAIN})${RESET_COLOR} ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
+    PS1="$(__colorized_exit_status) ${LIGHT_CYAN}[\t]${RESET_COLOR} ${COLOR_USER}\u${RESET_COLOR}@${CYAN_UNDERLINE}\h${RESET_COLOR}(${PS1_EXTRAINFO}) ${BLUE}\W${RESET_COLOR}${GREEN}\$(__git_ps1 \" (%s)\")\$(__svn_ps1)${RESET_COLOR}${P}> "
 }
 # TODO: define the same for white background.
 
