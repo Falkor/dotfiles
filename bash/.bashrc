@@ -332,6 +332,7 @@ RED="\[\e[0;31m\]"
 GREEN="\[\e[0;32m\]"
 BLUE="\[\e[34;1m\]"
 # other
+YELLOW="\[\e[0;33m\]"
 LIGHT_CYAN="\[\e[36;1m\]"
 CYAN_UNDERLINE="\[\e[4;36m\]"
 
@@ -366,7 +367,7 @@ if [ -z "${PS1_EXTRA}" -a -f "/proc/cmdline" ]; then
 fi
 PS1_EXTRAINFO="${BOLD_COLOR}${DOMAIN}${XENTYPE}${RESET_COLOR}"
 if [ -n "${PS1_EXTRA}" ]; then 
-    PS1_EXTRAINFO="${PS1_EXTRAINFO},${RED}${PS1_EXTRA}${RESET_COLOR}"
+    PS1_EXTRAINFO="${PS1_EXTRAINFO},${YELLOW}${PS1_EXTRA}${RESET_COLOR}"
 fi 
 
 
@@ -374,6 +375,7 @@ fi
 # depending on the exit status of the last run command. 
 # Exit status 130 is also considered as good as it corresponds to a CTRL-D 
 # cf http://www.unicode.org/charts/PDF/U1F600.pdf
+# cf http://superuser.com/questions/368497/how-can-you-customize-your-terminal-bash-prompt-with-smiley-faces
 __colorized_exit_status() { 
     printf -- "\`if [[ \$? = 0 || \$? = 130  ]]; then echo -e '\[\e[01;32m\]\xE2\x98\xBA'; else echo -e '\[\e[01;31m\]\xE2\x98\xB9'; fi\`"
 }
