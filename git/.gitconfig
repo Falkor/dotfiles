@@ -16,7 +16,7 @@
 # Resources:
 #  - http://stackoverflow.com/questions/267761/what-does-your-gitconfig-contain
 [user]
-	name  = Sebastien Varrette
+	name = Sebastien Varrette
 	email = Sebastien.Varrette@uni.lu
         signingkey = 0xDD01D5C0
 [alias]
