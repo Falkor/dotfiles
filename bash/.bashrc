@@ -182,14 +182,18 @@ if [ "$UNAME" = Darwin ]; then
     # after install
     test -x /sw -a ! -L /sw && {
         FINK=/sw
-
+    }
+    test -x /opt/sw -a ! -L /opt/sw && {
+        FINK=/opt/sw
+    }
+    if [ -n "${FINK}" ]; then 
         # adapt the various PATHs
         PATH="$FINK/bin:$FINK/sbin:$PATH"
         MANPATH="$FINK/share/man:$MANPATH"
         PKG_CONFIG_PATH="${FINK}/lib/pkgconfig:$PKG_CONFIG_PATH"
         C_INCLUDE_PATH=${FINK}/include:${C_INCLUDE_PATH}
         LIBRARY_PATH=${FINK}/lib:${LIBRARY_PATH}
-    }
+    fi
 
     # MacPorts paths
     test -x /opt/local -a ! -L /opt/local && {
@@ -495,3 +499,5 @@ test -f ~/.bash_private &&
 # I hate this ring
 #set bell-style visible
 
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
