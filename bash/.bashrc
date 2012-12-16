@@ -280,6 +280,17 @@ unset bash bmajor bminor
 #}
 
 # ----------------------------------------------------------------------
+# BASH HISTORY
+# ----------------------------------------------------------------------
+
+# Increase the history size
+HISTSIZE=10000
+HISTFILESIZE=20000
+
+# Add date and time to the history
+HISTTIMEFORMAT="[%d/%m/%Y %H:%M:%S] "
+
+# ----------------------------------------------------------------------
 # VERSION CONTROL SYSTEM - CVS, SVN and GIT
 # ----------------------------------------------------------------------
 # === CVS ===
@@ -347,28 +358,28 @@ fi
 
 # Configure a set of useful variables for the prompt
 DOMAIN=`hostname -f | cut -d '.' -f 2`
-# get virtualization  virtualization
+# get virtualization information
 XENTYPE=""
-if [ -d "/sys/bus/xen" ]; then
-    if [ -f "/proc/xen/capabilities" ]; then
+if [ -f "/sys/hypervisor/uuid" ]; then
+    if [ $(</sys/hypervisor/uuid) == "00000000-0000-0000-0000-000000000000" ]; then
         XENTYPE=",Dom0"
-    else 
-        XENTYPE=",domU"
+    else
+        XENTYPE=",DomU"
     fi
 fi
 # Test the PS1_EXTRA variable
-if [ -z "${PS1_EXTRA}" -a -f "/proc/cmdline" ]; then 
+if [ -z "${PS1_EXTRA}" -a -f "/proc/cmdline" ]; then
     # Here PS1_EXTRA is not set and/or empty, check additionally if it has not
     # been set via kernel comment
-    kernel_ps1_extra="$(grep PS1_EXTRA /proc/cmdline)" 
-    if [ -n "${kernel_ps1_extra}" ]; then 
+    kernel_ps1_extra="$(grep PS1_EXTRA /proc/cmdline)"
+    if [ -n "${kernel_ps1_extra}" ]; then
         PS1_EXTRA=` sed -e "s/.*PS1_EXTRA=\"\?\([^ ^\t^\"]\+\)\"\?.*/\1/g" /proc/cmdline `
-    fi 
+    fi
 fi
 PS1_EXTRAINFO="${BOLD_COLOR}${DOMAIN}${XENTYPE}${RESET_COLOR}"
-if [ -n "${PS1_EXTRA}" ]; then 
+if [ -n "${PS1_EXTRA}" ]; then
     PS1_EXTRAINFO="${PS1_EXTRAINFO},${YELLOW}${PS1_EXTRA}${RESET_COLOR}"
-fi 
+fi
 
 
 # # Bash support for ZSH-like 'preexec' and 'precmd' functions.
@@ -390,11 +401,11 @@ fi
 # }
 
 # This function is called from a subshell in $PS1, to provide a colorized smiley
-# depending on the exit status of the last run command. 
-# Exit status 130 is also considered as good as it corresponds to a CTRL-D 
+# depending on the exit status of the last run command.
+# Exit status 130 is also considered as good as it corresponds to a CTRL-D
 # cf http://www.unicode.org/charts/PDF/U1F600.pdf
 # cf http://superuser.com/questions/368497/how-can-you-customize-your-terminal-bash-prompt-with-smiley-faces
-__colorized_exit_status() { 
+__colorized_exit_status() {
     printf -- "\`if [[ \$? = 0 || \$? = 130  ]]; then echo -e '\[\e[01;32m\]\xE2\x98\xBA'; else echo -e '\[\e[01;31m\]\xE2\x98\xB9'; fi\`"
 }
 
@@ -432,7 +443,7 @@ __set_compact_prompt() {
 # (guessed from hostname -f)
 # `xentype` is DOM0 or domU depending if the machine is a Xen dom0 or domU
 # Finally, is the environment variable PS1_EXTRA is set (or passed to the
-# kernel), then its content is displayed here. 
+# kernel), then its content is displayed here.
 #
 # This prompt is perfect for terminal with black background, in my case the
 # Vizor color set (see http://visor.binaryage.com/) or iTerm2
