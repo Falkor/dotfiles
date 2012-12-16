@@ -347,12 +347,12 @@ fi
 
 # Configure a set of useful variables for the prompt
 DOMAIN=`hostname -f | cut -d '.' -f 2`
-# get virtualization  virtualization
+# get virtualization information
 XENTYPE=""
-if [ -d "/sys/bus/xen" ]; then
-    if [ -f "/proc/xen/capabilities" ]; then
+if [ -f "/sys/hypervisor/uuid" ]; then
+    if [ $(</sys/hypervisor/uuid) == "00000000-0000-0000-0000-000000000000" ]; then
         XENTYPE=",Dom0"
-    else 
+    else
         XENTYPE=",domU"
     fi
 fi
