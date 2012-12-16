@@ -280,6 +280,17 @@ unset bash bmajor bminor
 #}
 
 # ----------------------------------------------------------------------
+# BASH HISTORY
+# ----------------------------------------------------------------------
+
+# Increase the history size
+HISTSIZE=10000
+HISTFILESIZE=20000
+
+# Add date and time to the history
+HISTTIMEFORMAT="[%d/%m/%Y %H:%M:%S] "
+
+# ----------------------------------------------------------------------
 # VERSION CONTROL SYSTEM - CVS, SVN and GIT
 # ----------------------------------------------------------------------
 # === CVS ===
