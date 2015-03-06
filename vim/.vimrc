@@ -31,8 +31,8 @@ set enc=iso-8859-1
 
 " Active la coloration syntaxique
 syntax on
+set background=dark
 " Utiliser le jeu de couleurs standard
-" colorscheme default
 colorscheme default
 
 " Affiche la position du curseur 'ligne,colonne'
