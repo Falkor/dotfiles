@@ -1,20 +1,20 @@
-"  
-"  .vimrc -- my personal VIM configuration 
+"
+"  .vimrc -- my personal VIM configuration
 "            see http://github.com/Falkor/dotfiles
-" 
+"
 "  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 "                http://varrette.gforge.uni.lu
 "
-"             _                    
-"      __   _(_)_ __ ___  _ __ ___ 
+"             _
+"      __   _(_)_ __ ___  _ __ ___
 "      \ \ / / | '_ ` _ \| '__/ __|
-"       \ V /| | | | | | | | | (__ 
+"       \ V /| | | | | | | | | (__
 "      (_)_/ |_|_| |_| |_|_|  \___|
 "
-" 
-" To be reworked... for instance using 
+"
+" To be reworked... for instance using
 "   http://github.com/rtomayko/dotfiles/blob/rtomayko/.vimrc
-" 
+"
 " /etc/vim/vimrc ou ~/.vimrc
 " Fichier de configuration de Vim
 " Formation Debian GNU/Linux par Alexis de Lattre
@@ -26,14 +26,14 @@
 " Avertissement par flash (visual bell) plutôt que par beep
 set vb
 
-" Encoding 
+" Encoding
 set enc=iso-8859-1
 
 " Active la coloration syntaxique
 syntax on
-set background=dark
 " Utiliser le jeu de couleurs standard
 colorscheme default
+set background=dark
 
 " Affiche la position du curseur 'ligne,colonne'
 set ruler
