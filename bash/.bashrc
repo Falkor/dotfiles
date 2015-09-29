@@ -371,6 +371,24 @@ if [ -n "${PS1_EXTRA}" ]; then
 fi 
 
 
+# # Bash support for ZSH-like 'preexec' and 'precmd' functions.
+# # See http://www.twistedmatrix.com/users/glyph/preexec.bash.txt
+# test -r ~/.dotfiles.github.d/bash/preexec.bash &&
+# . ~/.dotfiles.github.d/bash/preexec.bash
+
+# set_xterm_title () {
+#     local title="$1"
+#     echo -ne "\e]0;$title\007"
+# }
+
+# precmd () {
+#     set_xterm_title "${TERM} - ${USER}@${HOSTNAME} `dirs -0` $PROMPTCHAR"
+# }
+
+# preexec () {
+#     set_xterm_title "${TERM} - $1 {`dirs -0`} (${USER}@${HOSTNAME})"
+# }
+
 # This function is called from a subshell in $PS1, to provide a colorized smiley
 # depending on the exit status of the last run command. 
 # Exit status 130 is also considered as good as it corresponds to a CTRL-D 
