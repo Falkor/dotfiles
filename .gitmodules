@@ -1,0 +1,4 @@
+[submodule ".submodules/gitstats"]
+	path = .submodules/gitstats
+	url = https://github.com/hoxu/gitstats.git
+	branch = master
