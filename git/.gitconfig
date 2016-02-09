@@ -61,3 +61,5 @@
 	autocrlf = input
         pager = less -FRSX
 
+[push]
+	default = matching
