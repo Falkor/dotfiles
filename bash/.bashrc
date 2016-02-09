@@ -400,23 +400,15 @@ fi
 #     set_xterm_title "${TERM} - $1 {`dirs -0`} (${USER}@${HOSTNAME})"
 # }
 
-# This function is called from a subshell in $PS1, to provide a colorized smiley
-# depending on the exit status of the last run command. 
-# Exit status 130 is also considered as good as it corresponds to a CTRL-D 
-# cf http://www.unicode.org/charts/PDF/U1F600.pdf
-# cf http://superuser.com/questions/368497/how-can-you-customize-your-terminal-bash-prompt-with-smiley-faces
-__colorized_exit_status() { 
-    printf -- "\`if [[ \$? = 0 || \$? = 130  ]]; then echo -e '\[\e[01;32m\]\xE2\x98\xBA'; else echo -e '\[\e[01;31m\]\xE2\x98\xB9'; fi\`"
+# This function is called from a subshell in $PS1, to provide the colorized
+# exit status of the last run command.
+# Exit status 130 is also considered as good as it corresponds to a CTRL-D
+__colorized_exit_status() {
+    printf -- "\`status=\$? ; if [[ \$status = 0 || \$status = 130  ]]; then \
+                                echo -e '\[\e[01;32m\]'\$status;             \
+                              else                                           \
+                                echo -e '\[\e[01;31m\]'\$status; fi\`"
 }
-## This function is called from a subshell in $PS1, to provide the colorized
-## exit status of the last run command.
-## Exit status 130 is also considered as good as it corresponds to a CTRL-D
-#__colorized_exit_status() {
-#    printf -- "\`status=\$? ; if [[ \$status = 0 || \$status = 130  ]]; then \
-#                                echo -e '\[\e[01;32m\]'\$status;             \
-#                              else                                           \
-#                                echo -e '\[\e[01;31m\]'\$status; fi\`"
-#}
 
 # Simple (basic) prompt
 __set_simple_prompt() {
