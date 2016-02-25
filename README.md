@@ -3,40 +3,88 @@
 [![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
 
-       Time-stamp: <Thu 2016-02-04 12:11 svarrette>
+       Time-stamp: <Wed 2016-02-10 09:10 svarrette>
 
          ______    _ _             _       _____        _    __ _ _          
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |         
         | |__ __ _| | | _____  _ __/ ___  | |  | | ___ | |_| |_ _| | ___ ___ 
-        |  __/ _` | | |/ / _ \| '__| / __| | |  | |/ _ \| __|  _| | |/ _ \ __|
+        |  __/ _` | | |/ / _ \| '__|/ __| | |  | |/ _ \| __|  _| | |/ _ \ __|
         | | | (_| | |   < (_) | |   \__ \ | |__| | (_) | |_| | | | |  __\__ \
         |_|  \__,_|_|_|\_\___/|_|   |___/ |_____/ \___/ \__|_| |_|_|\___|___/
                                                                              
                                                                              
-       Copyright (c) 2016 Sebastien Varrette aka Falkor <Sebastien.Varrette@uni.lu>
+       Copyright (c) 2011-2016 Sebastien Varrette aka Falkor <Sebastien.Varrette@uni.lu>
 
-Sebastien Varrette aka Falkor's dotfiles
-## Synopsis
+# Sebastien Varrette aka Falkor's dotfiles (zsh, bash, vim, screen etc.) 
 
-Sebastien Varrette aka Falkor's dotfiles
+These are my configuration files for `bash`, `zsh`, `git`, `vim` etc. so as to set up a system the way I like it.
 
-## Installation / Repository Setup
+__Warning:__ Use these dotfiles at your own risk! 
+
+In the sequel, when providing a command, `$>` denotes a prompt and is not part of the commands. 
+
+## Pre-requisites
+
+You should install the following elements to use the full functionality of
+these config files:
+
+* bash
+* bash-completions
+* zsh
+* screen
+* git
+* subversion
+* vim
+
+## Installation
+
+### Using Git and the embedded Makefile
 
 This repository is hosted on [Github](https://github.com/Falkor/dotfiles). 
 
-* To clone this repository, proceed as follows (adapt accordingly):
+* To clone this repository into `~/.dotfiles.falkor.d/`, proceed as follows 
 
-        $> mkdir -p ~/git/github.com/Falkor
-        $> cd ~/git/github.com/Falkor
-        $> git clone https://github.com/Falkor/dotfiles.git
+        $> git clone https://github.com/Falkor/dotfiles.git ~/.dotfiles.falkor.d
 
+**`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository by running:
 
-**`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository by running: 
-
-    $> cd dotfiles
-    $> make setup
+	    $> cd ~/.dotfiles.falkor.d
+	    $> make setup
 
 This will initiate the [Git submodules of this repository](.gitmodules) and setup the [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) layout for this repository.
+
+To install the 
+
+
+Later on, you can upgrade the [Git submodules](.gitmodules) to the latest version by running:
+
+
+
+
+## Contributing / Repository Setup for developers
+
+1. [Fork](https://help.github.com/articles/fork-a-repo/) it.
+2. To clone your forked copy of this repository, proceed as follows (adapt accordingly):
+
+        $> mkdir -p ~/git/github.com/<YOUR_LOGIN>
+        $> cd ~/git/github.com/<YOUR_LOGIN>
+        $> git clone https://github.com/<YOUR_LOGIN>/dotfiles.git
+
+3. **`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository ([Git-flow](https://github.com/nvie/gitflow), Git [submodules](.gitmodules) etc.) by running: 
+
+        $> cd dotfiles
+		$> make setup
+
+4. Create your own feature branch
+
+          $> git checkout -b my-new-feature
+
+5. Commit your changes (`git commit -am 'Added some feature'`)
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create a new [Pull Request](https://help.github.com/articles/using-pull-requests/) to submit your changes to me.
+
+
+
 
 Later on, you can upgrade the [Git submodules](.gitmodules) to the latest version by running:
 
@@ -45,6 +93,7 @@ Later on, you can upgrade the [Git submodules](.gitmodules) to the latest versio
 ## Issues / Feature request
 
 You can submit bug / issues / feature request using the [`Falkor/dotfiles` Project Tracker](https://github.com/Falkor/dotfiles/issues)
+
 ## Advanced Topics
 
 ### Git
