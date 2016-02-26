@@ -6,3 +6,6 @@
 	path = .submodules/Makefiles
 	url = https://github.com/Falkor/Makefiles.git
 	branch = devel
+[submodule "emacs"]
+	path = emacs
+	url = https://github.com/Falkor/emacs-config2
