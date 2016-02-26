@@ -16,10 +16,12 @@
 ################################################################################
 # Resources:
 #  - http://stackoverflow.com/questions/267761/what-does-your-gitconfig-contain
-[user]
-    name = Sebastien Varrette
-    email = Sebastien.Varrette@uni.lu
-    signingkey = 0xDD01D5C0
+
+# As introduced in Git >= 1.7.10 (see http://git-scm.com/docs/git-config#_includes)
+[include]
+    # For username / credentials / private business etc.
+    path = .gitconfig.local
+
 [alias]
     up = pull origin
     pu = push origin
@@ -29,7 +31,7 @@
     br = branch
     w  = whatchanged --abbrev-commit
     ls = ls-files
-    gr = log --graph --oneline --decorate
+    gr = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     # From http://progit.org/book/ch2-11.html
     unstage = reset HEAD --
     last = log -1 HEAD
