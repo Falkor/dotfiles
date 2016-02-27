@@ -209,7 +209,7 @@ alias em="emacsclient -nw --alternate-editor='vim'"
 # ---------------
 alias zshrc="$EDITOR ~/.zshrc" # Quick access to the ~/.zshrc file
 alias sourcezshrc="source ~/.zshrc"
-alias zshfalkor="$EDITOR ~/.oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to the ~/.zshrc file
+alias zshfalkor="$EDITOR ~/.oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
 
 #--------------
 # Global alias
@@ -219,8 +219,3 @@ alias -g H="| head -n 20" # Write L after a command to get the 20 first lines
 alias -g G='| grep --color -i' # Write G after the command to grep it
 alias -g TL='| tail -20'
 alias -g NUL="> /dev/null 2>&1" # You get the idea.
-
-#-----------------
-# Custom aliases
-#-----------------
-[ -f "aliases.local.zsh" ] && source "aliases.local.zsh"
