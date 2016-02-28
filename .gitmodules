@@ -1,0 +1,14 @@
+[submodule ".submodules/gitstats"]
+	path = .submodules/gitstats
+	url = https://github.com/hoxu/gitstats.git
+	branch = master
+[submodule ".submodules/Makefiles"]
+	path = .submodules/Makefiles
+	url = https://github.com/Falkor/Makefiles.git
+	branch = devel
+[submodule "emacs"]
+	path = emacs
+	url = https://github.com/Falkor/emacs-config2
+[submodule "oh-my-zsh/custom/plugins/zsh-completions"]
+	path = oh-my-zsh/custom/plugins/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions

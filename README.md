@@ -1,87 +1,206 @@
--*- mode: markdown; mode: auto-fill; fill-column: 80 -*-
+-*- mode: markdown; mode: visual-line; fill-column: 80 -*-
 
-`README.md`
+[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
 
-      Time-stamp: <Tue 2011-01-25 17:35 svarrette>
+       Time-stamp: <Sun 2016-02-28 12:07 svarrette>
 
-Copyright (c) 2011 [Sebastien Varrette](http://varrette.gforge.uni.lu)
- 
----------
-# Sebastien Varrette Dot Files
+         ______    _ _             _       _____        _    __ _ _
+        |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
+        | |__ __ _| | | _____  _ __/ ___  | |  | | ___ | |_| |_ _| | ___ ___
+        |  __/ _` | | |/ / _ \| '__|/ __| | |  | |/ _ \| __|  _| | |/ _ \ __|
+        | | | (_| | |   < (_) | |   \__ \ | |__| | (_) | |_| | | | |  __\__ \
+        |_|  \__,_|_|_|\_\___/|_|   |___/ |_____/ \___/ \__|_| |_|_|\___|___/
 
-These are my configuration files for `bash`, `git`, `vim` etc. so as to set up a
-system the way I like it. 
 
-In the sequel, when providing a command, `$>` denotes a prompt and is not part of the commands. 
+       Copyright (c) 2011-2016 Sebastien Varrette aka Falkor <Sebastien.Varrette@uni.lu>
+
+# Sebastien Varrette aka Falkor's dotfiles (zsh, bash, vim, screen etc.)
+
+These are my configuration files for `bash`, `zsh`, `git`, `vim` etc. so as to set up a system the way I like it.
+
+__Warning:__ Use these dotfiles at your own risk!
+
+In the sequel, when providing a command, `$>` denotes a prompt and is not part of the commands.
 
 ## Pre-requisites
 
-You should install the following elements to use the full functionality of these config files. 
+You should install the following elements to use the full functionality of
+these config files:
 
-### Mac OS X 
+* bash
+* bash-completions
+* zsh
+* screen
+* git
+* subversion
+* vim
 
-There exists several package manager under Mac to install open-source software. 
-I recommend [Macports](http://www.macports.org/) or [Homebrew](http://mxcl.github.com/homebrew/)
-The Macports packages you should install (I'm sure you'll find alone the Homebrew equivalents) are the following ones: 
-
-      	bash-completion
-		git-core +bash_completion +svn +doc +gitweb
-
-Note that `vim` should be installed by default.  
-
-### Linux Debian 
-
-Under Lenny, configure the [backports](http://backports.debian.org/) to get the version 1.7 of git (which include the bash function `__git_ps1`). In this purpose, follow [these instructions](http://backports.debian.org/Instructions/) and run the following commands: 
-
-		$> apt-get -t lenny-backports install git
-		$> apt-get install bash-completion vim
-
-	
 ## Installation
 
-Run the following commands: 
-	
-		$> git clone git://github.com/Falkor/dotfiles ~/.dotfiles.github.d
-		$> cd 
-		$> mv .bashrc .bashrc.old
-		$> ln -s .dotfiles.github.d/bash/.bashrc    .
-		$> ln -s .dotfiles.github.d/bash/.inputrc   .
-		$> ln -s .dotfiles.github.d/vim/.vimrc      .
-		$> ln -s .dotfiles.github.d/git/.gitconfig  .
-		$> mkdir bin 
-		$> cd bin
-		$> ln -s ../.dotfiles.github.d/bin/git-changelog .
+### Using Git and the embedded Makefile
 
-One day I will take some time to do an installation script ;)
+This repository is hosted on [Github](https://github.com/Falkor/dotfiles).
 
-In all cases, the next step if to ensure that your `~/.bashrc` is really invoked when bash is run. 
-For this, ensure you have the following lines in your file `~/.profile` (create it if necessary):
+* To clone this repository into `~/.dotfiles.falkor.d/`, proceed as follows
 
-	if [ -f ~/.bashrc ]; then 
-		. ~/.bashrc
-	fi
+        $> git clone https://github.com/Falkor/dotfiles.git ~/.dotfiles.falkor.d
+
+**`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository by running:
+
+	    $> cd ~/.dotfiles.falkor.d
+	    $> make setup
+
+This will initiate the [Git submodules of this repository](.gitmodules) and setup the [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) layout for this repository.
+
+Later on, you can upgrade the [Git submodules](.gitmodules) to the latest version by running:
+
+          $> make update
 
 
-## Environment
+## Contributing / Repository Setup for developers
 
-I am running primarily on Mac OS X, otherwise on Debian so these config files
-will likely work on your system, eventually with a little tweaking. 
+1. [Fork](https://help.github.com/articles/fork-a-repo/) it.
+2. To clone your forked copy of this repository, proceed as follows (adapt accordingly):
 
-## BUGS
+        $> mkdir -p ~/git/github.com/<YOUR_LOGIN>
+        $> cd ~/git/github.com/<YOUR_LOGIN>
+        $> git clone https://github.com/<YOUR_LOGIN>/dotfiles.git
 
-Find a bug? Just post a new issue on [Github](https://github.com/Falkor/dotfiles/issues)!
+3. **`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository ([Git-flow](https://github.com/nvie/gitflow), Git [submodules](.gitmodules) etc.) by running:
 
-## DISCLAIMER
+        $> cd dotfiles
+		$> make setup
 
-My `dotfiles` are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+4. Create your own feature branch
 
-## AUTHOR
- 
-[Sebastien Varrette](http://varrette.gforge.uni.lu), using various contributions on the Internet, in particular: 
+          $> git checkout -b my-new-feature
 
-*  [Derek Payton dotfiles](http://bitbucket.org/dmpayton/dotfiles/src/tip/.bashrc)
-*  [Ryan Tomayko dotfiles](http://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc)
+5. Commit your changes (`git commit -am 'Added some feature'`)
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create a new [Pull Request](https://help.github.com/articles/using-pull-requests/) to submit your changes to me.
 
-As often, I release these files under GNU GPL Licence v3. You may use, modify, and/or redistribute them under the terms of the GPL Licence v3.
 
--------
+
+
+Later on, you can upgrade the [Git submodules](.gitmodules) to the latest version by running:
+
+    $> make upgrade
+
+## Issues / Feature request
+
+You can submit bug / issues / feature request using the [`Falkor/dotfiles` Project Tracker](https://github.com/Falkor/dotfiles/issues)
+
+## Advanced Topics
+
+### Git
+
+This repository make use of [Git](http://git-scm.com/) such that you should have it installed on your working machine:
+
+       $> apt-get install git-core # On Debian-like systems
+       $> yum install git          # On CentOS-like systems
+       $> brew install git         # On Mac OS, using [Homebrew](http://mxcl.github.com/homebrew/)
+       $> port install git         # On Mac OS, using MacPort
+
+Consider these resources to become more familiar (if not yet) with Git:
+
+* [Simple Git Guide](http://rogerdudler.github.io/git-guide/)
+* [Git book](http://book.git-scm.com/index.html)
+* [Github:help](http://help.github.com/mac-set-up-git/)
+* [Git reference](http://gitref.org/)
+
+At least, you shall configure the following variables
+
+       $> git config --global user.name "Your Name Comes Here"
+       $> git config --global user.email you@yourdomain.example.com
+       # configure colors
+       $> git config --global color.diff auto
+       $> git config --global color.status auto
+       $> git config --global color.branch auto
+
+Note that you can create git command aliases in `~/.gitconfig` as follows:
+
+       [alias]
+           up = pull origin
+           pu = push origin
+           st = status
+           df = diff
+           ci = commit -s
+           br = branch
+           w  = whatchanged --abbrev-commit
+           ls = ls-files
+           gr = log --graph --oneline --decorate
+           amend = commit --amend
+
+Consider my personal [`.gitconfig`](https://github.com/Falkor/dotfiles/blob/master/git/.gitconfig) as an example -- if you decide to use it, simply copy it in your home directory and adapt the `[user]` section.
+
+### [Git-flow](https://github.com/nvie/gitflow)
+
+The Git branching model for this repository follows the guidelines of
+[gitflow](http://nvie.com/posts/a-successful-git-branching-model/).
+In particular, the central repository holds two main branches with an infinite lifetime:
+
+* `production`: the *production-ready* branch
+* `master`: the main branch where the latest developments interviene. This is the *default* branch you get when you clone the repository.
+
+Thus you are more than encouraged to install the [git-flow](https://github.com/nvie/gitflow) extensions following the [installation procedures](https://github.com/nvie/gitflow/wiki/Installation) to take full advantage of the proposed operations. The associated [bash completion](https://github.com/bobthecow/git-flow-completion) might interest you also.
+
+### Releasing mechanism
+
+The operation consisting of releasing a new version of this repository is automated by a set of tasks within the root `Makefile`.
+
+In this context, a version number have the following format:
+
+      <major>.<minor>.<patch>[-b<build>]
+
+where:
+
+* `< major >` corresponds to the major version number
+* `< minor >` corresponds to the minor version number
+* `< patch >` corresponds to the patching version number
+* (eventually) `< build >` states the build number _i.e._ the total number of commits within the `master` branch.
+
+Example: \`1.0.0-b28\`
+
+The current version number is stored in the root file `VERSION`. __/!\ NEVER MAKE ANY MANUAL CHANGES TO THIS FILE__
+
+For more information on the version, run:
+
+     $> make versioninfo
+
+If a new version number such be bumped, you simply have to run:
+
+      $> make start_bump_{major,minor,patch}
+
+This will start the release process for you using `git-flow`.
+Once you have finished to commit your last changes, make the release effective by running:
+
+      $> make release
+
+It will finish the release using `git-flow`, create the appropriate tag in the `production` branch and merge all things the way they should be.
+
+## Licence
+
+This project is released under the terms of the [GPL-3.0](LICENCE) licence.
+
+[![Licence](https://www.gnu.org/graphics/gplv3-88x31.png)](http://www.gnu.org/licenses/gpl-3.0.html)
+
+## Contributing
+
+That's quite simple:
+
+1. [Fork](https://help.github.com/articles/fork-a-repo/) it
+2. Create your own feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new [Pull Request](https://help.github.com/articles/using-pull-requests/)
+
+## Resources
+
+You can find of course many other resources in terms dotfiles repositories.
+I suggest you to take a look at the following places I inspired:
+
+* [Your unofficial guide to dotfiles on GitHub](https://dotfiles.github.io/)
+* My friend [H.Cartiaux's dotfiles](https://github.com/hcartiaux/dotfiles)
+* [Holman's does dotfiles](https://github.com/holman/dotfiles), for his idea of bundling the [homebrew](http://brew.sh) configuration
+* [Mathias’s dotfiles](https://github.com/mathiasbynens/dotfiles),  for featuring `~/.osx` _i.e._ sensible hacker defaults for OS X;
+* [Awesome dotfiles](https://github.com/webpro/awesome-dotfiles), a curated list of dotfiles resources. Inspired by the [awesome](https://github.com/sindresorhus/awesome) list thing.

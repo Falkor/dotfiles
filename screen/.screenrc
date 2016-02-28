@@ -1,0 +1,31 @@
+###################################################################################
+# .screenrc -- configuration file for [screen](http://www.gnu.org/software/screen/)
+# Time-stamp: <Fri 2012-10-19 10:05 svarrette>
+#
+#                      ___  ___ _ __ ___  ___ _ __  _ __ ___
+#                     / __|/ __| '__/ _ \/ _ \ '_ \| '__/ __|
+#                    _\__ \ (__| | |  __/  __/ | | | | | (__
+#                   (_)___/\___|_|  \___|\___|_| |_|_|  \___|
+#
+###################################################################################
+# Resources:
+# *  gyaresu's .screenrc: http://delicious.com/search?p=screenrc
+###################################################################################
+
+# Don't display the copyright page
+startup_message off
+
+# tab-completion flash in heading bar
+vbell off
+
+# keep scrollback n lines
+defscrollback 1000
+
+shelltitle "$ |bash"
+
+# THIS IS THE PRETTY BIT
+#change the hardstatus settings to give an window list at the bottom of the
+##screen, with the time and date and with the current window highlighted
+hardstatus             alwayslastline
+#hardstatus string '%{= mK}%-Lw%{= KW}%50>%n%f* %t%{= mK}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
