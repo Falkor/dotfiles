@@ -52,12 +52,9 @@ This repository is hosted on [Github](https://github.com/Falkor/dotfiles).
 
 This will initiate the [Git submodules of this repository](.gitmodules) and setup the [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) layout for this repository.
 
-To install the
-
-
 Later on, you can upgrade the [Git submodules](.gitmodules) to the latest version by running:
 
-
+          $> make update
 
 
 ## Contributing / Repository Setup for developers
