@@ -1,0 +1,12 @@
+site_name: Falkor/dotfiles
+pages:
+- Home: 'index.md'
+- Overview: 'overview.md'
+- Tests with Vagrant: 'vagrant.md'
+- Documentation (RTFD): 'rtfd.md'
+- Contributing:
+  - 'Overview': 'contributing/index.md'
+  - 'Directory Layout': 'contributing/layout.md'
+  - 'Repository Setup and Developments': 'contributing/setup.md'
+  - 'Semantic Versioning': 'contributing/versioning.md'
+theme: readthedocs
