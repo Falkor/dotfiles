@@ -17,6 +17,7 @@
 # Sebastien Varrette aka Falkor's dotfiles (zsh, bash, vim, screen etc.)
 
 These are my configuration files for `bash`, `zsh`, `git`, `vim` etc. so as to set up a system the way I like it.
+Screenshot
 
 __Warning:__ Use these dotfiles at your own risk!
 
