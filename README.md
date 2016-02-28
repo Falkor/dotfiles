@@ -1,27 +1,26 @@
 -*- mode: markdown; mode: visual-line; fill-column: 80 -*-
 
-[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
-![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
+[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
 
-       Time-stamp: <Wed 2016-02-10 09:10 svarrette>
+       Time-stamp: <Sun 2016-02-28 12:07 svarrette>
 
-         ______    _ _             _       _____        _    __ _ _          
-        |  ____|  | | |           ( )     |  __ \      | |  / _(_) |         
-        | |__ __ _| | | _____  _ __/ ___  | |  | | ___ | |_| |_ _| | ___ ___ 
+         ______    _ _             _       _____        _    __ _ _
+        |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
+        | |__ __ _| | | _____  _ __/ ___  | |  | | ___ | |_| |_ _| | ___ ___
         |  __/ _` | | |/ / _ \| '__|/ __| | |  | |/ _ \| __|  _| | |/ _ \ __|
         | | | (_| | |   < (_) | |   \__ \ | |__| | (_) | |_| | | | |  __\__ \
         |_|  \__,_|_|_|\_\___/|_|   |___/ |_____/ \___/ \__|_| |_|_|\___|___/
-                                                                             
-                                                                             
+
+
        Copyright (c) 2011-2016 Sebastien Varrette aka Falkor <Sebastien.Varrette@uni.lu>
 
-# Sebastien Varrette aka Falkor's dotfiles (zsh, bash, vim, screen etc.) 
+# Sebastien Varrette aka Falkor's dotfiles (zsh, bash, vim, screen etc.)
 
 These are my configuration files for `bash`, `zsh`, `git`, `vim` etc. so as to set up a system the way I like it.
 
-__Warning:__ Use these dotfiles at your own risk! 
+__Warning:__ Use these dotfiles at your own risk!
 
-In the sequel, when providing a command, `$>` denotes a prompt and is not part of the commands. 
+In the sequel, when providing a command, `$>` denotes a prompt and is not part of the commands.
 
 ## Pre-requisites
 
@@ -40,9 +39,9 @@ these config files:
 
 ### Using Git and the embedded Makefile
 
-This repository is hosted on [Github](https://github.com/Falkor/dotfiles). 
+This repository is hosted on [Github](https://github.com/Falkor/dotfiles).
 
-* To clone this repository into `~/.dotfiles.falkor.d/`, proceed as follows 
+* To clone this repository into `~/.dotfiles.falkor.d/`, proceed as follows
 
         $> git clone https://github.com/Falkor/dotfiles.git ~/.dotfiles.falkor.d
 
@@ -53,7 +52,7 @@ This repository is hosted on [Github](https://github.com/Falkor/dotfiles).
 
 This will initiate the [Git submodules of this repository](.gitmodules) and setup the [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) layout for this repository.
 
-To install the 
+To install the
 
 
 Later on, you can upgrade the [Git submodules](.gitmodules) to the latest version by running:
@@ -70,7 +69,7 @@ Later on, you can upgrade the [Git submodules](.gitmodules) to the latest versio
         $> cd ~/git/github.com/<YOUR_LOGIN>
         $> git clone https://github.com/<YOUR_LOGIN>/dotfiles.git
 
-3. **`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository ([Git-flow](https://github.com/nvie/gitflow), Git [submodules](.gitmodules) etc.) by running: 
+3. **`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository ([Git-flow](https://github.com/nvie/gitflow), Git [submodules](.gitmodules) etc.) by running:
 
         $> cd dotfiles
 		$> make setup
@@ -98,7 +97,7 @@ You can submit bug / issues / feature request using the [`Falkor/dotfiles` Proje
 
 ### Git
 
-This repository make use of [Git](http://git-scm.com/) such that you should have it installed on your working machine: 
+This repository make use of [Git](http://git-scm.com/) such that you should have it installed on your working machine:
 
        $> apt-get install git-core # On Debian-like systems
        $> yum install git          # On CentOS-like systems
@@ -121,7 +120,7 @@ At least, you shall configure the following variables
        $> git config --global color.status auto
        $> git config --global color.branch auto
 
-Note that you can create git command aliases in `~/.gitconfig` as follows: 
+Note that you can create git command aliases in `~/.gitconfig` as follows:
 
        [alias]
            up = pull origin
@@ -135,7 +134,7 @@ Note that you can create git command aliases in `~/.gitconfig` as follows:
            gr = log --graph --oneline --decorate
            amend = commit --amend
 
-Consider my personal [`.gitconfig`](https://github.com/Falkor/dotfiles/blob/master/git/.gitconfig) as an example -- if you decide to use it, simply copy it in your home directory and adapt the `[user]` section. 
+Consider my personal [`.gitconfig`](https://github.com/Falkor/dotfiles/blob/master/git/.gitconfig) as an example -- if you decide to use it, simply copy it in your home directory and adapt the `[user]` section.
 
 ### [Git-flow](https://github.com/nvie/gitflow)
 
@@ -184,7 +183,7 @@ It will finish the release using `git-flow`, create the appropriate tag in the `
 
 ## Licence
 
-This project is released under the terms of the [GPL-3.0](LICENCE) licence. 
+This project is released under the terms of the [GPL-3.0](LICENCE) licence.
 
 [![Licence](https://www.gnu.org/graphics/gplv3-88x31.png)](http://www.gnu.org/licenses/gpl-3.0.html)
 
@@ -197,3 +196,14 @@ That's quite simple:
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new [Pull Request](https://help.github.com/articles/using-pull-requests/)
+
+## Resources
+
+You can find of course many other resources in terms dotfiles repositories.
+I suggest you to take a look at the following places I inspired:
+
+* [Your unofficial guide to dotfiles on GitHub](https://dotfiles.github.io/)
+* My friend [H.Cartiaux's dotfiles](https://github.com/hcartiaux/dotfiles)
+* [Holman's does dotfiles](https://github.com/holman/dotfiles), for his idea of bundling the [homebrew](http://brew.sh) configuration
+* [Mathias’s dotfiles](https://github.com/mathiasbynens/dotfiles),  for featuring `~/.osx` _i.e._ sensible hacker defaults for OS X;
+* [Awesome dotfiles](https://github.com/webpro/awesome-dotfiles), a curated list of dotfiles resources. Inspired by the [awesome](https://github.com/sindresorhus/awesome) list thing.
