@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2016-02-29 15:45 svarrette>
+# Time-stamp: <Mon 2016-02-29 23:27 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -178,23 +178,23 @@ add_or_remove_link() {
     local dst=$2
     [ ! -f $src ] && print_error_and_exit "Unable to find the dotfile '${src}'"
     if [ "${MODE}" == "--delete" ]; then
-      debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink $dst))"
-      if [[ -h $dst && "$(readlink $dst)" == "${src}" ]]; then
-        warning "removing the symlink '$dst'"
-        [ -n "${VERBOSE}" ] && really_continue
-        execute "rm $dst"
-        if [ -f "${dst}.bak" ]; then
-          warning "restoring ${dst} from ${dst}.bak"
-          execute "mv ${dst}.bak ${dst}"
+        debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink $dst))"
+        if [[ -h $dst && "$(readlink $dst)" == "${src}" ]]; then
+            warning "removing the symlink '$dst'"
+            [ -n "${VERBOSE}" ] && really_continue
+            execute "rm $dst"
+            if [ -f "${dst}.bak" ]; then
+                warning "restoring ${dst} from ${dst}.bak"
+                execute "mv ${dst}.bak ${dst}"
+            fi
         fi
-      fi
     else
         debug "attempt to add '$dst' symlink (pointing to '$src')"
         # return if the symlink already exists
-        [ -h $dst ] && return
-        if [ -f $dst ]; then
-          warning "The file '$dst' already exists and will be backuped (as ${dst}.bak)"
-          execute "cp $dst{,.bak}"
+        [[ -h $dst && "$(readlink $dst)" == "${src}" ]] && return
+        if [ -e $dst ]; then
+            warning "The file '$dst' already exists and will be backuped (as ${dst}.bak)"
+            execute "mv $dst{,.bak}"
         fi
         execute "ln -sf $src $dst"
     fi
@@ -206,16 +206,16 @@ copy_or_delete() {
     local dst=$2
     [ ! -f $src ] && print_error_and_exit "Unable to find the dotfile '${src}'"
     if [ "${MODE}" == "--delete" ]; then
-      debug "removing dst='$dst'"
-      if [[ -f $dst ]]; then
-        warning "removing the file '$dst'"
-        [ -n "${VERBOSE}" ] && really_continue
-        execute "rm $dst"
-        if [ -f "${dst}.bak" ]; then
-          warning "restoring ${dst} from ${dst}.bak"
-          execute "mv ${dst}.bak ${dst}"
+        debug "removing dst='$dst'"
+        if [[ -f $dst ]]; then
+            warning "removing the file '$dst'"
+            [ -n "${VERBOSE}" ] && really_continue
+            execute "rm $dst"
+            if [ -f "${dst}.bak" ]; then
+                warning "restoring ${dst} from ${dst}.bak"
+                execute "mv ${dst}.bak ${dst}"
+            fi
         fi
-      fi
     else
         debug "copying '$dst' from '$src'"
         check_bin shasum
@@ -223,12 +223,12 @@ copy_or_delete() {
         local checksum_src=`shasum $src | cut -d ' ' -f 1`
         local checksum_dst=`shasum $dst | cut -d ' ' -f 1`
         if [ "${checksum_src}" == "${checksum_dst}" ]; then
-          debug "NOT copying '$dst' from '$src' since they are the same files"
-          return
+            debug "NOT copying '$dst' from '$src' since they are the same files"
+            return
         fi
         if [ -f $dst ]; then
-          warning "The file '$dst' already exists and will be backuped (as ${dst}.bak)"
-          execute "cp $dst{,.bak}"
+            warning "The file '$dst' already exists and will be backuped (as ${dst}.bak)"
+            execute "cp $dst{,.bak}"
         fi
         execute "cp $src $dst"
     fi
@@ -237,20 +237,20 @@ copy_or_delete() {
 install_ohmyzsh() {
     check_bin zsh
     if [ ! -d "$HOME/.oh-my-zsh/" ]; then
-      info "installing Oh-My-ZSH -- see http://ohmyz.sh/"
-      # installation by curl if available
-      if   [ -n "`which curl`" ]; then
-        echo "   - installation using curl"
-        warning " "
-        warning "Remember to Exit the zsh shell to continue the installation!!!"
-        warning " "
-        [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-      elif [ -n "`which wget`" ]; then
-        echo "   - installation using wget"
-        [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-      else
-          print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
-      fi
+        info "installing Oh-My-ZSH -- see http://ohmyz.sh/"
+        # installation by curl if available
+        if   [ -n "`which curl`" ]; then
+            echo "   - installation using curl"
+            warning " "
+            warning "Remember to Exit the zsh shell to continue the installation!!!"
+            warning " "
+            [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+        elif [ -n "`which wget`" ]; then
+            echo "   - installation using wget"
+            [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+        else
+            print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
+        fi
     fi
     copy_or_delete  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
 }
@@ -263,13 +263,13 @@ install_custom_ohmyzsh() {
     for f in `ls ${custom_falkordir}/*.zsh`; do
         ff=`basename $f`
         if [ ! -h "${customdir}/$ff" ]; then
-          echo "     - add custom '$ff'"
-          execute "ln -s .ref/$ff ${customdir}/$ff"
+            echo "     - add custom '$ff'"
+            execute "ln -s .ref/$ff ${customdir}/$ff"
         fi
     done
     local private_aliases="${customdir}/private_aliases.zsh"
     if [ ! -f "${private_aliases}" ]; then
-      cat  << 'EOF' > ${private_aliases}
+        cat  << 'EOF' > ${private_aliases}
 #
 # private_aliases.zsh
 #
@@ -282,19 +282,19 @@ EOF
     for d in `ls -d ${falkor_plugindir}/*`; do
         dd=`basename $d`
         if [ ! -h "${plugindir}/$dd" ]; then
-          echo "     - installing custom oh-my-zsh plugin '$dd'"
-          execute "ln -s .ref/$dd ${plugindir}/$dd"
+            echo "     - installing custom oh-my-zsh plugin '$dd'"
+            execute "ln -s .ref/$dd ${plugindir}/$dd"
         fi
     done
 }
 
 uninstall_ohmyzsh() {
     if [ -n "`which curl`" ]; then
-      echo "   - uninstall ~/.oh-my-zsh/ using curl"
-      [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/uninstall.sh)"
+        echo "   - uninstall ~/.oh-my-zsh/ using curl"
+        [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/uninstall.sh)"
     elif [ -n "`which wget`" ]; then
-      echo "   - uninstall ~/.oh-my-zsh/ using wget"
-      [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/uninstall.sh -O -)"
+        echo "   - uninstall ~/.oh-my-zsh/ using wget"
+        [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/uninstall.sh -O -)"
     else
         print_error_and_exit "Unable to uninstall oh-my-zsh/. You should install 'curl' or 'wget' on your system"
     fi
@@ -306,6 +306,7 @@ uninstall_ohmyzsh() {
 ################################################################################
 # Let's go
 
+ACTION="install"
 # Check for options
 while [ $# -ge 1 ]; do
     case $1 in
@@ -318,7 +319,7 @@ while [ $# -ge 1 ]; do
         -n | --dry-run) SIMULATION="--dry-run";;
         --offline)      OFFLINE="--offline";;
         --delete | --remove | --uninstall)
-            OFFLINE="--offline"; MODE="--delete";;
+            ACTION="uninstall"; OFFLINE="--offline"; MODE="--delete";;
         -d | --dir | --dotfiles)
             shift;       DOTFILES=$1;;
         --with-bash  | --bash)   WITH_BASH='--with-bash';;
@@ -341,24 +342,33 @@ done
 echo ${DOTFILES} | grep  '^\/' > /dev/null
 greprc=$?
 if [ $greprc -ne 0 ]; then
-  warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
-  DOTFILES="$HOME/${DOTFILES}"
+    warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
+    DOTFILES="$HOME/${DOTFILES}"
 fi
-[ "${MODE}" == "--delete" ] && ACTION="uninstall" || ACTION="install"
 info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
 [ -z "${FORCE}" ] && really_continue
 
 # Update the repository if already present
 [[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd $DOTFILES ; git pull )"
 # OR clone it there
-[[ ! -d "${DOTFILES}" ]] && execute "git clone https://github.com/Falkor/dotfiles.git ${DOTFILES}"
+[[ ! -d "${DOTFILES}" ]] && execute "git clone --recursive https://github.com/Falkor/dotfiles.git ${DOTFILES}"
 
 cd ~
 
+## GNU Screen
 if [ -n "${WITH_SCREEN}" ]; then
-    info "proceed with Falkor's GNU Screen"
+    info "${ACTION} Falkor's GNU Screen configuration ~/.screenrc"
     add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
 fi
+
+## BASH
+if [ -n "${WITH_BASH}" ]; then
+    info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc"
+    add_or_remove_link $DOTFILES/bash/bashrc       ~/.bashrc
+    add_or_remove_link $DOTFILES/bash/inputrc      ~/.inputrc
+    add_or_remove_link $DOTFILES/bash/bash_profile ~/.bash_profile
+fi
+
 
 
 
