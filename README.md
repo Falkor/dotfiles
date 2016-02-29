@@ -1,9 +1,8 @@
 -*- mode: markdown; mode: visual-line; fill-column: 80 -*-
 
-[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
-[![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
+[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Falkor/dotfiles issues](https://img.shields.io/github/issues/Falkor/dotfiles.svg)](https://github.com/Falkor/dotfiles/issues) ![](https://img.shields.io/github/stars/Falkor/dotfiles.svg) [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
-        Time-stamp: <Mon 2016-02-29 15:07 svarrette>
+        Time-stamp: <Mon 2016-02-29 15:44 svarrette>
 
          ______    _ _             _       _____        _    __ _ _
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
@@ -60,9 +59,16 @@ This will initiate the [Git submodules of this repository](.gitmodules) and setu
 
 Now to install all my dotfiles, run:
 
-        $> make install
+        $> ./install.sh --all
 
-### Git-free install
+Note that __by default__, the `install.sh` script does nothing __except__ cloning the Falkor/dotfiles directory in `~/.dotfiles.falkor.d`.
+
+* if you do not want to install everything but only a subpart, kindly refer to the below table to find the proper command-line argument to use
+   - Ex: `./install.sh --zsh --vim --git`
+* if you want to install everything in a row, use as suggested above the `--all` option
+   - Ex: `./install.sh --all`
+
+### All-in-one git-free install
 
 TODO (with curl over `install.sh`)
 
@@ -84,15 +90,19 @@ Note that if you wish to upgrade the [Git submodules](.gitmodules) to the latest
 
 ## What's included and how to customize?
 
-| Tools                                                      | Description                  | Type                  | Documentation                                |
-|------------------------------------------------------------|------------------------------|-----------------------|----------------------------------------------|
-| [bash](http://tiswww.case.edu/php/chet/bash/bashtop.html)  | Bourne-Again shell           | shell                 | [`bash/README.md`](bash/README.md)           |
-| [zsh](http://www.zsh.org/) / [Oh-my-zsh](http://ohmyz.sh/) | Z shell                      | shell                 | [`oh-my-zsh/README.md`](oh-my-zsh/README.md) |
-| [vim](http://www.vim.org/)                                 | VI iMproved                  | editor                | [`vim/README.md`](vim/README.md)             |
-| [emacs](https://www.gnu.org/software/emacs/)               | GNU Emacs                    | editor                | `emacs/README.md`                            |
-| [git](https://git-scm.com/)                                | `git --fast-version-control` | VCS                   | [`git/README.md`](git/README.md)             |
-| [screen](https://www.gnu.org/software/screen/)             | GNU screen                   | terminal multiplexers | [`screen/README.md`](screen/README.md)       |
-|                                                            |                              |                       |                                              |
+| Tools                                                                          | Type                  | Installation            | Documentation                                |
+|--------------------------------------------------------------------------------|-----------------------|-------------------------|----------------------------------------------|
+| [Bourne-Again shell (bash)](http://tiswww.case.edu/php/chet/bash/bashtop.html) | shell                 | `./install.sh --bash`   | [`bash/README.md`](bash/README.md)           |
+| [zsh](http://www.zsh.org/) / [Oh-my-zsh](http://ohmyz.sh/)                     | shell                 | `./install.sh --zsh`    | [`oh-my-zsh/README.md`](oh-my-zsh/README.md) |
+| [VI iMproved (vim)](http://www.vim.org/)                                       | editor                | `./install.sh --vim`    | [`vim/README.md`](vim/README.md)             |
+| [GNU Emacs](https://www.gnu.org/software/emacs/)                               | editor                | `./install.sh --emacs`  | `emacs/README.md`                            |
+| [Git `--fast-version-control`](https://git-scm.com/)                           | VCS                   | `./install.sh --git`    | [`git/README.md`](git/README.md)             |
+| [GNU screen](https://www.gnu.org/software/screen/)                             | terminal multiplexers | `./install.sh --screen` | [`screen/README.md`](screen/README.md)       |
+|                                                                                |                       |                         |                                              |
+
+As mentioned above, if you want to install all dotfiles in one shot, just use
+
+      $> ./install.sh --all
 
 ## Issues / Feature request
 
