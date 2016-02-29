@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Mon 2016-02-29 21:42 svarrette>
+# Time-stamp: <Mon 2016-02-29 22:31 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -125,6 +125,7 @@ gma() {
     git commit -s -am "$*"
 }
 alias gp='git push'
+alias gpu='git push'
 alias gpd='git push --dry-run'
 alias gpoat='git push origin --all && git push origin --tags'
 [[ -n ${ZSH_VERSION-} ]] && compdef _git gpoat=git-push
