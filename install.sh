@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2016-02-29 01:02 svarrette>
+# Time-stamp: <Mon 2016-02-29 15:45 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -40,6 +40,13 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOTFILES=~/.dotfiles.falkor.d
 
+# What to take care of (default is empty)
+WITH_BASH=""
+WITH_ZSH=""
+WITH_EMACS=""
+WITH_VIM=""
+WITH_GIT=""
+WITH_SCREEN=""
 
 #######################
 ### print functions ###
@@ -314,6 +321,19 @@ while [ $# -ge 1 ]; do
             OFFLINE="--offline"; MODE="--delete";;
         -d | --dir | --dotfiles)
             shift;       DOTFILES=$1;;
+        --with-bash  | --bash)   WITH_BASH='--with-bash';;
+        --with-zsh   | --zsh)    WITH_ZSH='--with-zsh';;
+        --with-emacs | --emacs)  WITH_EMACS='--with-emacs';;
+        --with-vim   | --vim)    WITH_VIM='--with-emacs';;
+        --with-git   | --git)    WITH_GIT='--with-git';;
+        --with-screen| --screen) WITH_SCREEN='--with-screen';;
+        -a | --all)
+            WITH_BASH='--with-bash';
+            WITH_ZSH='--with-zsh';
+            WITH_EMACS='--with-emacs';
+            WITH_VIM='--with-emacs';
+            WITH_GIT='--with-git';
+            WITH_SCREEN='--with-screen';;
     esac
     shift
 done
@@ -335,13 +355,20 @@ info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
 
 cd ~
 
-## ZSH
-if [ "${MODE}" == "--delete" ]; then
-  uninstall_ohmyzsh
-else
-    install_ohmyzsh
-    install_custom_ohmyzsh
+if [ -n "${WITH_SCREEN}" ]; then
+    info "proceed with Falkor's GNU Screen"
+    add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
 fi
+
+
+
+# ## ZSH
+# if [ "${MODE}" == "--delete" ]; then
+#   uninstall_ohmyzsh
+# else
+#     install_ohmyzsh
+#     install_custom_ohmyzsh
+# fi
 
 
 # ## bash
