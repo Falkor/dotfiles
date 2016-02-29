@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Fri 2016-02-26 20:14 svarrette>
+# Time-stamp: <Mon 2016-02-29 21:42 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -108,7 +108,9 @@ gbnoedit() {
 }
 alias gc='git checkout'
 alias gcount='git shortlog -sn'
-compdef gcount=git
+if [[ -n ${ZSH_VERSION-} ]]; then
+    compdef gcount=git
+fi
 alias gcl='git clone'
 alias gd='git diff'
 alias dg='git diff'
@@ -125,7 +127,7 @@ gma() {
 alias gp='git push'
 alias gpd='git push --dry-run'
 alias gpoat='git push origin --all && git push origin --tags'
-compdef _git gpoat=git-push
+[[ -n ${ZSH_VERSION-} ]] && compdef _git gpoat=git-push
 alias gr='git remote -v'
 alias gra='git remote add'
 alias grr='git remote rm'
@@ -214,8 +216,10 @@ alias zshfalkor="$EDITOR ~/.oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh" #
 #--------------
 # Global alias
 # -------------
-alias -g L="| less" # Write L after a command to page through the output.
-alias -g H="| head -n 20" # Write L after a command to get the 20 first lines
-alias -g G='| grep --color -i' # Write G after the command to grep it
-alias -g TL='| tail -20'
-alias -g NUL="> /dev/null 2>&1" # You get the idea.
+if [[ -n ${ZSH_VERSION-} ]]; then
+    alias -g L="| less" # Write L after a command to page through the output.
+    alias -g H="| head -n 20" # Write L after a command to get the 20 first lines
+    alias -g G='| grep --color -i' # Write G after the command to grep it
+    alias -g TL='| tail -20'
+    alias -g NUL="> /dev/null 2>&1" # You get the idea.
+fi
