@@ -3,7 +3,7 @@
 [![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
 [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
-        Time-stamp: <Sun 2016-02-28 21:53 svarrette>
+        Time-stamp: <Mon 2016-02-29 01:08 svarrette>
 
          ______    _ _             _       _____        _    __ _ _
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
@@ -20,7 +20,7 @@
 These are my configuration files for `bash`, `zsh`, `git`, `vim` etc. so as to set up a system the way I like it.
 For instance, here is a screenshot of my terminal illustrating its behaviour on classical contexts commonly met on a daily usage of interactions with git repositories etc.
 
-![](screenshots/screenshot_falkor_iterm.png)
+![](/screenshots/screenshot_falkor_iterm.png)
 
 __Warning:__ Use these dotfiles at your own risk!
 
