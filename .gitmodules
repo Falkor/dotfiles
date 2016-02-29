@@ -12,3 +12,7 @@
 [submodule "oh-my-zsh/custom/plugins/zsh-completions"]
 	path = oh-my-zsh/custom/plugins/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions
+[submodule "oh-my-zsh/custom/themes/powerlevel9k"]
+	path = oh-my-zsh/custom/themes/powerlevel9k
+	url = https://github.com/bhilburn/powerlevel9k.git
+	branch = next
