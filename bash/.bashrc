@@ -307,11 +307,15 @@ __svn_ps1() {
 }
 
 # === GIT ===
-
 # render __git_ps1 even better so as to show activity in a git repository
+#
+# see https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh for
+# configuration info of the GIT_PS1* variables
+#
 export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
-export GIT_PS1_SHOWUPSTREAM="auto"
+#export GIT_PS1_SHOWUPSTREAM="auto legacy"
 
 # GIT bash completion and access to __git_ps1 is set in
 # /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file.
