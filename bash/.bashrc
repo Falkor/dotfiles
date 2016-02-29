@@ -51,14 +51,14 @@ unset MAILCHECK
 
 # bring in system bashrc
 test -r /etc/bashrc &&
-. /etc/bashrc
+    . /etc/bashrc
 
 # shell opts. see bash(1) for details
 shopt -s cdspell                 >/dev/null 2>&1  # correct minor errors in the spelling
-                                                  # of a directory in a cd command
+# of a directory in a cd command
 shopt -s extglob                 >/dev/null 2>&1  # extended pattern matching
 shopt -s hostcomplete            >/dev/null 2>&1  # perform hostname completion
-                                                  # on '@'
+# on '@'
 #shopt -s no_empty_cmd_completion >/dev/null 2>&1
 shopt -u mailwarn                >/dev/null 2>&1
 
@@ -98,7 +98,7 @@ fi
 
 # setup the main ls alias if we've established common args
 test -n "$LS_COMMON" &&
-alias ls="command ls $LS_COMMON"
+    alias ls="command ls $LS_COMMON"
 
 # these use the ls aliases above
 alias ll="ls -l"
@@ -160,9 +160,6 @@ MANPATH="/usr/share/man:/usr/local/share/man:$MANPATH"
 
 # Old version of PATH:
 #PATH=/sw/bin:/sw/sbin:/Applications/Tools/Emacs.app/Contents/MacOS:/bin:/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/usr/local/teTeX/bin/powerpc-apple-darwin-current:/usr/X11R6/bin:/usr/local/mysql/bin:$HOME/bin:/opt/local/bin:.
-
-# Avispa settings
-export AVISPA_PACKAGE="/usr/local/stow/avispa-1.1"
 
 # === Programming stuff ===
 # pkg-config settings
@@ -226,8 +223,7 @@ if [ "$UNAME" = Darwin ]; then
     export ANT_HOME JAVA_HOME
 
     # Alias so as to be able to call easily emacs etc. from terminal
-    alias emacs='open -a Aquamacs.app'
-    alias aquamacs='open -a Aquamacs.app'
+    alias emacs='open -a Emacs.app'
     alias skim='open -a Skim.app'
 
     # Finalize the Paths
@@ -266,16 +262,16 @@ export PAGER MANPAGER
 bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
 test -n "$PS1" && test $bmajor -gt 1 && {
         # search for a bash_completion file to source
-    for f in /usr/local/etc/bash_completion \
-        /opt/local/etc/bash_completion \
-        /etc/bash_completion
-    do
-        test -f $f && {
-            . $f
-            break
-        }
-    done
-}
+        for f in /usr/local/etc/bash_completion \
+                     /opt/local/etc/bash_completion \
+                     /etc/bash_completion
+        do
+            test -f $f && {
+                . $f
+                break
+            }
+        done
+    }
 unset bash bmajor bminor
 #}
 
@@ -311,13 +307,11 @@ __svn_ps1() {
 }
 
 # === GIT ===
-export GIT_AUTHOR='Sebastien Varrette'
-export GIT_AUTHOR_EMAIL='Sebastien.Varrette@uni.lu'
-export GIT_COMMITER=$GIT_AUTHOR
-export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
 
 # render __git_ps1 even better so as to show activity in a git repository
 export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM="auto"
 
 # GIT bash completion and access to __git_ps1 is set in
 # /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file.
@@ -473,54 +467,54 @@ __set_my_prompt() {
 # --------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS (thanks rtomayko ;) )
 # --------------------------------------------------------------------
-######
-# List path entries of PATH or environment variable <var>.
-# Usage: pls [<var>]
-###
-pls () { eval echo \$${1:-PATH} |tr : '\n'; }
+# ######
+# # List path entries of PATH or environment variable <var>.
+# # Usage: pls [<var>]
+# ###
+# pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
-######
-# Shift <num> entries off the front of PATH or environment var <var>.
-# with the <var> option.
-# Usage:  pshift [-n <num>] [<var>]
-# Useful: pshift $(pwd)
-####
-pshift () {
-    local n=1
-    [ "$1" = "-n" ] && { n=$(( $2 + 1 )); shift 2; }
-    eval "${1:-PATH}='$(pls |tail -n +$n |tr '\n' :)'"
-}
+# ######
+# # Shift <num> entries off the front of PATH or environment var <var>.
+# # with the <var> option.
+# # Usage:  pshift [-n <num>] [<var>]
+# # Useful: pshift $(pwd)
+# ####
+# pshift () {
+#     local n=1
+#     [ "$1" = "-n" ] && { n=$(( $2 + 1 )); shift 2; }
+#     eval "${1:-PATH}='$(pls |tail -n +$n |tr '\n' :)'"
+# }
 
-######
-# Pop <num> entries off the end of PATH or environment variable <var>.
-# Usage: ppop [-n <num>] [<var>]
-####
-ppop () {
-    local n=1 i=0
-    [ "$1" = "-n" ] && { n=$2; shift 2; }
-    while [ $i -lt $n ]
-    do eval "${1:-PATH}='\${${1:-PATH}%:*}'"
-        i=$(( i + 1 ))
-    done
-}
+# ######
+# # Pop <num> entries off the end of PATH or environment variable <var>.
+# # Usage: ppop [-n <num>] [<var>]
+# ####
+# ppop () {
+#     local n=1 i=0
+#     [ "$1" = "-n" ] && { n=$2; shift 2; }
+#     while [ $i -lt $n ]
+#     do eval "${1:-PATH}='\${${1:-PATH}%:*}'"
+#        i=$(( i + 1 ))
+#     done
+# }
 
-######
-# Remove <path> from PATH or environment variable <var>.
-# Usage: prm <path> [<var>]
-####
-prm () { eval "${2:-PATH}='$(pls $2 |grep -v "^$1\$" |tr '\n' :)'"; }
+# ######
+# # Remove <path> from PATH or environment variable <var>.
+# # Usage: prm <path> [<var>]
+# ####
+# prm () { eval "${2:-PATH}='$(pls $2 |grep -v "^$1\$" |tr '\n' :)'"; }
 
-######
-# Shift <path> onto the beginning of PATH or environment variable <var>.
-# Usage: punshift <path> [<var>]
-#####
-punshift () { eval "${2:-PATH}='$1:$(eval echo \$${2:-PATH})'"; }
+# ######
+# # Shift <path> onto the beginning of PATH or environment variable <var>.
+# # Usage: punshift <path> [<var>]
+# #####
+# punshift () { eval "${2:-PATH}='$1:$(eval echo \$${2:-PATH})'"; }
 
-#######
-# push <path>
-# Usage: ppush <path> [<var>]
-####
-ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
+# #######
+# # push <path>
+# # Usage: ppush <path> [<var>]
+# ####
+# ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
 
 ######
 # Remove duplicate entries from a PATH style value while retaining
@@ -533,7 +527,7 @@ ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
 ###
 puniq () {
     echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n |
-    cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
+        cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
 }
 
 # -------------------------------------------------------------------
@@ -561,13 +555,16 @@ test -n "$INTERACTIVE" -a -n "$LOGIN" && {
 export PKG_CONFIG_PATH
 export C_INCLUDE_PATH   CPLUS_INCLUDE_PATH   LIBRARY_PATH   DYLD_FALLBACK_LIBRARY_PATH
 
-# Eventually load you private settings (not exposed here)
-test -f ~/.bash_private &&
-. ~/.bash_private
+# Eventually load you custom aliases
+test -f $HOME/.bash_aliases &&
+    source $HOME/.bash_aliases
 
+# Eventually load you private settings (not exposed here)
+test -f $HOME/.bash_private &&
+    source $HOME/.bash_private
 
 # I hate this ring
 #set bell-style visible
 
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:$HOME/bin:$HOME/.rvm/bin # Add RVM to PATH for scripting
+export PATH=`puniq $PATH`
