@@ -2,4 +2,4 @@
 
 ## Screenshot
 
-![](../screenshots/screenshot_falkor_vim.png)
+![](https://raw.githubusercontent.com/Falkor/dotfiles/master/screenshots/screenshot_falkor_vim.png)

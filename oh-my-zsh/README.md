@@ -10,7 +10,7 @@ The font I use is [Source Code Pro + Powerline Awesome Regular](https://github.c
 
 ## Screenshot
 
-![](../screenshots/screenshot_falkor_iterm.png)
+![](https://raw.githubusercontent.com/Falkor/dotfiles/master/screenshots/screenshot_falkor_iterm.png)
 
 ## Pre-requisites
 

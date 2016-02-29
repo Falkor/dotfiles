@@ -15,7 +15,7 @@ The provided [`.screenrc`](.screenrc) helps to offer a status bar displaying the
 
 ## Screenshot
 
-![](../screenshots/screenshot_falkor_screen.png)
+![](https://raw.githubusercontent.com/Falkor/dotfiles/master/screenshots/screenshot_falkor_screen.png)
 
 ## Installation
 
