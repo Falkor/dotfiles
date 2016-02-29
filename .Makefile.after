@@ -1,7 +1,7 @@
 # -*- mode: makefile; -*-
 ####################################################################################
 # Makefile.local (local configuration file for GNU make, extending Makefile)
-# Time-stamp: <Sun 2016-02-28 23:26 svarrette>
+# Time-stamp: <Mon 2016-02-29 09:35 svarrette>
 #                      __  __       _         __ _ _
 #                     |  \/  | __ _| | _____ / _(_) | ___
 #                     | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -9,7 +9,12 @@
 #                     |_|  |_|\__,_|_|\_\___|_| |_|_|\___|
 #
 ####################################################################################
+INSTALL_SCRIPT=install.sh
+
 doc:
 	@if [ -n "`which mkdocs`" ]; then \
 		mkdocs serve; \
 	fi
+
+install: setup
+	echo $(INSTALL_SCRIPT)

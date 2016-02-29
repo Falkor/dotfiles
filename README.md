@@ -3,7 +3,7 @@
 [![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
 [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
-        Time-stamp: <Mon 2016-02-29 01:08 svarrette>
+        Time-stamp: <Mon 2016-02-29 09:34 svarrette>
 
          ______    _ _             _       _____        _    __ _ _
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
@@ -15,12 +15,12 @@
 
        Copyright (c) 2011-2016 Sebastien Varrette aka Falkor <Sebastien.Varrette@uni.lu>
 
-# Sebastien Varrette aka Falkor's dotfiles (zsh, bash, vim, screen etc.)
+# Sebastien Varrette aka Falkor's dotfiles
 
 These are my configuration files for `bash`, `zsh`, `git`, `vim` etc. so as to set up a system the way I like it.
 For instance, here is a screenshot of my terminal illustrating its behaviour on classical contexts commonly met on a daily usage of interactions with git repositories etc.
 
-![](/screenshots/screenshot_falkor_iterm.png)
+![](docs/screenshots/screenshot_falkor_iterm.png)
 
 __Warning:__ Use these dotfiles at your own risk!
 
@@ -79,6 +79,10 @@ Note that if you wish to upgrade the [Git submodules](.gitmodules) to the latest
      $> make update
 
 ## What's included and how to customize?
+
+|   |   |   |
+|---|---|---|
+|   |   |   |
 
 
 

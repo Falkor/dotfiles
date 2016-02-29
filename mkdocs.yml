@@ -1,7 +1,8 @@
 site_name: Falkor/dotfiles
 pages:
 - Home: 'index.md'
-- Overview: 'overview.md'
+- Overview and Installation: 'overview.md'
+- Embedded
 - Tests with Vagrant: 'vagrant.md'
 - Documentation (RTFD): 'rtfd.md'
 - Contributing:
