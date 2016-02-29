@@ -6,6 +6,8 @@
 
 So I use [Oh-My-Zsh](http://ohmyz.sh) using the excellent [powerlevel9k](https://github.com/bhilburn/powerlevel9k) prompt theme and the [Darkside iTerm Color scheme](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Darkside.itermcolors).
 
+The font I use is [Source Code Pro + Powerline Awesome Regular](https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) at 14pt (for bot Regular and Non-ASCII font)
+
 ## Screenshot
 
 ![](../screenshots/screenshot_falkor_iterm.png)
@@ -16,7 +18,7 @@ So I use [Oh-My-Zsh](http://ohmyz.sh) using the excellent [powerlevel9k](https:/
 
 You should install the [Source Code Pro Patched fonts](https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) following [these instructions](https://github.com/bhilburn/powerlevel9k/wiki/Install-Instructions#step-2-install-powerline-fonts) yet adapted to this font.
 
-### [Darkside]() Color Scheme
+### [Darkside](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Darkside.itermcolors) Color Scheme
 
 ![](https://github.com/mbadolato/iTerm2-Color-Schemes/raw/master/screenshots/darkside.png)
 
@@ -58,7 +60,7 @@ The part dedicated to the zsh installation will basically reproduce the below ma
 
 * Edit `~/.zshrc` to include the newly added custom plugin.
 
-  ~~~bash
+``` zsh
         [...]
         ZSH_THEME="powerlevel9k/powerlevel9k"
         [...]
@@ -66,7 +68,8 @@ The part dedicated to the zsh installation will basically reproduce the below ma
         plugins=(git-flow ...)
         # Custom plugins
         plugins+=(falkor)
-  ~~~
+
+```
 
 
 ## Customizations
@@ -118,7 +121,6 @@ POWERLEVEL9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
 
 POWERLEVEL9K_STATUS_VERBOSE=false
 export DEFAULT_USER="$USER"
-
 ~~~
 
 See also [the official prompt customization guide](https://github.com/bhilburn/powerlevel9k#prompt-customization) for alternative segments you might wish to integrate.
