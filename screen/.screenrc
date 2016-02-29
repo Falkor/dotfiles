@@ -1,6 +1,7 @@
+# -*- mode:sh; -*-
 ###################################################################################
 # .screenrc -- configuration file for [screen](http://www.gnu.org/software/screen/)
-# Time-stamp: <Fri 2012-10-19 10:05 svarrette>
+# Time-stamp: <Mon 2016-02-29 13:48 svarrette>
 #
 #                      ___  ___ _ __ ___  ___ _ __  _ __ ___
 #                     / __|/ __| '__/ _ \/ _ \ '_ \| '__/ __|

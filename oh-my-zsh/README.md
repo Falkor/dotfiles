@@ -80,7 +80,7 @@ Follow also [this guide from Oh-My-ZSH](https://github.com/robbyrussell/oh-my-zs
 You might wish to reproduce my configuration of [Powerlevel9k](https://github.com/bhilburn/powerlevel9k) as depicted in the above screenshot yet without installing my dotfiles.
 Assuming you followed the above mentioned pre-requisites, you should simply customize the `POWERLEVEL9K_*` variables (probably in your `~/.zhsrc`) as follows:
 
-~~~bash
+~~~zsh
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
 # Customization of the https://github.com/bhilburn/powerlevel9k

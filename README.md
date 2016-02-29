@@ -3,7 +3,7 @@
 [![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Issues](https://img.shields.io/badge/issues-github-green.svg)](https://github.com/Falkor/dotfiles/issues)
 [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
-        Time-stamp: <Mon 2016-02-29 10:08 svarrette>
+        Time-stamp: <Mon 2016-02-29 14:21 svarrette>
 
          ______    _ _             _       _____        _    __ _ _
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
@@ -89,7 +89,7 @@ Note that if you wish to upgrade the [Git submodules](.gitmodules) to the latest
 | [bash](http://tiswww.case.edu/php/chet/bash/bashtop.html)  | Bourne-Again shell           | shell                 | [`bash/README.md`](bash/README.md)           |
 | [zsh](http://www.zsh.org/) / [Oh-my-zsh](http://ohmyz.sh/) | Z shell                      | shell                 | [`oh-my-zsh/README.md`](oh-my-zsh/README.md) |
 | [vim](http://www.vim.org/)                                 | VI iMproved                  | editor                | [`vim/README.md`](vim/README.md)             |
-| [emacs](https://www.gnu.org/software/emacs/)               | GNU Emacs                    | editor                | [`emacs/README.md`](emacs/README.md)         |
+| [emacs](https://www.gnu.org/software/emacs/)               | GNU Emacs                    | editor                | `emacs/README.md`                            |
 | [git](https://git-scm.com/)                                | `git --fast-version-control` | VCS                   | [`git/README.md`](git/README.md)             |
 | [screen](https://www.gnu.org/software/screen/)             | GNU screen                   | terminal multiplexers | [`screen/README.md`](screen/README.md)       |
 |                                                            |                              |                       |                                              |
@@ -101,7 +101,7 @@ You can submit bug / issues / feature request using the [`Falkor/dotfiles` Proje
 ## Developments / Contributing to the code
 
 If you want to contribute to the code, you shall be aware of the way this repository is organized and developed.
-These elements are detailed on [`docs/contributing/`](docs/contributing/index.md).
+These elements are detailed on `docs/contributing/`
 
 ## Licence
 
