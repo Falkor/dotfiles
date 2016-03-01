@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2016-02-29 23:27 svarrette>
+# Time-stamp: <Tue 2016-03-01 21:59 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -62,7 +62,7 @@ info() {
     local title=$2
     # add default title if not submitted but don't print anything
     [ -n "$text" ] && text="${title:==>} $text"
-    echo -e $text
+    echo -e "${COLOR_GREEN}$text${COLOR_BACK}"
 }
 debug()   { [ -n "$DEBUG"   ] && info "$1" "[${COLOR_YELLOW}DEBUG${COLOR_BACK}]"; }
 verbose() { [ -n "$VERBOSE" ] && info "$1"; }
@@ -200,7 +200,7 @@ add_or_remove_link() {
     fi
 }
 
-copy_or_delete() {
+add_or_remove_copy() {
     [ $# -ne 2 ] && print_error_and_exit "[$FUNCNAME] missing argument(s). Format: $FUNCNAME <src> <dst>"
     local src=$1
     local dst=$2
@@ -252,7 +252,7 @@ install_ohmyzsh() {
             print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
         fi
     fi
-    copy_or_delete  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
+    add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
 }
 
 install_custom_ohmyzsh() {
@@ -298,7 +298,56 @@ uninstall_ohmyzsh() {
     else
         print_error_and_exit "Unable to uninstall oh-my-zsh/. You should install 'curl' or 'wget' on your system"
     fi
-    copy_or_delete  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
+    add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
+}
+
+# courtesy of https://github.com/holman/dotfiles/blob/master/script/bootstrap
+setup_gitconfig_local () {
+    local gitconfig_local=${1:-"$HOME/.gitconfig.local"}
+    if [ ! -f "${gitconfig_local}" ]; then
+        info "setup Local / private gitconfig '${gitconfig_local}'"
+        cat > $gitconfig_local <<'EOF'
+# -*- mode: gitconfig; -*-
+################################################################################
+#  .gitconfig.local -- Private part of the GIT configuration
+#  .                   to hold username / credentials etc .
+#  NOT meant to be staged for commit under github
+#                _ _                   __ _         _                 _
+#           __ _(_) |_ ___ ___  _ __  / _(_) __ _  | | ___   ___ __ _| |
+#          / _` | | __/ __/ _ \| '_ \| |_| |/ _` | | |/ _ \ / __/ _` | |
+#         | (_| | | || (_| (_) | | | |  _| | (_| |_| | (_) | (_| (_| | |
+#        (_)__, |_|\__\___\___/|_| |_|_| |_|\__, (_)_|\___/ \___\__,_|_|
+#          |___/                            |___/
+#
+# See also: http://github.com/Falkor/dotfiles
+################################################################################
+EOF
+
+        local git_credential='cache'
+        local git_authorname=
+        local git_email=
+        if [ "$(uname -s)" == "Darwin" ]; then
+            git_authorname=`dscl . -read /Users/$(whoami) RealName | tail -n1`
+            git_credential='osxkeychain'
+        elif [ "$(uname -s)" == "Linux" ]; then
+            git_authorname=`getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1`
+        fi
+        if [ -z "${git_authorname}" ]; then
+            echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author name:"
+            read -e git_authorname
+        fi
+        if [ -z "${git_email}" ]; then
+            echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author email:"
+            read -e git_email
+        fi
+        cat >> $gitconfig_local <<EOF
+[user]
+    name   = $git_authorname
+    email  = $git_email
+    helper = $git_credential
+EOF
+
+    fi
 }
 
 
@@ -361,12 +410,38 @@ if [ -n "${WITH_SCREEN}" ]; then
     add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
 fi
 
-## BASH
+## Bash
 if [ -n "${WITH_BASH}" ]; then
     info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc"
     add_or_remove_link $DOTFILES/bash/bashrc       ~/.bashrc
     add_or_remove_link $DOTFILES/bash/inputrc      ~/.inputrc
     add_or_remove_link $DOTFILES/bash/bash_profile ~/.bash_profile
+    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash)"
+    add_or_remove_link $DOTFILES/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh  ~/.bash_aliases
+fi
+
+## Git
+if [ -n "${WITH_GIT}" ]; then
+    info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
+    add_or_remove_link $DOTFILES/git/gitconfig  ~/.gitconfig
+    if [ "${MODE}" != "--delete" ]; then
+        setup_gitconfig_local  ~/.gitconfig.local
+    else
+        add_or_remove_copy ' '   ~/.gitconfig.local
+    fi
+fi
+
+## VI iMproved ([m]Vim)
+if [ -n "${WITH_VIM}" ]; then
+    info "${ACTION} Falkor's VIM configuration ~/.vimrc"
+    add_or_remove_link $DOTFILES/vim/vimrc ~/.vimrc
+    if  [ "${MODE}" != "--delete" ]; then
+        warning "Run vim afterwards to download the expected package (using NeoBundle)"
+        if [ "$(uname -s)" == "Linux" ]; then
+            warning "After Neobundle installation and vim relaunch, you might encounter the bug #156"
+            warning "        https://github.com/avelino/vim-bootstrap/issues/156"
+        fi
+    fi
 fi
 
 
@@ -379,14 +454,6 @@ fi
 #     install_ohmyzsh
 #     install_custom_ohmyzsh
 # fi
-
-
-# ## bash
-# add_or_remove_link $DOTFILES/bash/bashrc       ~/.bashrc
-# add_or_remove_link $DOTFILES/bash/inputrc      ~/.inputrc
-# add_or_remove_link $DOTFILES/bash/bash_profile ~/.bash_profile
-# add_or_remove_link $DOTFILES/bash/profile      ~/.profile
-# add_or_remove_link $DOTFILES/bash/bash_logout  ~/.bash_logout
 
 # ## vim
 # add_or_remove_link $DOTFILES/vim/vimrc ~/.vimrc
