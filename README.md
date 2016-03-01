@@ -2,7 +2,7 @@
 
 [![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Falkor/dotfiles issues](https://img.shields.io/github/issues/Falkor/dotfiles.svg)](https://github.com/Falkor/dotfiles/issues) ![](https://img.shields.io/github/stars/Falkor/dotfiles.svg) [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
-        Time-stamp: <Wed 2016-03-02 00:03 svarrette>
+        Time-stamp: <Wed 2016-03-02 00:49 svarrette>
 
          ______    _ _             _       _____        _    __ _ _
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
@@ -38,43 +38,58 @@ these config files:
 * git
 * subversion
 * vim
-* ssh
+* screen
 
 ## Installation
+
+### All-in-one git-free install
+
+Using `curl` (adapt the `--all` option to whatever you prefer -- see below table):
+
+``` bash
+$> curl -fsSL https://raw.githubusercontent.com/Falkor/dotfiles/master/install.sh | bash -s -- --all
+```
 
 ### Using Git and the embedded Makefile
 
 This repository is hosted on [Github](https://github.com/Falkor/dotfiles). You can clone the repository wherever you want.
-Personally, I like to keep it in `~/git/github.com/Falkor/dotfiles`, with `~/.dotfiles.falkor.d` as a symlink.
-Othoerwise, to clone this repository directly into `~/.dotfiles.falkor.d/`, proceed as follows
+Personally, I like to keep it in `~/git/github.com/Falkor/dotfiles`, with `~/.dotfiles.falkor.d` as a symlink. This behaviour will be reflected in the `install.sh` script _i.e._ if it is invoked from a directory that differs from `~/.dotfiles.falkor.d`, a symlink will be created toward the place where your cloned this repository.
+
+Otherwise, to clone this repository directly into `~/.dotfiles.falkor.d/`, proceed as follows
 
         $> git clone https://github.com/Falkor/dotfiles.git ~/.dotfiles.falkor.d
 
 **`/!\ IMPORTANT`**: Once cloned, initiate your local copy of the repository by running:
 
-	    $> cd ~/.dotfiles.falkor.d
-	    $> make setup
+        $> cd ~/.dotfiles.falkor.d
+        $> make setup
 
 This will initiate the [Git submodules of this repository](.gitmodules) and setup the [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) layout for this repository.
 
 Now to install all my dotfiles, run:
 
-        $> ./install.sh --all
+~~~bash
+    $> make install
+~~~
 
-Note that __by default__, the `install.sh` script does nothing __except__ cloning the Falkor/dotfiles directory in `~/.dotfiles.falkor.d`.
+### Using Git and the embedded `install.sh` script
 
-* if you do not want to install everything but only a subpart, kindly refer to the below table to find the proper command-line argument to use
-   - Ex: `./install.sh --zsh --vim --git`
-* if you want to install everything in a row, use as suggested above the `--all` option
-   - Ex: `./install.sh --all`
-
-### All-in-one git-free install
-
-Using `curl` (adapt the `--all` option to whatever you prefer):
+The above `make install` command actually runs (see `.Makefile.after`):
 
 ~~~bash
-$> curl -fsSL https://raw.githubusercontent.com/Falkor/dotfiles/master/install.sh | bash -s -- --all
+     $> ./install.sh --all   # Equivalent of 'make install'
 ~~~
+
+Note that __by default__ (_i.e._ without option), the `install.sh` script does nothing __except__ cloning the Falkor/dotfiles directory if it does not yet exists (in `~/.dotfiles.falkor.d` by default).
+
+* if you __do not want to install everything__ but only a subpart, kindly refer to the below table to find the proper command-line argument to use. Ex:
+
+```bash
+         $> ./install.sh --zsh --vim --git
+```
+
+* if you want to install everything in a row, use as suggested above the `--all` option
+
 
 ## Updating / Upgrading
 
@@ -85,12 +100,30 @@ Upgrading is normally as simple as:
 OR, if you prefer a more atomic approach:
 
      $> cd ~/.dotfiles.falkor.d
-     $> git pull
      $> make update
 
-Note that if you wish to upgrade the [Git submodules](.gitmodules) to the latest version, you should run:
+Note that if you wish to __upgrade__ the [Git submodules](.gitmodules) to the latest version, you should run:
 
-     $> make update
+     $> make upgrade
+
+## Uninstalling / Removing Falkor's dotfile
+
+You can use `install.sh --delete` to remove Falkor's dotfiles.
+
+__`/!\ IMPORTANT`__: pay attention to use the options matching you installation package.
+
+* if you install __all__ dotfiles, run:
+
+```bash
+     $> ./install.sh --delete --all     # OR make uninstall
+```
+
+* if you install __only__ a subpart of the dotfiles, adapt the command line option. Ex:
+
+```bash
+     $> ./install.sh --delete --zsh --vim --git
+```
+
 
 ## What's included and how to customize?
 
@@ -106,7 +139,7 @@ Note that if you wish to upgrade the [Git submodules](.gitmodules) to the latest
 
 As mentioned above, if you want to install all dotfiles in one shot, just use
 
-      $> ./install.sh --all
+      $> ./install.sh --all      # OR 'make install'
 
 ## Issues / Feature request
 

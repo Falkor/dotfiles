@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Tue 2016-03-01 23:41 svarrette>
+# Time-stamp: <Wed 2016-03-02 00:29 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -418,10 +418,21 @@ fi
 info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
 [ -z "${FORCE}" ] && really_continue
 
+if [ "${SCRIPTDIR}" != "${DOTFILES}" ]; then
+    if [ -d "${SCRIPTDIR}/.git" ]; then
+        # We are (hopefully) in a clone of the Falkor's dotfile repository.
+        # Make $DOTFILES be a symlink to this clone.
+        info "make '${DOTFILES}' a symlink to ${SCRIPTDIR}"
+        execute "ln -s ${SCRIPTDIR} ${DOTFILES}"
+    fi
+fi
+
 # Update the repository if already present
 [[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd $DOTFILES ; git pull )"
 # OR clone it there
 [[ ! -d "${DOTFILES}" ]] && execute "git clone --recursive https://github.com/Falkor/dotfiles.git ${DOTFILES}"
+
+exit 0
 
 cd ~
 
