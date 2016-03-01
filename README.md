@@ -2,7 +2,7 @@
 
 [![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Falkor/dotfiles issues](https://img.shields.io/github/issues/Falkor/dotfiles.svg)](https://github.com/Falkor/dotfiles/issues) ![](https://img.shields.io/github/stars/Falkor/dotfiles.svg) [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
-        Time-stamp: <Mon 2016-02-29 15:44 svarrette>
+        Time-stamp: <Wed 2016-03-02 00:03 svarrette>
 
          ______    _ _             _       _____        _    __ _ _
         |  ____|  | | |           ( )     |  __ \      | |  / _(_) |
@@ -70,7 +70,11 @@ Note that __by default__, the `install.sh` script does nothing __except__ clonin
 
 ### All-in-one git-free install
 
-TODO (with curl over `install.sh`)
+Using `curl` (adapt the `--all` option to whatever you prefer):
+
+~~~bash
+$> curl -fsSL https://raw.githubusercontent.com/Falkor/dotfiles/master/install.sh | bash -s -- --all
+~~~
 
 ## Updating / Upgrading
 
