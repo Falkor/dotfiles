@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Tue 2016-03-01 21:59 svarrette>
+# Time-stamp: <Tue 2016-03-01 23:41 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -89,8 +89,8 @@ NAME
 
 SYNOPSIS
     $COMMAND [-V | -h]
-    $COMMAND [--debug] [-v] [-n] [-d DIR] [--offline]
-    $COMMAND --delete [-d DIR]
+    $COMMAND [--debug] [-v] [-n] [-d DIR] [--offline] [options]
+    $COMMAND --delete [-d DIR] [options]
 
 OPTIONS
     --debug
@@ -111,6 +111,28 @@ OPTIONS
         Remove / Restore the installed components
     --offline
         Proceed in offline mode (assuming you have already cloned the repository)
+    --all -a
+        Install / delete ALL Falkor's dotfiles
+    --bash --with-bash
+        Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc
+    --zsh --with-zsh
+        Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc
+    --emacs --with-emacs
+        Falkor's Emacs configuration ~/.emacs ~/.emacs.d/
+    --vim --with-vim
+        Falkor's VIM configuration ~/.vimrc
+    --git --with-git
+        Falkor's Git configuration ~/.gitconfig[.local]
+    --screen --with-screen
+        Falkor's GNU Screen configuration ~/.screenrc
+
+EXAMPLES
+
+    To install/remove all available dotfiles:
+        $COMMAND [--delete] --all
+
+    To install ONLY the zsh/vim/git and screen dotfiles:
+        $COMMAND [--delete] --zsh --vim --git --screen
 
 AUTHOR
     Falkor aka Sebastien Varrette (sebastien.varrette@uni.lu)
@@ -176,7 +198,6 @@ add_or_remove_link() {
     [ $# -ne 2 ] && print_error_and_exit "[$FUNCNAME] missing argument(s). Format: $FUNCNAME <src> <dst>"
     local src=$1
     local dst=$2
-    [ ! -f $src ] && print_error_and_exit "Unable to find the dotfile '${src}'"
     if [ "${MODE}" == "--delete" ]; then
         debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink $dst))"
         if [[ -h $dst && "$(readlink $dst)" == "${src}" ]]; then
@@ -189,6 +210,7 @@ add_or_remove_link() {
             fi
         fi
     else
+        [ ! -e $src ] && print_error_and_exit "Unable to find the dotfile '${src}'"
         debug "attempt to add '$dst' symlink (pointing to '$src')"
         # return if the symlink already exists
         [[ -h $dst && "$(readlink $dst)" == "${src}" ]] && return
@@ -259,8 +281,8 @@ install_custom_ohmyzsh() {
     info "installing Falkor custom plugins for oh-my-zsh/"
     local customdir="$HOME/.oh-my-zsh/custom/"
     local falkor_customdir="${DOTFILES}/oh-my-zsh/custom"
-    [ ! -h "${customdir}/.ref" ] && execute "ln -s ${custom_falkordir} ${customdir}/.ref"
-    for f in `ls ${custom_falkordir}/*.zsh`; do
+    [ ! -h "${customdir}/.ref" ] && execute "ln -s ${falkor_customdir} ${customdir}/.ref"
+    for f in `ls ${falkor_customdir}/*.zsh`; do
         ff=`basename $f`
         if [ ! -h "${customdir}/$ff" ]; then
             echo "     - add custom '$ff'"
@@ -286,19 +308,18 @@ EOF
             execute "ln -s .ref/$dd ${plugindir}/$dd"
         fi
     done
-}
+    local themedir="${customdir}/themes"
+    [ ! -d "${themedir}" ] && execute "mkdir -p ${customdir}/themes"
+    local falkor_themedir="${falkor_customdir}/themes"
+    [ ! -h "${themedir}/.ref" ] && execute "ln -s ../.ref/themes ${themedir}/.ref"
+    for d in `ls -d ${falkor_themedir}/*`; do
+        dd=`basename $d`
+        if [ ! -h "${themedir}/$dd" ]; then
+            echo "     - installing custom oh-my-zsh theme '$dd'"
+            execute "ln -s .ref/$dd ${themedir}/$dd"
+        fi
+    done
 
-uninstall_ohmyzsh() {
-    if [ -n "`which curl`" ]; then
-        echo "   - uninstall ~/.oh-my-zsh/ using curl"
-        [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/uninstall.sh)"
-    elif [ -n "`which wget`" ]; then
-        echo "   - uninstall ~/.oh-my-zsh/ using wget"
-        [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/uninstall.sh -O -)"
-    else
-        print_error_and_exit "Unable to uninstall oh-my-zsh/. You should install 'curl' or 'wget' on your system"
-    fi
-    add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
 }
 
 # courtesy of https://github.com/holman/dotfiles/blob/master/script/bootstrap
@@ -404,11 +425,15 @@ info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
 
 cd ~
 
-## GNU Screen
-if [ -n "${WITH_SCREEN}" ]; then
-    info "${ACTION} Falkor's GNU Screen configuration ~/.screenrc"
-    add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
+if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN}" ]; then
+    warning " "
+    warning "By default, this installer does nothing except updating ${DOTFILES}."
+    warning "Use '$0 --all' to install all available configs. OR use a discrete set of options."
+    warning "Ex: '$0 $MODE --zsh --with'"
+    warning " "
+    exit 0
 fi
+
 
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
@@ -420,15 +445,25 @@ if [ -n "${WITH_BASH}" ]; then
     add_or_remove_link $DOTFILES/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh  ~/.bash_aliases
 fi
 
-## Git
-if [ -n "${WITH_GIT}" ]; then
-    info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link $DOTFILES/git/gitconfig  ~/.gitconfig
+## Zsh
+if [ -n "${WITH_ZSH}" ]; then
+    info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc"
     if [ "${MODE}" != "--delete" ]; then
-        setup_gitconfig_local  ~/.gitconfig.local
+        install_ohmyzsh
+        install_custom_ohmyzsh
     else
-        add_or_remove_copy ' '   ~/.gitconfig.local
+        if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
+            execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
+        fi
+        add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
     fi
+fi
+
+## GNU Emacs
+if [ -n "${WITH_EMACS}" ]; then
+    info "${ACTION} Falkor's Emacs configuration ~/.emacs ~/.emacs.d"
+    add_or_remove_link   $DOTFILES/emacs     ~/.emacs.d
+    add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
 fi
 
 ## VI iMproved ([m]Vim)
@@ -444,19 +479,19 @@ if [ -n "${WITH_VIM}" ]; then
     fi
 fi
 
+## Git
+if [ -n "${WITH_GIT}" ]; then
+    info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
+    add_or_remove_link $DOTFILES/git/gitconfig  ~/.gitconfig
+    if [ "${MODE}" != "--delete" ]; then
+        setup_gitconfig_local  ~/.gitconfig.local
+    else
+        add_or_remove_copy ' '   ~/.gitconfig.local
+    fi
+fi
 
-
-
-# ## ZSH
-# if [ "${MODE}" == "--delete" ]; then
-#   uninstall_ohmyzsh
-# else
-#     install_ohmyzsh
-#     install_custom_ohmyzsh
-# fi
-
-# ## vim
-# add_or_remove_link $DOTFILES/vim/vimrc ~/.vimrc
-
-# ## screen
-# add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
+## GNU Screen
+if [ -n "${WITH_SCREEN}" ]; then
+    info "${ACTION} Falkor's GNU Screen configuration ~/.screenrc"
+    add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
+fi
