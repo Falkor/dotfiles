@@ -1,0 +1,21 @@
+site_name: Falkor/dotfiles
+pages:
+- Home: 'index.md'
+- Overview and Installation: 'overview.md'
+- Shells:
+  - Bourne-Again Shell (bash): 'bash/README.md'
+  - Z-shell (zsh) / Oh-My-ZSH: 'oh-my-zsh/README.md'
+- Editors:
+  - VIm: 'vim/README.md'
+  - Emacs: 'emacs/index.md'
+- Misc:
+  - Git: 'git/README.md'
+  - GNU Screen: 'screen/README.md'
+- Tests with Vagrant: 'vagrant.md'
+- Documentation (RTFD): 'rtfd.md'
+- Contributing:
+  - 'Overview': 'contributing/index.md'
+  - 'Directory Layout': 'contributing/layout.md'
+  - 'Repository Setup and Developments': 'contributing/setup.md'
+  - 'Semantic Versioning': 'contributing/versioning.md'
+theme: readthedocs

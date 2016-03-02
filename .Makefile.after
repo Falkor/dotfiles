@@ -1,0 +1,22 @@
+# -*- mode: makefile; -*-
+####################################################################################
+# .Makefile.after (local hook for GNU make, extending Makefile)
+# Time-stamp: <Wed 2016-03-02 00:17 svarrette>
+#            __  __       _         __ _ _              __ _
+#           |  \/  | __ _| | _____ / _(_) | ___   __ _ / _| |_ ___ _ __
+#           | |\/| |/ _` | |/ / _ \ |_| | |/ _ \ / _` | |_| __/ _ \ '__|
+#          _| |  | | (_| |   <  __/  _| | |  __/| (_| |  _| ||  __/ |
+#         (_)_|  |_|\__,_|_|\_\___|_| |_|_|\___(_)__,_|_|  \__\___|_|
+###################################################################################
+INSTALL_SCRIPT=./install.sh
+
+doc:
+	@if [ -n "`which mkdocs`" ]; then \
+		mkdocs serve; \
+	fi
+
+install: setup
+	$(INSTALL_SCRIPT) --all --dry-run
+
+uninstall:
+	$(INSTALL_SCRIPT) --delete --all --dry-run
