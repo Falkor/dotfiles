@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Wed 2016-03-02 00:29 svarrette>
+# Time-stamp: <Wed 2016-03-02 01:05 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -430,7 +430,7 @@ fi
 # Update the repository if already present
 [[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd $DOTFILES ; git pull )"
 # OR clone it there
-[[ ! -d "${DOTFILES}" ]] && execute "git clone --recursive https://github.com/Falkor/dotfiles.git ${DOTFILES}"
+[[ ! -d "${DOTFILES}" ]] && execute "git clone --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${DOTFILES}"
 
 exit 0
 
@@ -473,8 +473,10 @@ fi
 ## GNU Emacs
 if [ -n "${WITH_EMACS}" ]; then
     info "${ACTION} Falkor's Emacs configuration ~/.emacs ~/.emacs.d"
-    add_or_remove_link   $DOTFILES/emacs     ~/.emacs.d
-    add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
+    warning "For performance reason, make this installation independently following instructions on"
+    warning "    https://github.com/Falkor/emacs-config2 "
+    # add_or_remove_link   $DOTFILES/emacs     ~/.emacs.d
+    # add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
 fi
 
 ## VI iMproved ([m]Vim)
