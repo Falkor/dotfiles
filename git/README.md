@@ -41,10 +41,21 @@ The way I organize my git configurations is as follows:
 
 Note that this hierarchy assume the availability of the `include.path` directive within Git which was introduced in __Git >= 1.7.10__ (see <http://git-scm.com/docs/git-config#_includes>)
 
-## Installation
+## Installation for Falkor's Git configuration
 
+You can use the `install.sh` script featured with the [Falkor's dotfile](https://github.com/Falkor/dotfile) repository.
 
+``` bash
+$> cd ~/.dotfiles.falkor.d
+$> ./install.sh --git     # OR ./install.sh --with-git
+```
 
+## Uninstall
+
+``` bash
+$> cd ~/.dotfiles.falkor.d
+$> ./install.sh --delete --git
+```
 
 ## Resources
 
