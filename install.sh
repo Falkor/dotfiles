@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Wed 2016-03-02 21:00 svarrette>
+# Time-stamp: <Wed 2016-03-02 21:33 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -245,7 +245,7 @@ add_or_remove_copy() {
         local checksum_src=`shasum $src | cut -d ' ' -f 1`
         local checksum_dst=`shasum $dst | cut -d ' ' -f 1`
         if [ "${checksum_src}" == "${checksum_dst}" ]; then
-            debug "NOT copying '$dst' from '$src' since they are the same files"
+            echo "   - NOT copying '$dst' from '$src' since they are the same files"
             return
         fi
         if [ -f $dst ]; then
@@ -451,11 +451,11 @@ fi
 
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
-    info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc"
+    info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
     add_or_remove_link $DOTFILES/bash/bashrc       ~/.bashrc
     add_or_remove_link $DOTFILES/bash/inputrc      ~/.inputrc
     add_or_remove_link $DOTFILES/bash/bash_profile ~/.bash_profile
-    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash)"
+    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/.bash_aliases"
     add_or_remove_link $DOTFILES/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh  ~/.bash_aliases
 fi
 
