@@ -1,0 +1,9 @@
+language: bash
+os:
+    - linux
+    - osx
+install:
+    - ./install.sh -a
+    - if [ "$(uname -s)" != "Darwin"  ]; then sudo apt-get update && sudo apt-get install -y zsh; fi
+notifications:
+    email: false
