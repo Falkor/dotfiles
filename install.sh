@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Wed 2016-03-02 01:05 svarrette>
+# Time-stamp: <Wed 2016-03-02 01:12 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -431,8 +431,6 @@ fi
 [[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd $DOTFILES ; git pull )"
 # OR clone it there
 [[ ! -d "${DOTFILES}" ]] && execute "git clone --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${DOTFILES}"
-
-exit 0
 
 cd ~
 
