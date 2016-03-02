@@ -5,7 +5,7 @@ os:
 install:
   - if [ "$(uname -s)" != "Darwin"  ]; then sudo apt-get update && sudo apt-get install -y zsh; fi
 script:
-  - ./install.sh --all
-  - ./install --delete --all
+  - ./install.sh --all --force
+  - ./install --delete --all --force
 notifications:
   email: false
