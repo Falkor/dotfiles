@@ -1,6 +1,6 @@
 language: bash
-#os:
-#  - linux
+os:
+  - linux
 #  - osx
 before_script:
   - source ./tests/setup_bats.sh
