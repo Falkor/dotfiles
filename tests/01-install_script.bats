@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 22:05 svarrette>
+# Time-stamp: <Thu 2016-03-03 22:33 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -118,6 +118,7 @@ setup() {
 }
 
 @test "install --git" {
+    [ -n "${TRAVIS_CI_RUN}" ] && skip
     run $DOTFILE_INSTALL --git
     assert_success
     assert_falkor_dotfile_present "git/.gitconfig"
@@ -125,6 +126,7 @@ setup() {
 }
 
 @test "install --git --delete" {
+    [ -n "${TRAVIS_CI_RUN}" ] && skip
     run $DOTFILE_INSTALL --git --delete
     assert_success
     assert_falkor_dotfile_absent "git/.gitconfig"
@@ -132,7 +134,7 @@ setup() {
 }
 
 @test "install --zsh" {
-    [ -n "${TRAVIS_CI_RUN}" ] && skip
+    #[ -n "${TRAVIS_CI_RUN}" ] && skip
     run bash -c "echo password | $DOTFILE_INSTALL --zsh"
     assert_success
     assert_falkor_dotfile_present "oh-my-zsh/.zshrc"
@@ -141,7 +143,7 @@ setup() {
 }
 
 @test "install --zsh --delete" {
-    [ -n "${TRAVIS_CI_RUN}" ] && skip
+    #[ -n "${TRAVIS_CI_RUN}" ] && skip
     run bash -c "echo y | $DOTFILE_INSTALL --zsh --delete"
     assert_success
     assert_falkor_dotfile_absent "oh-my-zsh/.zshrc"
