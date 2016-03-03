@@ -7,14 +7,16 @@ os:
 before_script:
   - source ./tests/setup_bats.sh
 addons:
+  apt:
+    packages:
+    - zsh
   hosts:
     - travis.dev
 env:
   - TRAVIS_CI_RUN=true GIT_SSH='ssh -o StrictHostKeyChecking=no' GIT_AUTHOR_NAME='Travis CI' GIT_AUTHOR_EMAIL='travis@example.com'
-install:
-  - if [ "$(uname -s)" != "Darwin"  ]; then sudo apt-get update -qq && sudo apt-get install -y zsh; fi
+# install:
+#   - if [ "$(uname -s)" != "Darwin"  ]; then sudo apt-get update -qq && sudo apt-get install -y zsh; fi
 script:
-  - echo "HOSTNAME = $(hostname -f)"
   - bats tests
 notifications:
   email:
