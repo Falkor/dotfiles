@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Thu 2016-03-03 11:30 svarrette>
+# Time-stamp: <Thu 2016-03-03 14:57 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -452,9 +452,9 @@ fi
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
     info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-    add_or_remove_link $DOTFILES/bash/bashrc       ~/.bashrc
-    add_or_remove_link $DOTFILES/bash/inputrc      ~/.inputrc
-    add_or_remove_link $DOTFILES/bash/bash_profile ~/.bash_profile
+    add_or_remove_link $DOTFILES/bash/.bashrc       ~/.bashrc
+    add_or_remove_link $DOTFILES/bash/.inputrc      ~/.inputrc
+    add_or_remove_link $DOTFILES/bash/.bash_profile ~/.bash_profile
     info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/.bash_aliases"
     add_or_remove_link $DOTFILES/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh  ~/.bash_aliases
 fi
@@ -469,7 +469,7 @@ if [ -n "${WITH_ZSH}" ]; then
         if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
             execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
         fi
-        add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
+        add_or_remove_copy  $DOTFILES/oh-my-zsh/.zshrc       ~/.zshrc
     fi
 fi
 
@@ -485,7 +485,7 @@ fi
 ## VI iMproved ([m]Vim)
 if [ -n "${WITH_VIM}" ]; then
     info "${ACTION} Falkor's VIM configuration ~/.vimrc"
-    add_or_remove_link $DOTFILES/vim/vimrc ~/.vimrc
+    add_or_remove_link $DOTFILES/vim/.vimrc ~/.vimrc
     if  [ "${MODE}" != "--delete" ]; then
         warning "Run vim afterwards to download the expected package (using NeoBundle)"
         if [ "$(uname -s)" == "Linux" ]; then
@@ -498,7 +498,7 @@ fi
 ## Git
 if [ -n "${WITH_GIT}" ]; then
     info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link $DOTFILES/git/gitconfig  ~/.gitconfig
+    add_or_remove_link $DOTFILES/git/.gitconfig  ~/.gitconfig
     if [ "${MODE}" != "--delete" ]; then
         setup_gitconfig_local  ~/.gitconfig.local
     else
@@ -509,5 +509,5 @@ fi
 ## GNU Screen
 if [ -n "${WITH_SCREEN}" ]; then
     info "${ACTION} Falkor's GNU Screen configuration ~/.screenrc"
-    add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
+    add_or_remove_link $DOTFILES/screen/.screenrc ~/.screenrc
 fi
