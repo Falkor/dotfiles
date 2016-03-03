@@ -13,3 +13,6 @@
 	path = oh-my-zsh/custom/themes/powerlevel9k
 	url = https://github.com/bhilburn/powerlevel9k.git
 	branch = next
+[submodule "tests/helpers/assertions"]
+	path = tests/helpers/assertions
+	url = https://github.com/jasonkarns/bats-assert
