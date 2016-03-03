@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 22:00 svarrette>
+# Time-stamp: <Thu 2016-03-03 22:05 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -46,11 +46,7 @@
 
 load test_helper
 
-
 DOTFILE_INSTALL="$BATS_TEST_DIRNAME/../install.sh --force --offline"
-#DOTFILES_D=$HOME/.dotfiles.falkor.d
-#export GIT_SSH='ssh -o StrictHostKeyChecking=no'
-
 
 setup() {
     # Avoid to run the tests on your machine

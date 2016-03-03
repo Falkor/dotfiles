@@ -1,4 +1,6 @@
 language: bash
+cache:
+  - apt
 os:
   - linux
 #  - osx
