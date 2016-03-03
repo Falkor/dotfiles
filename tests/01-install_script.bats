@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 14:58 svarrette>
+# Time-stamp: <Thu 2016-03-03 15:37 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -55,9 +55,10 @@ DOTFILE_INSTALL="$BATS_TEST_DIRNAME/../install.sh --force --offline"
 setup() {
     # Avoid to run the tests on your machine
     case "$(hostname -f)" in
-        travis*)   echo "=> Tests on travis resources";;
+        *travis*)  echo "=> Tests on travis resources";;
         *vagrant*) echo "=> Tests on vagrant resources";;
-        *) skip;;
+        *) echo "tests on $(hostname -f) skiped"
+            skip;;
     esac
 }
 
