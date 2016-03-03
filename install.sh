@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Thu 2016-03-03 14:57 svarrette>
+# Time-stamp: <Thu 2016-03-03 15:43 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -359,6 +359,8 @@ EOF
         elif [ "$(uname -s)" == "Linux" ]; then
             git_authorname=`getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1`
         fi
+        [ -n "${GIT_AUTHOR_NAME}" ] && git_authorname="${GIT_AUTHOR_NAME}"
+        [ -n "${GIT_AUTHOR_EMAIL}"] && git_email="${GIT_AUTHOR_EMAIL}"
         if [ -z "${git_authorname}" ]; then
             echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author name:"
             read -e git_authorname

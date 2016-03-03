@@ -9,6 +9,8 @@ addons:
     - travis.dev
 env:
   - GIT_SSH='ssh -o StrictHostKeyChecking=no'
+  - GIT_AUTHOR_NAME='Travis CI'
+  - GIT_AUTHOR_EMAIL='travis@example.com'
 install:
   - if [ "$(uname -s)" != "Darwin"  ]; then sudo apt-get update -qq && sudo apt-get install -y zsh; fi
 script:

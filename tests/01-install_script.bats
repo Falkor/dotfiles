@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 15:37 svarrette>
+# Time-stamp: <Thu 2016-03-03 15:46 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -116,4 +116,18 @@ setup() {
     run $DOTFILE_INSTALL --screen --delete
     assert_success
     assert_falkor_dotfile_absent "screen/.screenrc"
+}
+
+@test "install --git" {
+    run $DOTFILE_INSTALL --git
+    assert_success
+    assert_falkor_dotfile_present "git/.gitconfig"
+    assert [ -f "${TARGET}/.gitconfig.local" ]
+}
+
+@test "install --git --delete" {
+    run $DOTFILE_INSTALL --git --delete
+    assert_success
+    assert_falkor_dotfile_absent "git/.gitconfig"
+    assert [ ! -f "${TARGET}/.gitconfig.local" ]
 }
