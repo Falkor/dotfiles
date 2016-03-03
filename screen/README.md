@@ -19,7 +19,22 @@ The provided [`.screenrc`](.screenrc) helps to offer a status bar displaying the
 
 ## Installation
 
-TODO
+You can use the `install.sh` script featured with the [Falkor's dotfile](https://github.com/Falkor/dotfile) repository.
+
+``` bash
+$> cd ~/.dotfiles.falkor.d
+$> ./install.sh --screen      # OR ./install.sh --with-screen
+```
+This will setup the following files:
+
+* `~/.screenrc`
+
+## Uninstall
+
+``` bash
+$> cd ~/.dotfiles.falkor.d
+$> ./install.sh --delete --screen
+~~~
 
 ## Basic commands (cheat-sheet)
 

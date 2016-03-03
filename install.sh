@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Wed 2016-03-02 01:12 svarrette>
+# Time-stamp: <Thu 2016-03-03 15:43 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -245,7 +245,7 @@ add_or_remove_copy() {
         local checksum_src=`shasum $src | cut -d ' ' -f 1`
         local checksum_dst=`shasum $dst | cut -d ' ' -f 1`
         if [ "${checksum_src}" == "${checksum_dst}" ]; then
-            debug "NOT copying '$dst' from '$src' since they are the same files"
+            echo "   - NOT copying '$dst' from '$src' since they are the same files"
             return
         fi
         if [ -f $dst ]; then
@@ -325,8 +325,14 @@ EOF
 # courtesy of https://github.com/holman/dotfiles/blob/master/script/bootstrap
 setup_gitconfig_local () {
     local gitconfig_local=${1:-"$HOME/.gitconfig.local"}
+    local dotfile_gitconfig_local="${DOTFILES}/git/`basename ${gitconfig_local}`"
+    if [ -f "${dotfile_gitconfig_local}" ]; then
+        add_or_remove_link "${dotfile_gitconfig_local}" "${gitconfig_local}"
+        return
+    fi
     if [ ! -f "${gitconfig_local}" ]; then
         info "setup Local / private gitconfig '${gitconfig_local}'"
+        [ -n "${SIMULATION}" ] && return
         cat > $gitconfig_local <<'EOF'
 # -*- mode: gitconfig; -*-
 ################################################################################
@@ -353,6 +359,8 @@ EOF
         elif [ "$(uname -s)" == "Linux" ]; then
             git_authorname=`getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1`
         fi
+        [ -n "${GIT_AUTHOR_NAME}" ] && git_authorname="${GIT_AUTHOR_NAME}"
+        [ -n "${GIT_AUTHOR_EMAIL}"] && git_email="${GIT_AUTHOR_EMAIL}"
         if [ -z "${git_authorname}" ]; then
             echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author name:"
             read -e git_authorname
@@ -367,7 +375,6 @@ EOF
     email  = $git_email
     helper = $git_credential
 EOF
-
     fi
 }
 
@@ -419,7 +426,7 @@ info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
 [ -z "${FORCE}" ] && really_continue
 
 if [ "${SCRIPTDIR}" != "${DOTFILES}" ]; then
-    if [ -d "${SCRIPTDIR}/.git" ]; then
+    if [ -d "${SCRIPTDIR}/.git" -a ! -e "${DOTFILES}" ]; then
         # We are (hopefully) in a clone of the Falkor's dotfile repository.
         # Make $DOTFILES be a symlink to this clone.
         info "make '${DOTFILES}' a symlink to ${SCRIPTDIR}"
@@ -430,7 +437,7 @@ fi
 # Update the repository if already present
 [[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd $DOTFILES ; git pull )"
 # OR clone it there
-[[ ! -d "${DOTFILES}" ]] && execute "git clone --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${DOTFILES}"
+[[ ! -d "${DOTFILES}" ]] && execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${DOTFILES}"
 
 cd ~
 
@@ -446,11 +453,11 @@ fi
 
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
-    info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc"
-    add_or_remove_link $DOTFILES/bash/bashrc       ~/.bashrc
-    add_or_remove_link $DOTFILES/bash/inputrc      ~/.inputrc
-    add_or_remove_link $DOTFILES/bash/bash_profile ~/.bash_profile
-    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash)"
+    info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
+    add_or_remove_link $DOTFILES/bash/.bashrc       ~/.bashrc
+    add_or_remove_link $DOTFILES/bash/.inputrc      ~/.inputrc
+    add_or_remove_link $DOTFILES/bash/.bash_profile ~/.bash_profile
+    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/.bash_aliases"
     add_or_remove_link $DOTFILES/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh  ~/.bash_aliases
 fi
 
@@ -464,7 +471,7 @@ if [ -n "${WITH_ZSH}" ]; then
         if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
             execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
         fi
-        add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
+        add_or_remove_copy  $DOTFILES/oh-my-zsh/.zshrc       ~/.zshrc
     fi
 fi
 
@@ -480,7 +487,7 @@ fi
 ## VI iMproved ([m]Vim)
 if [ -n "${WITH_VIM}" ]; then
     info "${ACTION} Falkor's VIM configuration ~/.vimrc"
-    add_or_remove_link $DOTFILES/vim/vimrc ~/.vimrc
+    add_or_remove_link $DOTFILES/vim/.vimrc ~/.vimrc
     if  [ "${MODE}" != "--delete" ]; then
         warning "Run vim afterwards to download the expected package (using NeoBundle)"
         if [ "$(uname -s)" == "Linux" ]; then
@@ -493,7 +500,7 @@ fi
 ## Git
 if [ -n "${WITH_GIT}" ]; then
     info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link $DOTFILES/git/gitconfig  ~/.gitconfig
+    add_or_remove_link $DOTFILES/git/.gitconfig  ~/.gitconfig
     if [ "${MODE}" != "--delete" ]; then
         setup_gitconfig_local  ~/.gitconfig.local
     else
@@ -504,5 +511,5 @@ fi
 ## GNU Screen
 if [ -n "${WITH_SCREEN}" ]; then
     info "${ACTION} Falkor's GNU Screen configuration ~/.screenrc"
-    add_or_remove_link $DOTFILES/screen/screenrc ~/.screenrc
+    add_or_remove_link $DOTFILES/screen/.screenrc ~/.screenrc
 fi

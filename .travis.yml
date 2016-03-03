@@ -1,0 +1,27 @@
+language: bash
+sudo: false
+cache:
+  - apt
+os:
+  - linux
+#  - osx
+before_script:
+  - source ./tests/setup_bats.sh
+addons:
+  apt:
+    packages:
+    - zsh
+  hosts:
+    - travis.dev
+env:
+  - TRAVIS_CI_RUN=true GIT_SSH='ssh -o StrictHostKeyChecking=no' GIT_AUTHOR_NAME='Travis CI' GIT_AUTHOR_EMAIL='travis@example.com'
+before install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update      ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bats; fi
+# install:
+#   - if [ "$(uname -s)" != "Darwin"  ]; then sudo apt-get update -qq && sudo apt-get install -y zsh; fi
+script:
+  - bats tests
+notifications:
+  email:
+    on_success: never

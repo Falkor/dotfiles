@@ -36,8 +36,19 @@ See [`falkor.plugin.zsh`](custom/plugins/falkor/falkor.plugin.zsh) for more deta
 
 ## Installation, the lazy way
 
-Nothing special here once you fullfilled the pre-requisite: just install [Falkor's dotfile](https://github.com/Falkor/dotfile) as suggested.
-The part dedicated to the zsh installation will basically reproduce the below manual steps.
+Nothing special here once you fullfilled the pre-requisite: just install [Falkor's dotfile](https://github.com/Falkor/dotfile) as suggested, _i.e._
+
+``` bash
+$> cd ~/.dotfiles.falkor.d
+$> ./install.sh --zsh     # OR ./install.sh --with-zsh
+```
+
+This will configure the following components:
+
+* `~/.zshrc`
+* `~/oh-my-zsh/`
+
+For details, see below.
 
 ## Installation, the manual way
 
@@ -69,6 +80,13 @@ The part dedicated to the zsh installation will basically reproduce the below ma
         # Custom plugins
         plugins+=(falkor)
 
+```
+
+## Uninstall
+
+``` bash
+$> cd ~/.dotfiles.falkor.d
+$> ./install.sh --delete --zsh
 ```
 
 

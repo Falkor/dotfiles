@@ -1,15 +1,16 @@
+# -*- mode:sh; -*-
 ################################################################################
-#  .inputrc -- my personal Readline configuration  
+#  .inputrc -- my personal Readline configuration
 #             see http://github.com/Falkor/dotfiles
 #
 #  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 #                http://varrette.gforge.uni.lu
-#                 _                   _            
-#                (_)_ __  _ __  _   _| |_ _ __ ___ 
+#                 _                   _
+#                (_)_ __  _ __  _   _| |_ _ __ ___
 #                | | '_ \| '_ \| | | | __| '__/ __|
-#               _| | | | | |_) | |_| | |_| | | (__ 
+#               _| | | | | |_) | |_| | |_| | | (__
 #              (_)_|_| |_| .__/ \__,_|\__|_|  \___|
-#                        |_|                       
+#                        |_|
 ################################################################################
 # Resource
 # - http://github.com/rtomayko/dotfiles/blob/rtomayko/.inputrc

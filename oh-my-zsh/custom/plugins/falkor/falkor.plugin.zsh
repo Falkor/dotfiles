@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Mon 2016-02-29 22:31 svarrette>
+# Time-stamp: <Wed 2016-03-02 21:24 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -24,8 +24,7 @@
 # ~/.oh-my-zsh/
 #   ├── plugins
 #       └── falkor
-#           ├── falkor.aliases.local.zsh    # ignored in public release
-#           └── Falkor.plugin.zsh
+#           └── falkor.plugin.zsh
 #
 ### Usage:
 #
@@ -170,7 +169,7 @@ alias proxy='ssh -C -q -T -n -N -D 1080'
 mkcd () {
     mkdir -p "$@" && cd "$@"
 }
-alias diff='git diff'  # for colors
+alias diff='colordiff'  # for colors
 alias draw='figlet -c -w 80'
 # Which directory is hiding all the bytes?
 alias dux='du -h -d 1 | sort -n'

@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mon 2016-02-29 22:40 svarrette>
+# Time-stamp: <Thu 2016-03-03 22:42 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -47,13 +47,13 @@ MAJOR      = $(shell echo $(VERSION) | sed "s/^\([0-9]*\).*/\1/")
 MINOR      = $(shell echo $(VERSION) | sed "s/[0-9]*\.\([0-9]*\).*/\1/")
 PATCH      = $(shell echo $(VERSION) | sed "s/[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/")
 # total number of commits
-BUILD      = $(shell git log --oneline | wc -l | sed -e "s/[ \t]*//g")
+#BUILD      = -b$(shell git log --oneline | wc -l | sed -e "s/[ \t]*//g")
 
 #REVISION   = $(shell git rev-list $(LAST_TAG).. --count)
 #ROOTDIR    = $(shell git rev-parse --show-toplevel)
-NEXT_MAJOR_VERSION = $(shell expr $(MAJOR) + 1).0.0-b$(BUILD)
-NEXT_MINOR_VERSION = $(MAJOR).$(shell expr $(MINOR) + 1).0-b$(BUILD)
-NEXT_PATCH_VERSION = $(MAJOR).$(MINOR).$(shell expr $(PATCH) + 1)-b$(BUILD)
+NEXT_MAJOR_VERSION = $(shell expr $(MAJOR) + 1).0.0$(BUILD)
+NEXT_MINOR_VERSION = $(MAJOR).$(shell expr $(MINOR) + 1).0$(BUILD)
+NEXT_PATCH_VERSION = $(MAJOR).$(MINOR).$(shell expr $(PATCH) + 1)$(BUILD)
 
 # Default targets
 TARGETS =

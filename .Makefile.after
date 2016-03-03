@@ -1,7 +1,7 @@
 # -*- mode: makefile; -*-
 ####################################################################################
 # .Makefile.after (local hook for GNU make, extending Makefile)
-# Time-stamp: <Wed 2016-03-02 00:17 svarrette>
+# Time-stamp: <Thu 2016-03-03 14:18 svarrette>
 #            __  __       _         __ _ _              __ _
 #           |  \/  | __ _| | _____ / _(_) | ___   __ _ / _| |_ ___ _ __
 #           | |\/| |/ _` | |/ / _ \ |_| | |/ _ \ / _` | |_| __/ _ \ '__|
@@ -9,6 +9,9 @@
 #         (_)_|  |_|\__,_|_|\_\___|_| |_|_|\___(_)__,_|_|  \__\___|_|
 ###################################################################################
 INSTALL_SCRIPT=./install.sh
+BATS=$(shell which bats 2>/dev/null)
+
+.PHONY: tests
 
 doc:
 	@if [ -n "`which mkdocs`" ]; then \
@@ -20,3 +23,13 @@ install: setup
 
 uninstall:
 	$(INSTALL_SCRIPT) --delete --all --dry-run
+
+ifeq ($(BATS),)
+tests:
+	@echo "the Unit tests of Falkor's dotfiles rely on Bats which does not seem present on your system"
+	@echo "See https://github.com/sstephenson/bats for details"
+	@echo "installation notes can be found in tests/setup_bats.sh"
+else
+tests:
+	$(BATS) tests
+endif
