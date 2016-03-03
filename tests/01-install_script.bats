@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 15:56 svarrette>
+# Time-stamp: <Thu 2016-03-03 18:38 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -55,10 +55,13 @@ DOTFILE_INSTALL="$BATS_TEST_DIRNAME/../install.sh --force --offline"
 setup() {
     # Avoid to run the tests on your machine
     case "$(hostname -f)" in
-        *travis*)  echo "=> Tests on travis resources";;
+        *travis* | *testing*)  echo "=> Tests on travis resources";;
         *vagrant*) echo "=> Tests on vagrant resources";;
-        *) echo "tests on $(hostname -f) skiped"
-            skip;;
+        *) # Detect TRAVIS_CI_RUN environment variable (set in .travis.yml)
+            if [ -z "${TRAVIS_CI_RUN}" ]; then
+                echo "tests on $(hostname -f) skiped"
+                skip
+            fi;;
     esac
 }
 
