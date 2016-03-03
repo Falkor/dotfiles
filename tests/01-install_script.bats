@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 15:46 svarrette>
+# Time-stamp: <Thu 2016-03-03 15:56 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -130,4 +130,20 @@ setup() {
     assert_success
     assert_falkor_dotfile_absent "git/.gitconfig"
     assert [ ! -f "${TARGET}/.gitconfig.local" ]
+}
+
+@test "install --zsh" {
+    run bash -c "echo password | $DOTFILE_INSTALL --zsh"
+    assert_success
+    assert_falkor_dotfile_present "oh-my-zsh/.zshrc"
+    assert [ -h "${TARGET}/.oh-my-zsh/custom/plugins/falkor" ]
+    assert [ -h "${TARGET}/.oh-my-zsh/custom/themes/powerlevel9k" ]
+}
+
+@test "install --zsh --delete" {
+    run bash -c "echo y | $DOTFILE_INSTALL --zsh --delete"
+    assert_success
+    assert_falkor_dotfile_absent "oh-my-zsh/.zshrc"
+    assert [ ! -e "${TARGET}/.oh-my-zsh/custom/plugins/falkor" ]
+    assert [ ! -e "${TARGET}/.oh-my-zsh/custom/themes/powerlevel9k" ]
 }
