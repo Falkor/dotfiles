@@ -138,6 +138,7 @@ alias gss='git status --short'
 function gsa() {
     local url=$1
     local dir=`basename $url .git`
+	[ -d ".submodules" ] && dir=".submodules/$dir"
     [ $# -eq 2 ] && dir=$2
     echo "=> adding git submodule from '$url' in '$dir'"
     git submodule add $url $dir
