@@ -23,15 +23,16 @@
     path = .gitconfig.local
 
 [alias]
-    up = pull origin
-    pu = push origin
-    st = status
-    df = diff
-    ci = commit -s
-    br = branch
-    w  = whatchanged --abbrev-commit
-    ls = ls-files
-    gr = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    up  = pull origin
+    pu  = push origin
+    st  = status
+    df  = diff
+    ci  = commit -s
+    br  = branch
+    w   = whatchanged --abbrev-commit
+    ls  = ls-files
+    gr  = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    grd = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit
     # From http://progit.org/book/ch2-11.html
     unstage = reset HEAD --
     last = log -1 HEAD
@@ -63,6 +64,7 @@
 
 [core]
     autocrlf = input
+    safecrlf = true
     pager = less -FRSX
     editor = vim
     #editor = /Users/svarrette/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -t
