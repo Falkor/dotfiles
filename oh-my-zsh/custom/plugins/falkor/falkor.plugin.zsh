@@ -158,6 +158,10 @@ alias gta='git tag -a -m'
 # Utilities
 # ------------
 alias o='open'
+alias skim='open -a Skim'
+if [[ -n ${ZSH_VERSION-}  ]]; then
+	zstyle ":completion:*:*:skim:*" file-patterns "*.pdf *(-/)"
+fi
 alias mkdir='mkdir -p'
 # Search for files and page it
 search() {
@@ -177,6 +181,28 @@ alias dux='du -h -d 1 | sort -n'
 # Ask more gently to run the last command ;)
 alias pls='sudo `fc -n -l -1`'
 alias ":q"="exit"
+
+# Optimize PDF/JPEG/PNG size
+optipdf () {
+	local pdf=$1
+	local res=`basename $pdf .pdf`-optimized.pdf
+	noglob gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress -sOutputFile=$res $pdf
+	local opti_size=`du -k $res | cut -f1`
+	local size=`du -k $pdf | cut -f1`
+	if [[ "$opti_size" -lt "$size"  ]]; then
+		echo " => optimized PDF of smaller size ($opti_size vs. $size) thus overwrite $pdf"
+		mv $res $pdf
+	else
+		echo " => already optimized PDF thus discarded"
+		rm -f $res
+	fi
+}
+alias reducepdf='optipdf'
+if [[ -n ${ZSH_VERSION-}   ]]; then
+	compdef '_files -g "*.pdf"' optipdf
+fi
+alias optipng='optipng -o9 -zm1-9 -strip all'
+alias optijpg='jpegoptim'
 
 # ---------------------------------------------
 # United Colors of Benetton: Colors everywhere
