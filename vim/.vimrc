@@ -490,6 +490,8 @@ let g:jedi#smart_auto_mappings = 0
 " syntastic
 let g:syntastic_python_checkers=['python', 'flake8']
 let g:syntastic_python_flake8_post_args='--ignore=W391'
+" disable it for latex
+let g:syntastic_disabled_filetypes=['tex']
 
 " vim-airline
 let g:airline#extensions#virtualenv#enabled = 1
