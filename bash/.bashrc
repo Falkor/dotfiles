@@ -231,9 +231,6 @@ if [ "$UNAME" = Darwin ]; then
     DYLD_FALLBACK_LIBRARY_PATH=${LIBRARY_PATH}
 fi
 
-# RVM specific (see http://beginrescueend.com/)
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-
 
 
 # ----------------------------------------------------------------------
@@ -581,10 +578,6 @@ puniq () {
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
-# condense PATH entries
-PATH=$(puniq $PATH)
-MANPATH=$(puniq $MANPATH)
-
 # CDPATH settings
 #export CDPATH=.:~/svn/gforge.uni.lu
 
@@ -611,8 +604,14 @@ test -f $HOME/.bash_aliases &&
 test -f $HOME/.bash_private &&
     source $HOME/.bash_private
 
+# RVM specific (see http://beginrescueend.com/)
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 # I hate this ring
 #set bell-style visible
 
 PATH=$PATH:$HOME/bin:$HOME/.rvm/bin # Add RVM to PATH for scripting
-export PATH=`puniq $PATH`
+
+# condense PATH entries
+PATH="$(puniq "$PATH")"
+MANPATH="$(puniq "$MANPATH")"
+export PATH MANPATH
