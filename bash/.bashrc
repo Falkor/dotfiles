@@ -55,10 +55,10 @@ test -r /etc/bashrc &&
 
 # shell opts. see bash(1) for details
 shopt -s cdspell                 >/dev/null 2>&1  # correct minor errors in the spelling
-# of a directory in a cd command
+                                                  # of a directory in a cd command
 shopt -s extglob                 >/dev/null 2>&1  # extended pattern matching
 shopt -s hostcomplete            >/dev/null 2>&1  # perform hostname completion
-# on '@'
+                                                  # on '@'
 #shopt -s no_empty_cmd_completion >/dev/null 2>&1
 shopt -u mailwarn                >/dev/null 2>&1
 
@@ -81,13 +81,13 @@ test -n "$dircolors" && {
     test -e "/etc/DIR_COLORS.$TERM"   && COLORS="/etc/DIR_COLORS.$TERM"
     test -e "$HOME/.dircolors"        && COLORS="$HOME/.dircolors"
     test ! -e "$COLORS"               && COLORS=
-    eval `$dircolors --sh $COLORS`
+    eval "$($dircolors --sh $COLORS)"
 }
 unset dircolors
 
 if [ "$UNAME" = Darwin ]; then
     # check if you're using gnu core-utils then use --color
-    test "`which ls`" = "/opt/local/bin/ls" && {
+    test "$(which ls)" = "/opt/local/bin/ls" && {
         LS_COMMON="$LS_COMMON --color"
     } || {
         LS_COMMON="$LS_COMMON -G"
@@ -258,22 +258,20 @@ export PAGER MANPAGER
 # BASH COMPLETION
 # ----------------------------------------------------------------------
 
-#test -z "$BASH_COMPLETION" && {
-bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-test -n "$PS1" && test $bmajor -gt 1 && {
+bash=${BASH_VERSION%.*}; bmajor=${bash%.*};
+test -n "$PS1" && test "$bmajor" -gt 1 && {
         # search for a bash_completion file to source
         for f in /usr/local/etc/bash_completion \
-                     /opt/local/etc/bash_completion \
-                     /etc/bash_completion
+                 /opt/local/etc/bash_completion \
+                 /etc/bash_completion
         do
-            test -f $f && {
+            test -f $f && (
                 . $f
                 break
-            }
+            )
         done
-    }
-unset bash bmajor bminor
-#}
+}
+unset bash bmajor
 
 # ----------------------------------------------------------------------
 # BASH HISTORY
@@ -298,11 +296,13 @@ export SVN_EDITOR=$EDITOR
 
 ## display the current subversion revision (to be used later in the prompt)
 __svn_ps1() {
-    local svnversion=`svnversion | sed -e "s/[:M]//g"`
+    local svnversion
+    svnversion=$(svnversion | sed -e "s/[:M]//g")
     # Continue if $svnversion is numerical
-    if let $svnversion 2>/dev/null
+    let $svnversion
+    if [[ "$?" -eq "0" ]]
     then
-        printf " (svn:%s)" `svnversion`
+        printf " (svn:%s)" "$(svnversion)"
     fi
 }
 
@@ -355,11 +355,16 @@ else
 fi
 
 # Configure a set of useful variables for the prompt
-DOMAIN=`hostname -f | cut -d '.' -f 2`
+if [[ "$(echo $UNAME | grep -c -i -e '^.*bsd$')" == "1" ]] ; then
+    DOMAIN=$(hostname | cut -d '.' -f 2)
+else
+    DOMAIN=$(hostname -f | cut -d '.' -f 2)
+fi
+
 # get virtualization information
 XENTYPE=""
 if [ -f "/sys/hypervisor/uuid" ]; then
-    if [ $(</sys/hypervisor/uuid) == "00000000-0000-0000-0000-000000000000" ]; then
+    if [ "$(</sys/hypervisor/uuid)" == "00000000-0000-0000-0000-000000000000" ]; then
         XENTYPE=",Dom0"
     else
         XENTYPE=",DomU"
@@ -371,7 +376,7 @@ if [ -z "${PS1_EXTRA}" -a -f "/proc/cmdline" ]; then
     # been set via kernel comment
     kernel_ps1_extra="$(grep PS1_EXTRA /proc/cmdline)"
     if [ -n "${kernel_ps1_extra}" ]; then
-        PS1_EXTRA=` sed -e "s/.*PS1_EXTRA=\"\?\([^ ^\t^\"]\+\)\"\?.*/\1/g" /proc/cmdline `
+        PS1_EXTRA=$( sed -e "s/.*PS1_EXTRA=\"\?\([^ ^\t^\"]\+\)\"\?.*/\1/g" /proc/cmdline )
     fi
 fi
 PS1_EXTRAINFO="${BOLD_COLOR}${DOMAIN}${XENTYPE}${RESET_COLOR}"
@@ -402,10 +407,10 @@ fi
 # exit status of the last run command.
 # Exit status 130 is also considered as good as it corresponds to a CTRL-D
 __colorized_exit_status() {
-    printf -- "\`status=\$? ; if [[ \$status = 0 || \$status = 130  ]]; then \
-                                echo -e '\[\e[01;32m\]'\$status;             \
-                              else                                           \
-                                echo -e '\[\e[01;31m\]'\$status; fi\`"
+    printf -- "\$(status=\$? ; if [[ \$status = 0 || \$status = 130  ]]; then \
+                                echo -e '\[\e[01;32m\]'\$status;              \
+                              else                                            \
+                                echo -e '\[\e[01;31m\]'\$status; fi)"
 }
 
 # Simple (basic) prompt
