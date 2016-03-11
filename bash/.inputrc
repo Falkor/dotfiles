@@ -1,7 +1,7 @@
 # -*- mode:sh; -*-
 ################################################################################
 #  .inputrc -- my personal Readline configuration
-#             see http://github.com/Falkor/dotfiles
+#             see https://github.com/Falkor/dotfiles
 #
 #  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 #                http://varrette.gforge.uni.lu
@@ -13,7 +13,7 @@
 #                        |_|
 ################################################################################
 # Resource
-# - http://github.com/rtomayko/dotfiles/blob/rtomayko/.inputrc
+# - https://github.com/rtomayko/dotfiles/blob/rtomayko/.inputrc
 
 # do not bell on tab-completion
 set bell-style bell
