@@ -154,7 +154,7 @@ PATH="/usr/local/bin:$PATH"
 
 # put ~/bin on PATH if you have it
 if [ -d "$HOME/bin" ]; then
-    PATH="$PATH:$HOME/bin:."
+    PATH="$PATH:$HOME/bin"
 fi
 MANPATH="/usr/share/man:/usr/local/share/man:$MANPATH"
 
