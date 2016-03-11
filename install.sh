@@ -16,7 +16,7 @@
 
 ### Global variables
 VERSION=0.1
-COMMAND=`basename $0`
+COMMAND=$(basename $0)
 VERBOSE=""
 DEBUG=""
 SIMULATION=""
@@ -29,13 +29,9 @@ COLOR_GREEN="\033[0;32m"
 COLOR_RED="\033[0;31m"
 COLOR_YELLOW="\033[0;33m"
 COLOR_VIOLET="\033[0;35m"
-COLOR_CYAN="\033[0;36m"
-COLOR_BOLD="\033[1m"
 COLOR_BACK="\033[0m"
 
 ### Local variables
-STARTDIR="$(pwd)"
-SCRIPTFILENAME=$(basename $0)
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOTFILES=~/.dotfiles.falkor.d
@@ -57,7 +53,7 @@ WITH_SCREEN=""
 # usage: info text [title]
 ##
 info() {
-    [ -z "$1" ] && print_error_and_exit "[$FUNCNAME] missing text argument"
+    [ -z "$1" ] && print_error_and_exit "[${FUNCNAME[0]}] missing text argument"
     local text=$1
     local title=$2
     # add default title if not submitted but don't print anything
@@ -156,11 +152,11 @@ EOF
 # usage: execute command
 ###
 execute() {
-    [ $# -eq 0 ] && print_error_and_exit "[$FUNCNAME] missing command argument"
-    debug "[$FUNCNAME] $*"
+    [ $# -eq 0 ] && print_error_and_exit "[${FUNCNAME[0]}] missing command argument"
+    debug "[${FUNCNAME[0]}] $*"
     [ -n "${SIMULATION}" ] && echo "(simulation) $*" || eval $*
     local exit_status=$?
-    debug "[$FUNCNAME] exit status: $exit_status"
+    debug "[${FUNCNAME[0]}] exit status: $exit_status"
     return $exit_status
 }
 
@@ -181,10 +177,10 @@ really_continue() {
 # usage: check_bin prog1 prog2 ...
 ##
 check_bin() {
-    [ $# -eq 0 ] && print_error_and_exit "[$FUNCNAME] missing argument"
-    for appl in $*; do
+    [ $# -eq 0 ] && print_error_and_exit "[${FUNCNAME[0]}] missing argument"
+    for appl in "$@"; do
         echo -n -e "=> checking availability of the command '$appl' on your system \t"
-        local tmp=`which $appl`
+        local tmp=$(which $appl)
         [ -z "$tmp" ] && print_error_and_exit "Please install $appl or check \$PATH." || echo -e "[${COLOR_GREEN} OK ${COLOR_BACK}]"
     done
 }
@@ -195,12 +191,12 @@ check_bin() {
 # Upon removal, the link is deleted only if it targets the expected dotfile
 ##
 add_or_remove_link() {
-    [ $# -ne 2 ] && print_error_and_exit "[$FUNCNAME] missing argument(s). Format: $FUNCNAME <src> <dst>"
+    [ $# -ne 2 ] && print_error_and_exit "[${FUNCNAME[0]}] missing argument(s). Format: ${FUNCNAME[0]} <src> <dst>"
     local src=$1
     local dst=$2
     if [ "${MODE}" == "--delete" ]; then
         debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink $dst))"
-        if [[ -h $dst && "$(readlink $dst)" == "${src}" ]]; then
+        if [[ -h "${dst}" && "$(readlink "${dst}")" == "${src}" ]]; then
             warning "removing the symlink '$dst'"
             [ -n "${VERBOSE}" ] && really_continue
             execute "rm $dst"
@@ -210,29 +206,29 @@ add_or_remove_link() {
             fi
         fi
     else
-        [ ! -e $src ] && print_error_and_exit "Unable to find the dotfile '${src}'"
+        [ ! -e "${src}" ] && print_error_and_exit "Unable to find the dotfile '${src}'"
         debug "attempt to add '$dst' symlink (pointing to '$src')"
         # return if the symlink already exists
-        [[ -h $dst && "$(readlink $dst)" == "${src}" ]] && return
-        if [ -e $dst ]; then
-            warning "The file '$dst' already exists and will be backuped (as ${dst}.bak)"
-            execute "mv $dst{,.bak}"
+        [[ -h "${dst}" && "$(readlink "${dst}")" == "${src}" ]] && return
+        if [ -e "${dst}" ]; then
+            warning "The file '${dst}' already exists and will be backuped (as ${dst}.bak)"
+            execute "mv ${dst}{,.bak}"
         fi
-        execute "ln -sf $src $dst"
+        execute "ln -sf ${src} ${dst}"
     fi
 }
 
 add_or_remove_copy() {
-    [ $# -ne 2 ] && print_error_and_exit "[$FUNCNAME] missing argument(s). Format: $FUNCNAME <src> <dst>"
+    [ $# -ne 2 ] && print_error_and_exit "[${FUNCNAME[0]}] missing argument(s). Format: ${FUNCNAME[0]} <src> <dst>"
     local src=$1
     local dst=$2
-    [ ! -f $src ] && print_error_and_exit "Unable to find the dotfile '${src}'"
+    [ ! -f "${src}" ] && print_error_and_exit "Unable to find the dotfile '${src}'"
     if [ "${MODE}" == "--delete" ]; then
-        debug "removing dst='$dst'"
+        debug "removing dst='${dst}'"
         if [[ -f $dst ]]; then
             warning "removing the file '$dst'"
             [ -n "${VERBOSE}" ] && really_continue
-            execute "rm $dst"
+            execute "rm ${dst}"
             if [ -f "${dst}.bak" ]; then
                 warning "restoring ${dst} from ${dst}.bak"
                 execute "mv ${dst}.bak ${dst}"
@@ -242,17 +238,17 @@ add_or_remove_copy() {
         debug "copying '$dst' from '$src'"
         check_bin shasum
         # return if the symlink already exists
-        local checksum_src=`shasum $src | cut -d ' ' -f 1`
-        local checksum_dst=`shasum $dst | cut -d ' ' -f 1`
+        local checksum_src=$(shasum "${src}" | cut -d ' ' -f 1)
+        local checksum_dst=$(shasum "${dst}" | cut -d ' ' -f 1)
         if [ "${checksum_src}" == "${checksum_dst}" ]; then
             echo "   - NOT copying '$dst' from '$src' since they are the same files"
             return
         fi
-        if [ -f $dst ]; then
+        if [ -f "${dst}" ]; then
             warning "The file '$dst' already exists and will be backuped (as ${dst}.bak)"
-            execute "cp $dst{,.bak}"
+            execute "cp ${dst}{,.bak}"
         fi
-        execute "cp $src $dst"
+        execute "cp ${src} ${dst}"
     fi
 }
 
@@ -325,7 +321,7 @@ EOF
 # courtesy of https://github.com/holman/dotfiles/blob/master/script/bootstrap
 setup_gitconfig_local () {
     local gitconfig_local=${1:-"$HOME/.gitconfig.local"}
-    local dotfile_gitconfig_local="${DOTFILES}/git/`basename ${gitconfig_local}`"
+    local dotfile_gitconfig_local="${DOTFILES}/git/$(basename ${gitconfig_local})"
     if [ -f "${dotfile_gitconfig_local}" ]; then
         add_or_remove_link "${dotfile_gitconfig_local}" "${gitconfig_local}"
         return
@@ -354,10 +350,10 @@ EOF
         local git_authorname=
         local git_email=
         if [ "$(uname -s)" == "Darwin" ]; then
-            git_authorname=`dscl . -read /Users/$(whoami) RealName | tail -n1`
+            git_authorname=$(dscl . -read /Users/$(whoami) RealName | tail -n1)
             git_credential='osxkeychain'
         elif [ "$(uname -s)" == "Linux" ]; then
-            git_authorname=`getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1`
+            git_authorname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
         fi
         [ -n "${GIT_AUTHOR_NAME}" ] && git_authorname="${GIT_AUTHOR_NAME}"
         [ -n "${GIT_AUTHOR_EMAIL}"] && git_email="${GIT_AUTHOR_EMAIL}"
@@ -409,14 +405,14 @@ while [ $# -ge 1 ]; do
             WITH_BASH='--with-bash';
             WITH_ZSH='--with-zsh';
             WITH_EMACS='--with-emacs';
-            WITH_VIM='--with-emacs';
+            WITH_VIM='--with-vim';
             WITH_GIT='--with-git';
             WITH_SCREEN='--with-screen';;
     esac
     shift
 done
 [ -z "${DOTFILES}" ] && print_error_and_exit "Wrong dotfiles directory (empty)"
-echo ${DOTFILES} | grep  '^\/' > /dev/null
+echo "${DOTFILES}" | grep  '^\/' > /dev/null
 greprc=$?
 if [ $greprc -ne 0 ]; then
     warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
@@ -435,7 +431,7 @@ if [ "${SCRIPTDIR}" != "${DOTFILES}" ]; then
 fi
 
 # Update the repository if already present
-[[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd $DOTFILES ; git pull )"
+[[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd ${DOTFILES} ; git pull )"
 # OR clone it there
 [[ ! -d "${DOTFILES}" ]] && execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${DOTFILES}"
 
@@ -454,11 +450,11 @@ fi
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
     info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-    add_or_remove_link $DOTFILES/bash/.bashrc       ~/.bashrc
-    add_or_remove_link $DOTFILES/bash/.inputrc      ~/.inputrc
-    add_or_remove_link $DOTFILES/bash/.bash_profile ~/.bash_profile
+    add_or_remove_link "${DOTFILES}/bash/.bashrc"       ~/.bashrc
+    add_or_remove_link "${DOTFILES}/bash/.inputrc"      ~/.inputrc
+    add_or_remove_link "${DOTFILES}/bash/.bash_profile" ~/.bash_profile
     info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/.bash_aliases"
-    add_or_remove_link $DOTFILES/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh  ~/.bash_aliases
+    add_or_remove_link "${DOTFILES}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  ~/.bash_aliases
 fi
 
 ## Zsh
@@ -471,7 +467,7 @@ if [ -n "${WITH_ZSH}" ]; then
         if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
             execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
         fi
-        add_or_remove_copy  $DOTFILES/oh-my-zsh/.zshrc       ~/.zshrc
+        add_or_remove_copy "${DOTFILES}/oh-my-zsh/.zshrc" ~/.zshrc
     fi
 fi
 
@@ -487,7 +483,7 @@ fi
 ## VI iMproved ([m]Vim)
 if [ -n "${WITH_VIM}" ]; then
     info "${ACTION} Falkor's VIM configuration ~/.vimrc"
-    add_or_remove_link $DOTFILES/vim/.vimrc ~/.vimrc
+    add_or_remove_link "${DOTFILES}/vim/.vimrc" ~/.vimrc
     if  [ "${MODE}" != "--delete" ]; then
         warning "Run vim afterwards to download the expected package (using NeoBundle)"
         if [ "$(uname -s)" == "Linux" ]; then
@@ -500,16 +496,16 @@ fi
 ## Git
 if [ -n "${WITH_GIT}" ]; then
     info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link $DOTFILES/git/.gitconfig  ~/.gitconfig
+    add_or_remove_link "${DOTFILES}/git/.gitconfig" ~/.gitconfig
     if [ "${MODE}" != "--delete" ]; then
         setup_gitconfig_local  ~/.gitconfig.local
     else
-        add_or_remove_copy ' '   ~/.gitconfig.local
+        add_or_remove_copy ' ' ~/.gitconfig.local
     fi
 fi
 
 ## GNU Screen
 if [ -n "${WITH_SCREEN}" ]; then
-    info "${ACTION} Falkor's GNU Screen configuration ~/.screenrc"
-    add_or_remove_link $DOTFILES/screen/.screenrc ~/.screenrc
+    info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
+    add_or_remove_link "${DOTFILES}/screen/.screenrc" ~/.screenrc
 fi
