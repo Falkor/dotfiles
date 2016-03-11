@@ -596,13 +596,11 @@ test -n "$INTERACTIVE" -a -n "$LOGIN" && {
 export PKG_CONFIG_PATH
 export C_INCLUDE_PATH   CPLUS_INCLUDE_PATH   LIBRARY_PATH   DYLD_FALLBACK_LIBRARY_PATH
 
-# Eventually load you custom aliases
-test -f $HOME/.bash_aliases &&
-    source $HOME/.bash_aliases
+# Eventually load your custom aliases
+test -f ~/.bash_aliases && . ~/.bash_aliases || true
 
-# Eventually load you private settings (not exposed here)
-test -f $HOME/.bash_private &&
-    source $HOME/.bash_private
+# Eventually load your private settings (not exposed here)
+test -f ~/.bash_private && . ~/.bash_private || true
 
 # RVM specific (see http://beginrescueend.com/)
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
