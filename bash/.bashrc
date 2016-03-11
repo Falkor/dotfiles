@@ -1,10 +1,10 @@
 #! /bin/bash
 ################################################################################
 #  .bashrc -- my personal Bourne-Again shell (aka bash) configuration
-#             see http://github.com/Falkor/dotfiles
+#             see https://github.com/Falkor/dotfiles
 #
 #  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
-#                http://varrette.gforge.uni.lu
+#                https://varrette.gforge.uni.lu
 #                   _               _
 #                  | |__   __ _ ___| |__  _ __ ___
 #                  | '_ \ / _` / __| '_ \| '__/ __|
@@ -29,7 +29,7 @@
 ################################################################################
 # Resources:
 #  - http://bitbucket.org/dmpayton/dotfiles/src/tip/.bashrc
-#  - http://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc
+#  - https://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc
 
 # Basic variables
 : ${HOME=~}
