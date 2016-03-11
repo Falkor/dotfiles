@@ -46,6 +46,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 "" NeoBundle install packages
 "===========================================================================
 NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'jistr/vim-nerdtree-tabs.git'
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'tpope/vim-fugitive'
@@ -145,10 +146,8 @@ set backspace=indent,eol,start
 
 
 "" Tabs. May be overriten by autocmd rules
-set tabstop=4
-set softtabstop=0
-set shiftwidth=4
-set expandtab
+set softtabstop=4 tabstop=8 shiftwidth=4 expandtab
+" set softtabstop=0
 
 "" Map leader to ,
 let mapleader=','
@@ -414,6 +413,10 @@ let g:syntastic_style_error_symbol = '✗'
 let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
+let g:syntastic_python_checkers=['python', 'flake8']
+let g:syntastic_python_flake8_post_args='--ignore=W391'
+let g:syntastic_tex_chktex_showmsgs = 0
+" let g:syntastic_disabled_filetypes=['tex']
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
@@ -426,9 +429,11 @@ set visualbell t_vb=
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
 endif
-
+" see http://tilvim.com/2014/03/18/a-better-paste.html
+" a better paste
+map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
 noremap YY "+y<CR>
-noremap <leader>p "+gP<CR>
+" noremap <leader>p "+gP<CR>
 noremap XX "+x<CR>
 
 if has('macunix')
@@ -487,12 +492,6 @@ let g:jedi#show_call_signatures = "0"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
 
-" syntastic
-let g:syntastic_python_checkers=['python', 'flake8']
-let g:syntastic_python_flake8_post_args='--ignore=W391'
-" disable it for latex
-let g:syntastic_tex_chktex_showmsgs = 0
-let g:syntastic_disabled_filetypes=['tex']
 
 " vim-airline
 let g:airline#extensions#virtualenv#enabled = 1
