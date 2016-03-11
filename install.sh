@@ -402,7 +402,7 @@ while [ $# -ge 1 ]; do
         --with-bash  | --bash)   WITH_BASH='--with-bash';;
         --with-zsh   | --zsh)    WITH_ZSH='--with-zsh';;
         --with-emacs | --emacs)  WITH_EMACS='--with-emacs';;
-        --with-vim   | --vim)    WITH_VIM='--with-emacs';;
+        --with-vim   | --vim)    WITH_VIM='--with-vim';;
         --with-git   | --git)    WITH_GIT='--with-git';;
         --with-screen| --screen) WITH_SCREEN='--with-screen';;
         -a | --all)
