@@ -42,7 +42,7 @@
 # readline config
 : ${INPUTRC=~/.inputrc}
 
-# Get ride of mail notification
+# Get rid of mail notification
 unset MAILCHECK
 
 # ----------------------------------------------------------------------
