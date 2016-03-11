@@ -192,6 +192,7 @@ optipdf () {
 	if [[ "$opti_size" -lt "$size"  ]]; then
 		echo " => optimized PDF of smaller size ($opti_size vs. $size) thus overwrite $pdf"
 		mv $res $pdf
+		git commit -s -m "reduce size of PDF '$pdf'" $pdf
 	else
 		echo " => already optimized PDF thus discarded"
 		rm -f $res
