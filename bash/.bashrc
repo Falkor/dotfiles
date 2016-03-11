@@ -604,6 +604,12 @@ test -f ~/.bash_private && . ~/.bash_private || true
 
 # RVM specific (see http://beginrescueend.com/)
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+
+# XCS Portal / XF
+if [ -f /XF/App/Scripts/xf_Globalenv.rc ]; then
+    source /XF/App/Scripts/xf_Globalenv.rc
+    export XF_VNC_GEOMETRY="-geometry 1280x1024"
+fi
 # I hate this ring
 #set bell-style visible
 
