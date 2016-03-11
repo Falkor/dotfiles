@@ -274,6 +274,43 @@ test -n "$PS1" && test "$bmajor" -gt 1 && {
 unset bash bmajor
 
 # ----------------------------------------------------------------------
+# OAR Batch scheduler
+# ----------------------------------------------------------------------
+# Resources:
+# - http://wiki-oar.imag.fr/index.php/Customization_tips
+# - http://wiki-oar.imag.fr/index.php/Oarsh_and_bash_completion
+
+# oarsh completion
+function _oarsh_complete_()
+{
+  local word=${COMP_WORDS[COMP_CWORD]}
+  local list
+  list=$(uniq "$OAR_NODEFILE" | tr '\n' ' ')
+  COMPREPLY=($(compgen -W "$list" -- "${word}"))
+}
+complete -F _oarsh_complete_ oarsh
+
+# Job + Remaining time
+__oar_ps1_remaining_time(){
+  if [ -n "$OAR_JOB_WALLTIME_SECONDS" -a -n "$OAR_NODE_FILE" -a -r "$OAR_NODE_FILE" ]; then
+    DATE_NOW=$(date +%s)
+    DATE_JOB_START=$(stat -c %Y "$OAR_NODE_FILE")
+    DATE_TMP=$OAR_JOB_WALLTIME_SECONDS
+    ((DATE_TMP = (DATE_TMP - DATE_NOW + DATE_JOB_START) / 60))
+    echo -n "[OAR$OAR_JOB_ID->$DATE_TMP]"
+  fi
+}
+
+# OAR motd
+
+test -n "$INTERACTIVE" && test -n "$OAR_NODE_FILE" && (
+  echo "[OAR] OAR_JOB_ID=$OAR_JOB_ID"
+  echo "[OAR] Your nodes are:"
+  sort "$OAR_NODE_FILE" | uniq -c | awk '{printf("      %s*%d\n",$2,$1)}END{printf("\n")}' | sed -e 's/,$//'
+)
+
+
+# ----------------------------------------------------------------------
 # BASH HISTORY
 # ----------------------------------------------------------------------
 
