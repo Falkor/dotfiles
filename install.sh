@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Thu 2016-03-03 15:43 svarrette>
+# Time-stamp: <Mon 2016-03-14 22:45 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -16,7 +16,7 @@
 
 ### Global variables
 VERSION=0.1
-COMMAND=$(basename $0)
+COMMAND=$(basename "$0")
 VERBOSE=""
 DEBUG=""
 SIMULATION=""
@@ -154,7 +154,7 @@ EOF
 execute() {
     [ $# -eq 0 ] && print_error_and_exit "[${FUNCNAME[0]}] missing command argument"
     debug "[${FUNCNAME[0]}] $*"
-    [ -n "${SIMULATION}" ] && echo "(simulation) $*" || eval $*
+    [ -n "${SIMULATION}" ] && echo "(simulation) $*" || eval "$*"
     local exit_status=$?
     debug "[${FUNCNAME[0]}] exit status: $exit_status"
     return $exit_status
@@ -195,10 +195,10 @@ add_or_remove_link() {
     local src=$1
     local dst=$2
     if [ "${MODE}" == "--delete" ]; then
-        debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink $dst))"
+        debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink "$dst"))"
         if [[ -h "${dst}" && "$(readlink "${dst}")" == "${src}" ]]; then
             warning "removing the symlink '$dst'"
-            [ -n "${VERBOSE}" ] && really_continue
+            [ -n "${VERBOSE}" ] && really_continue "$@"
             execute "rm $dst"
             if [ -f "${dst}.bak" ]; then
                 warning "restoring ${dst} from ${dst}.bak"
@@ -227,7 +227,7 @@ add_or_remove_copy() {
         debug "removing dst='${dst}'"
         if [[ -f $dst ]]; then
             warning "removing the file '$dst'"
-            [ -n "${VERBOSE}" ] && really_continue
+            [ -n "${VERBOSE}" ] && really_continue "$@"
             execute "rm ${dst}"
             if [ -f "${dst}.bak" ]; then
                 warning "restoring ${dst} from ${dst}.bak"
@@ -257,13 +257,13 @@ install_ohmyzsh() {
     if [ ! -d "$HOME/.oh-my-zsh/" ]; then
         info "installing Oh-My-ZSH -- see http://ohmyz.sh/"
         # installation by curl if available
-        if   [ -n "`which curl`" ]; then
+        if   [ -n "$(which curl)" ]; then
             echo "   - installation using curl"
             warning " "
             warning "Remember to Exit the zsh shell to continue the installation!!!"
             warning " "
             [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-        elif [ -n "`which wget`" ]; then
+        elif [ -n "$(which wget)" ]; then
             echo "   - installation using wget"
             [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
         else
@@ -279,7 +279,7 @@ install_custom_ohmyzsh() {
     local falkor_customdir="${DOTFILES}/oh-my-zsh/custom"
     [ ! -h "${customdir}/.ref" ] && execute "ln -s ${falkor_customdir} ${customdir}/.ref"
     for f in `ls ${falkor_customdir}/*.zsh`; do
-        ff=`basename $f`
+        ff="$(basename $f)"
         if [ ! -h "${customdir}/$ff" ]; then
             echo "     - add custom '$ff'"
             execute "ln -s .ref/$ff ${customdir}/$ff"
@@ -355,8 +355,8 @@ EOF
         elif [ "$(uname -s)" == "Linux" ]; then
             git_authorname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1)
         fi
-        [ -n "${GIT_AUTHOR_NAME}" ] && git_authorname="${GIT_AUTHOR_NAME}"
-        [ -n "${GIT_AUTHOR_EMAIL}"] && git_email="${GIT_AUTHOR_EMAIL}"
+        [ -n "${GIT_AUTHOR_NAME}"  ] && git_authorname="${GIT_AUTHOR_NAME}"
+        [ -n "${GIT_AUTHOR_EMAIL}" ] && git_email="${GIT_AUTHOR_EMAIL}"
         if [ -z "${git_authorname}" ]; then
             echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author name:"
             read -e git_authorname

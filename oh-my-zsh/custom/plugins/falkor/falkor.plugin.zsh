@@ -170,6 +170,8 @@ search() {
 
 alias sshx='ssh -C -X -c blowfish'
 alias proxy='ssh -C -q -T -n -N -D 1080'
+alias rsyncfalkor='rsync -P -avzu'
+
 
 mkcd () {
     mkdir -p "$@" && cd "$@"
