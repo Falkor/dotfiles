@@ -232,7 +232,7 @@ alias t='task'
 # Emacs business
 # ---------------
 
-alias emacs="$HOME/Applications/Emacs.app/Contents/MacOS/Emacs"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
 alias es="emacs --daemon"
 alias em="emacsclient -nw --alternate-editor='vim'"
 

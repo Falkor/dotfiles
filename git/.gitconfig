@@ -64,7 +64,7 @@
 
 [core]
     autocrlf = input
-    safecrlf = true
+	safecrlf = warn
     pager = less -FRSX
     editor = vim
     #editor = /Users/svarrette/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -t
