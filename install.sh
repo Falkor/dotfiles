@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2016-03-14 22:45 svarrette>
+# Time-stamp: <Fri 2017-01-20 14:53 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -43,6 +43,7 @@ WITH_EMACS=""
 WITH_VIM=""
 WITH_GIT=""
 WITH_SCREEN=""
+WITH_BREW=""
 
 #######################
 ### print functions ###
@@ -401,13 +402,17 @@ while [ $# -ge 1 ]; do
         --with-vim   | --vim)    WITH_VIM='--with-vim';;
         --with-git   | --git)    WITH_GIT='--with-git';;
         --with-screen| --screen) WITH_SCREEN='--with-screen';;
+        --with-brew  | --brew)   WITH_BREW='--with-brew';;
         -a | --all)
             WITH_BASH='--with-bash';
             WITH_ZSH='--with-zsh';
             WITH_EMACS='--with-emacs';
             WITH_VIM='--with-vim';
             WITH_GIT='--with-git';
-            WITH_SCREEN='--with-screen';;
+            WITH_SCREEN='--with-screen'
+            #WITH_BREW='--with-brew'
+            ;;
+
     esac
     shift
 done
@@ -415,8 +420,12 @@ done
 echo "${DOTFILES}" | grep  '^\/' > /dev/null
 greprc=$?
 if [ $greprc -ne 0 ]; then
-    warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
-    DOTFILES="$HOME/${DOTFILES}"
+    if [ "${DOTFILES}" == "." ]; then
+        DOTFILES=$PWD
+    else
+        warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
+        DOTFILES="$HOME/${DOTFILES}"
+    fi
 fi
 info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
 [ -z "${FORCE}" ] && really_continue
@@ -437,7 +446,7 @@ fi
 
 cd ~
 
-if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN}" ]; then
+if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN}${WITH_BREW}" ]; then
     warning " "
     warning "By default, this installer does nothing except updating ${DOTFILES}."
     warning "Use '$0 --all' to install all available configs. OR use a discrete set of options."
@@ -508,4 +517,14 @@ fi
 if [ -n "${WITH_SCREEN}" ]; then
     info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
     add_or_remove_link "${DOTFILES}/screen/.screenrc" ~/.screenrc
+fi
+
+## HomeBrew -- http://brew.sh
+if [ -n "${WITH_BREW}" ]; then
+    brewfile="${DOTFILES}/brew/Brewfile"
+    [ -z "$(which brew)" ] && print_error_and_exit "Unable to find the 'brew' command on your system"
+    [ ! -f "${brewfile}" ] && print_error_and_exit "Unable to find the Brew file '${brewfile}'"
+    info "${ACTION} Brew Bundle configuration from '${brewfile}'"
+    execute "brew tap Homebrew/bundle"    # Install brew bundle -- see https://github.com/Homebrew/homebrew-bundle
+    execute "brew bundle --file=${brewfile} -v"
 fi
