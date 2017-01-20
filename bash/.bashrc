@@ -551,7 +551,7 @@ done
 if [ -d "${BASH_CONFIG_DIR}" ]; then
     for f in ${BASH_CONFIG_DIR}/*.sh
     do
-        if [ -r "$f" ]; then
+        if [ -r "$f" ]; then
             . $f
         fi
     done
