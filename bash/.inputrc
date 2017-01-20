@@ -18,24 +18,24 @@
 # do not bell on tab-completion
 set bell-style bell
 
-set expand-tilde off
-set input-meta off
-set convert-meta on
-set output-meta off
-set horizontal-scroll-mode off
-set history-preserve-point on
-set mark-directories on
-set mark-symlinked-directories on
-set match-hidden-files off
+# set expand-tilde off
+# set input-meta off
+# set convert-meta on
+# set output-meta off
+# set horizontal-scroll-mode off
+# set history-preserve-point on
+# set mark-directories on
+# set mark-symlinked-directories on
+# set match-hidden-files off
 
-# completion settings
-set page-completions off
-set completion-query-items 2000
-set completion-ignore-case off
-set show-all-if-ambiguous on
-set show-all-if-unmodified on
-set completion-prefix-display-length 10
-set print-completions-horizontally off
+# # completion settings
+# set page-completions off
+# set completion-query-items 2000
+# set completion-ignore-case off
+# set show-all-if-ambiguous on
+# set show-all-if-unmodified on
+# set completion-prefix-display-length 10
+# set print-completions-horizontally off
 
 # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
 "\e[1;5C": forward-word
