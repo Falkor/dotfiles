@@ -41,7 +41,7 @@ esac
 : ${HOME=~}
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
-: ${BASH_CONFIG_DIR=$HOME/.bash.d}
+: ${BASH_CONFIG_DIR=$HOME/.config/bash.d}
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
 
@@ -523,8 +523,6 @@ puniq () {
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
-# CDPATH settings
-#export CDPATH=.:~/svn/gforge.uni.lu
 
 # Set the color prompt by default when interactive
 if [ -n "$PS1" ]; then
