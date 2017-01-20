@@ -153,10 +153,10 @@ done
 # ----------------------------------------------------------------------
 # MACOS X / DARWIN SPECIFIC
 # ----------------------------------------------------------------------
-if [ "${UNAME}" = "Darwin" ]; then
-    test -x "/usr/libexec/java_home" &&
-        export JAVE_HOME=$(/usr/libexec/java_home)
-fi
+# if [ "${UNAME}" = "Darwin" ]; then
+#     test -x "/usr/libexec/java_home" &&
+#         export JAVE_HOME=$(/usr/libexec/java_home)
+# fi
 
 # ----------------------------------------------------------------------
 # PAGER / EDITOR
