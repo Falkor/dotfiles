@@ -9,6 +9,7 @@ tap 'homebrew/dupes'
 
 # Couple of mandatory applications
 brew 'autoconf'
+brew 'autojump'
 brew 'readline'
 brew 'bash'
 brew 'bash-completion'
