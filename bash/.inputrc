@@ -37,6 +37,11 @@ set bell-style bell
 # set completion-prefix-display-length 10
 # set print-completions-horizontally off
 
+# mappings for Ctrl-up-arrow and Ctrl-down-arrow for word moving
+## arrow up
+#"\e[A":forward-word
+## arrow down
+#"\e[B":backward-word
 # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
 #"\e[1;5C": forward-word
 #"\e[1;5D": backward-word
