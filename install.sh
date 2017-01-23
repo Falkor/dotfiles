@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2017-01-23 01:36 svarrette>
+# Time-stamp: <Mon 2017-01-23 01:48 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -506,7 +506,7 @@ fi
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
     info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-    add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX}"
+    add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
     add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
     add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
     add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
@@ -517,7 +517,7 @@ fi
 ## Zsh
 if [ -n "${WITH_ZSH}" ]; then
     info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc"
-    add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"    "${PREFIX}/zsh"     "${PREFIX}"
+    add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"    "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
     if [ "${MODE}" != "--delete" ]; then
         install_ohmyzsh
         install_custom_ohmyzsh
@@ -541,7 +541,7 @@ fi
 ## VI iMproved ([m]Vim)
 if [ -n "${WITH_VIM}" ]; then
     info "${ACTION} Falkor's VIM configuration ~/.vimrc"
-    add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX}"
+    add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX_HOME}${PREFIX}"
     add_or_remove_link "${PREFIX}/vim/.vimrc"       ~/.vimrc       "${PREFIX_HOME}"
     if  [ "${MODE}" != "--delete" ]; then
         warning "Run vim afterwards to download the expected package (using NeoBundle)"
@@ -555,7 +555,7 @@ fi
 ## Git
 if [ -n "${WITH_GIT}" ]; then
     info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link "${DOTFILES_DIR}/git"    "${PREFIX}/git"     "${PREFIX}"
+    add_or_remove_link "${DOTFILES_DIR}/git"    "${PREFIX}/git"     "${PREFIX_HOME}${PREFIX}"
     #add_or_remove_link "${PREFIX}/git/.gitconfig"       ~/.gitconfig       "${PREFIX_HOME}"
     #add_or_remove_link "${INSTALL_DIR}/git/.gitconfig" ~/.gitconfig
     if [ "${MODE}" != "--delete" ]; then
@@ -570,7 +570,7 @@ fi
 ## GNU Screen
 if [ -n "${WITH_SCREEN}" ]; then
     info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
-    add_or_remove_link "${DOTFILES_DIR}/screen"    "${PREFIX}/screen"     "${PREFIX}"
+    add_or_remove_link "${DOTFILES_DIR}/screen"    "${PREFIX}/screen"     "${PREFIX_HOME}${PREFIX}"
     add_or_remove_link "${PREFIX}/screen/.screenrc"      ~/.screenrc       "${PREFIX_HOME}"
 fi
 
