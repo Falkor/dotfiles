@@ -54,6 +54,7 @@ brew 'homebrew/dupes/rsync'
 # Mac GUIs Apps
 cask '1password'
 cask 'alfred'
+cask 'atom'
 cask 'calibre'
 cask 'dropbox'
 cask 'mactex'
