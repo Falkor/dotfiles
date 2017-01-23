@@ -48,6 +48,7 @@ brew 'terminal-notifier'
 brew 'tig'
 brew 'vim'
 brew 'watch'
+brew 'wget'
 # more recent rsync
 brew 'homebrew/dupes/rsync'
 

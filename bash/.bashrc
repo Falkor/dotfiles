@@ -44,6 +44,9 @@ esac
 # See https://specifications.freedesktop.org/basedir-spec/latest/
 : ${XDG_CONFIG_HOME=$HOME/.config}
 : ${XDG_DATA_HOME=$HOME/.local/share}
+: ${XDG_CACHE_HOME=$HOME/.cache}
+export XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
+
 : ${BASH_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/bash/custom}
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
@@ -152,6 +155,9 @@ manpathadd() {
 for mandir in /usr/local/share/man $HOME/share/man; do
     manpathadd ${mandir}
 done
+
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 # ----------------------------------------------------------------------
 # MACOS X / DARWIN SPECIFIC
@@ -568,7 +574,9 @@ fi
 # condense PATH entries
 PATH="$(puniq "$PATH")"
 MANPATH="$(puniq "$MANPATH")"
-export PATH MANPATH
+PKG_CONFIG_PATH="$(puniq "$PKG_CONFIG_PATH")"
+LD_LIBRARY_PATH="$(puniq "$LD_LIBRARY_PATH")"
+export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
 
 # I hate this ring
 #set bell-style visible
