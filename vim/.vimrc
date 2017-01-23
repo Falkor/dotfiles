@@ -93,6 +93,7 @@ NeoBundle 'scwood/vim-hybrid'
 NeoBundle 'mhinz/vim-janah'
 NeoBundle 'sickill/vim-monokai'
 NeoBundle 'flazz/vim-colorschemes'
+NeoBundle 'NLKNguyen/papercolor-theme'
 
 "" Vim-Bootstrap Updater
 NeoBundle 'sherzberg/vim-bootstrap-updater'
@@ -106,7 +107,7 @@ NeoBundle "Yggdroot/indentLine"
 NeoBundle 'vim-scripts/c.vim'
 
 "" HTML Bundle
-NeoBundle 'amirh/HTML-AutoCloseTag'
+" NeoBundle 'amirh/HTML-AutoCloseTag'
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'gorodinskiy/vim-coloresque'
 NeoBundle 'tpope/vim-haml'
@@ -190,7 +191,9 @@ set number
 let no_buffers_menu=1
 if !exists('g:not_finsh_neobundle')
   " colorscheme molokai
-  colorscheme hybrid
+  "  colorscheme hybrid
+  set background=light
+  colorscheme PaperColor
 endif
 
 set mousemodel=popup

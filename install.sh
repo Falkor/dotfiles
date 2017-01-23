@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Time-stamp: <Fri 2017-01-20 14:53 svarrette>
+# Time-stamp: <Mon 2017-01-23 01:19 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
 #     | |_ / _` | | |/ / _ \| '__|// __|  / _` |/ _ \| __| |_| | |/ _ \/ __|
 #     |  _| (_| | |   < (_) | |    \__ \ | (_| | (_) | |_|  _| | |  __/\__ \
-#     |_|  \__,_|_|_|\_\___/|_|    |___/  \__,_|\___/ \__|_| |_|_|\___||___/
+    #     |_|  \__,_|_|_|\_\___/|_|    |___/  \__,_|\___/ \__|_| |_|_|\___||___/
 #
 ################################################################################
 # Installation script for Falkor aka S.Varrette's dotfiles within the homedir of the
@@ -34,7 +34,8 @@ COLOR_BACK="\033[0m"
 ### Local variables
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-DOTFILES=~/.dotfiles.falkor.d
+DOTFILES_DIR=dotfiles.falkor.d
+[ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="${HOME}/.config"
 
 # What to take care of (default is empty)
 WITH_BASH=""
@@ -44,6 +45,9 @@ WITH_VIM=""
 WITH_GIT=""
 WITH_SCREEN=""
 WITH_BREW=""
+
+# Default action
+ACTION="install"
 
 #######################
 ### print functions ###
@@ -103,7 +107,9 @@ OPTIONS
     -V --version
         Display the version number then quit.
     -d --dir DIR
-        Set the dotfiles directory (Default: ~/.dotfiles.falkor.d)
+        Set the dotfiles directory (Default: .dotfiles.falkor.d)
+    --prefix DIR
+        Set the prefix directory for the dotfiles (Default: ~/.config)
     --delete --remove --uninstall
         Remove / Restore the installed components
     --offline
@@ -112,6 +118,8 @@ OPTIONS
         Install / delete ALL Falkor's dotfiles
     --bash --with-bash
         Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc
+    --brew
+        Install with brew bundle
     --zsh --with-zsh
         Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc
     --emacs --with-emacs
@@ -166,6 +174,7 @@ execute() {
 # usage: really_continue text
 ##
 really_continue() {
+    [ -n "${FORCE}" ] && return || true
     echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] $1 Are you sure you want to continue? [Y|n] "
     read ans
     case $ans in
@@ -192,14 +201,17 @@ check_bin() {
 # Upon removal, the link is deleted only if it targets the expected dotfile
 ##
 add_or_remove_link() {
-    [ $# -ne 2 ] && print_error_and_exit "[${FUNCNAME[0]}] missing argument(s). Format: ${FUNCNAME[0]} <src> <dst>"
-    local src=$1
+    [ $# -lt 2 ] && print_error_and_exit "[${FUNCNAME[0]}] missing argument(s). Format: ${FUNCNAME[0]} <src> <dst> [<prefix>]"
+    local source=$1
     local dst=$2
+    # prefix for the source
+    local prefix=$3
+    [ -n "${prefix}" ] && src="${prefix}/${source}" || src="${source}"
     if [ "${MODE}" == "--delete" ]; then
-        debug "removing dst='$dst' (if symlink pointing to src='$src' =? $(readlink "$dst"))"
-        if [[ -h "${dst}" && "$(readlink "${dst}")" == "${src}" ]]; then
+        debug "removing dst='$dst' (if symlink pointing to src='$source' =? $(readlink "$dst"))"
+        if [[ -h "${dst}" && "$(readlink "${dst}")" == "${source}" ]]; then
             warning "removing the symlink '$dst'"
-            [ -n "${VERBOSE}" ] && really_continue "$@"
+            [ -n "${VERBOSE}" ] && really_continue
             execute "rm $dst"
             if [ -f "${dst}.bak" ]; then
                 warning "restoring ${dst} from ${dst}.bak"
@@ -208,14 +220,14 @@ add_or_remove_link() {
         fi
     else
         [ ! -e "${src}" ] && print_error_and_exit "Unable to find the dotfile '${src}'"
-        debug "attempt to add '$dst' symlink (pointing to '$src')"
+        debug "attempt to add '$dst' symlink (pointing to '$source')"
         # return if the symlink already exists
-        [[ -h "${dst}" && "$(readlink "${dst}")" == "${src}" ]] && return
+        [[ -h "${dst}" && "$(readlink "${dst}")" == "${source}" ]] && return
         if [ -e "${dst}" ]; then
             warning "The file '${dst}' already exists and will be backuped (as ${dst}.bak)"
             execute "mv ${dst}{,.bak}"
         fi
-        execute "ln -sf ${src} ${dst}"
+        execute "ln -sf ${source} ${dst}"
     fi
 }
 
@@ -271,13 +283,13 @@ install_ohmyzsh() {
             print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
         fi
     fi
-    add_or_remove_copy  $DOTFILES/oh-my-zsh/zshrc       ~/.zshrc
 }
 
 install_custom_ohmyzsh() {
     info "installing Falkor custom plugins for oh-my-zsh/"
     local customdir="$HOME/.oh-my-zsh/custom/"
-    local falkor_customdir="${DOTFILES}/oh-my-zsh/custom"
+    #local falkor_customdir="${INSTALL_DIR}/oh-my-zsh/custom"
+    local falkor_customdir="${PREFIX_HOME}${PREFIX}/zsh/custom"
     [ ! -h "${customdir}/.ref" ] && execute "ln -s ${falkor_customdir} ${customdir}/.ref"
     for f in `ls ${falkor_customdir}/*.zsh`; do
         ff="$(basename $f)"
@@ -321,10 +333,10 @@ EOF
 
 # courtesy of https://github.com/holman/dotfiles/blob/master/script/bootstrap
 setup_gitconfig_local () {
-    local gitconfig_local=${1:-"$HOME/.gitconfig.local"}
-    local dotfile_gitconfig_local="${DOTFILES}/git/$(basename ${gitconfig_local})"
+    local gitconfig_local=${1:-"${PREFIXHOME}${PREFIX}/git/config.local"}
+    local dotfile_gitconfig_local="${INSTALL_DIR}/git/$(basename ${gitconfig_local})"
     if [ -f "${dotfile_gitconfig_local}" ]; then
-        add_or_remove_link "${dotfile_gitconfig_local}" "${gitconfig_local}"
+        #add_or_remove_link "${dotfile_gitconfig_local}" "${gitconfig_local}"
         return
     fi
     if [ ! -f "${gitconfig_local}" ]; then
@@ -333,7 +345,7 @@ setup_gitconfig_local () {
         cat > $gitconfig_local <<'EOF'
 # -*- mode: gitconfig; -*-
 ################################################################################
-#  .gitconfig.local -- Private part of the GIT configuration
+#  [.git]config.local -- Private part of the GIT configuration
 #  .                   to hold username / credentials etc .
 #  NOT meant to be staged for commit under github
 #                _ _                   __ _         _                 _
@@ -375,12 +387,41 @@ EOF
     fi
 }
 
+setup_installdir() {
+    [ "${ACTION}" != 'install' ] && return
+    check_bin 'git'
+    if [ ! -d "${PREFIX}" ]; then
+        info "creating the prefix directory '${PREFIX}'"
+        really_continue
+        execute "mkdir -p ${PREFIX}"
+    fi
+    if [ -d "${SCRIPTDIR}/.git" -a ! -e "${INSTALL_DIR}" ]; then
+        # check that the install script really belongs to this git repository
+        ok=$(git --git-dir=${SCRIPTDIR}/.git ls-files $COMMAND --error-unmatch 2>/dev/null)
+        if [ $? -eq 0 ]; then
+            echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Make ${INSTALL_DIR} a symlink to ${SCRIPTDIR} [Y|n]? "
+            ans='Yes'
+            [ -z "${FORCE}" ] && read ans || true
+            case $ans in
+                n*|N*)
+                ;;
+                *)  add_or_remove_link "${SCRIPTDIR}" "${INSTALL_DIR}";
+                    return
+                    ;;
+            esac
+        fi
+        info "Cloning Falkor dotfiles in '${INSTALL_DIR}'";
+        execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${INSTALL_DIR}";
+    fi
+
+}
+
 
 ################################################################################
 ################################################################################
 # Let's go
 
-ACTION="install"
+
 # Check for options
 while [ $# -ge 1 ]; do
     case $1 in
@@ -394,8 +435,14 @@ while [ $# -ge 1 ]; do
         --offline)      OFFLINE="--offline";;
         --delete | --remove | --uninstall)
             ACTION="uninstall"; OFFLINE="--offline"; MODE="--delete";;
-        -d | --dir | --dotfiles)
-            shift;       DOTFILES=$1;;
+        # -d | --dir | --installdir)
+        #     shift;
+        #     INSTALL_DIR=$1
+        #     # DOTFILES_DIR=$(basename ${INSTALL_DIR})
+        #     # PREFIX=$(dirname ${INSTALL_DIR})
+        #     ;;
+        # --dotfiledir) shift;     DOTFILES_DIR=$1;;
+        --prefix)  shift;        PREFIX=$1;;
         --with-bash  | --bash)   WITH_BASH='--with-bash';;
         --with-zsh   | --zsh)    WITH_ZSH='--with-zsh';;
         --with-emacs | --emacs)  WITH_EMACS='--with-emacs';;
@@ -410,45 +457,45 @@ while [ $# -ge 1 ]; do
             WITH_VIM='--with-vim';
             WITH_GIT='--with-git';
             WITH_SCREEN='--with-screen'
-            #WITH_BREW='--with-brew'
+            WITH_BREW='--with-brew'
             ;;
 
     esac
     shift
 done
-[ -z "${DOTFILES}" ] && print_error_and_exit "Wrong dotfiles directory (empty)"
-echo "${DOTFILES}" | grep  '^\/' > /dev/null
-greprc=$?
-if [ $greprc -ne 0 ]; then
-    if [ "${DOTFILES}" == "." ]; then
-        DOTFILES=$PWD
-    else
-        warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
-        DOTFILES="$HOME/${DOTFILES}"
-    fi
-fi
-info "About to ${ACTION} Falkor's dotfiles from ${DOTFILES}"
-[ -z "${FORCE}" ] && really_continue
 
-if [ "${SCRIPTDIR}" != "${DOTFILES}" ]; then
-    if [ -d "${SCRIPTDIR}/.git" -a ! -e "${DOTFILES}" ]; then
-        # We are (hopefully) in a clone of the Falkor's dotfile repository.
-        # Make $DOTFILES be a symlink to this clone.
-        info "make '${DOTFILES}' a symlink to ${SCRIPTDIR}"
-        execute "ln -s ${SCRIPTDIR} ${DOTFILES}"
-    fi
+PREFIX_HOME=''
+if [[ $PREFIX == "${HOME}"* ]]; then
+    PREFIX_HOME="$HOME/"
+    PREFIX="${PREFIX/#$HOME\//}"
 fi
+#exit 1
+INSTALL_DIR=${PREFIX}/${DOTFILES_DIR}
+[ -z "${INSTALL_DIR}" ] && print_error_and_exit "Wrong installation directory"
+setup_installdir
+
+# echo "${DOTFILES}" | grep  '^\/' > /dev/null
+# greprc=$?
+# if [ $greprc -ne 0 ]; then
+#     if [ "${DOTFILES}" == "." ]; then
+#         DOTFILES=$PWD
+#     else
+#         warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
+#         DOTFILES="$HOME/${DOTFILES}"
+#     fi
+# fi
+
+info "About to ${ACTION} Falkor's dotfiles from ${INSTALL_DIR}"
+really_continue
 
 # Update the repository if already present
-[[ -z "${OFFLINE}" && -d "${DOTFILES}" ]]   && execute "( cd ${DOTFILES} ; git pull )"
-# OR clone it there
-[[ ! -d "${DOTFILES}" ]] && execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${DOTFILES}"
+[[ -z "${OFFLINE}" && -d "${INSTALL_DIR}" ]]   && execute "( cd ${INSTALL_DIR} ; git pull )"
 
 cd ~
 
 if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN}${WITH_BREW}" ]; then
     warning " "
-    warning "By default, this installer does nothing except updating ${DOTFILES}."
+    warning "By default, this installer does nothing except updating ${INSTALL_DIR}."
     warning "Use '$0 --all' to install all available configs. OR use a discrete set of options."
     warning "Ex: '$0 $MODE --zsh --with'"
     warning " "
@@ -459,16 +506,18 @@ fi
 ## Bash
 if [ -n "${WITH_BASH}" ]; then
     info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-    add_or_remove_link "${DOTFILES}/bash/.bashrc"       ~/.bashrc
-    add_or_remove_link "${DOTFILES}/bash/.inputrc"      ~/.inputrc
-    add_or_remove_link "${DOTFILES}/bash/.bash_profile" ~/.bash_profile
+    add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX}"
+    add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
+    add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
+    add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
     info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/.bash_aliases"
-    add_or_remove_link "${DOTFILES}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  ~/.bash_aliases
+    add_or_remove_link "${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX}/bash/custom/aliases.sh"
 fi
 
 ## Zsh
 if [ -n "${WITH_ZSH}" ]; then
     info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc"
+    add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"    "${PREFIX}/zsh"     "${PREFIX}"
     if [ "${MODE}" != "--delete" ]; then
         install_ohmyzsh
         install_custom_ohmyzsh
@@ -476,8 +525,8 @@ if [ -n "${WITH_ZSH}" ]; then
         if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
             execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
         fi
-        add_or_remove_copy "${DOTFILES}/oh-my-zsh/.zshrc" ~/.zshrc
     fi
+    add_or_remove_link "${PREFIX}/zsh/.zshrc"       ~/.zshrc       "${PREFIX_HOME}"
 fi
 
 ## GNU Emacs
@@ -485,14 +534,15 @@ if [ -n "${WITH_EMACS}" ]; then
     info "${ACTION} Falkor's Emacs configuration ~/.emacs ~/.emacs.d"
     warning "For performance reason, make this installation independently following instructions on"
     warning "    https://github.com/Falkor/emacs-config2 "
-    # add_or_remove_link   $DOTFILES/emacs     ~/.emacs.d
+    # add_or_remove_link   $INSTALL_DIR/emacs     ~/.emacs.d
     # add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
 fi
 
 ## VI iMproved ([m]Vim)
 if [ -n "${WITH_VIM}" ]; then
     info "${ACTION} Falkor's VIM configuration ~/.vimrc"
-    add_or_remove_link "${DOTFILES}/vim/.vimrc" ~/.vimrc
+    add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX}"
+    add_or_remove_link "${PREFIX}/vim/.vimrc"       ~/.vimrc       "${PREFIX_HOME}"
     if  [ "${MODE}" != "--delete" ]; then
         warning "Run vim afterwards to download the expected package (using NeoBundle)"
         if [ "$(uname -s)" == "Linux" ]; then
@@ -505,23 +555,28 @@ fi
 ## Git
 if [ -n "${WITH_GIT}" ]; then
     info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link "${DOTFILES}/git/.gitconfig" ~/.gitconfig
+    add_or_remove_link "${DOTFILES_DIR}/git"    "${PREFIX}/git"     "${PREFIX}"
+    #add_or_remove_link "${PREFIX}/git/.gitconfig"       ~/.gitconfig       "${PREFIX_HOME}"
+    #add_or_remove_link "${INSTALL_DIR}/git/.gitconfig" ~/.gitconfig
     if [ "${MODE}" != "--delete" ]; then
-        setup_gitconfig_local  ~/.gitconfig.local
-    else
-        add_or_remove_copy ' ' ~/.gitconfig.local
+        setup_gitconfig_local
+        #~/.gitconfig.local
+    # else
+    #     add_or_remove_copy ' ' ${PREFIXHOME}${PREFIX}/git/config.local
+    #     #~/.gitconfig.local
     fi
 fi
 
 ## GNU Screen
 if [ -n "${WITH_SCREEN}" ]; then
     info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
-    add_or_remove_link "${DOTFILES}/screen/.screenrc" ~/.screenrc
+    add_or_remove_link "${DOTFILES_DIR}/screen"    "${PREFIX}/screen"     "${PREFIX}"
+    add_or_remove_link "${PREFIX}/screen/.screenrc"      ~/.screenrc       "${PREFIX_HOME}"
 fi
 
 ## HomeBrew -- http://brew.sh
-if [ -n "${WITH_BREW}" ]; then
-    brewfile="${DOTFILES}/brew/Brewfile"
+if [ -n "${WITH_BREW}" -a "$(uname -s)" == "Darwin" -a "${ACTION}" == 'install' ]; then
+    brewfile="${INSTALL_DIR}/brew/Brewfile"
     [ -z "$(which brew)" ] && print_error_and_exit "Unable to find the 'brew' command on your system"
     [ ! -f "${brewfile}" ] && print_error_and_exit "Unable to find the Brew file '${brewfile}'"
     info "${ACTION} Brew Bundle configuration from '${brewfile}'"
