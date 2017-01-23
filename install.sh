@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2017-01-23 01:48 svarrette>
+# Time-stamp: <Mon 2017-01-23 01:55 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -395,23 +395,23 @@ setup_installdir() {
         really_continue
         execute "mkdir -p ${PREFIX_HOME}${PREFIX}"
     fi
-    if [ -d "${SCRIPTDIR}/.git" -a ! -e "${INSTALL_DIR}" ]; then
+    if [ -d "${SCRIPTDIR}/.git" -a ! -e "${PREFIX_HOME}${INSTALL_DIR}" ]; then
         # check that the install script really belongs to this git repository
         ok=$(git --git-dir=${SCRIPTDIR}/.git ls-files $COMMAND --error-unmatch 2>/dev/null)
         if [ $? -eq 0 ]; then
-            echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Make ${INSTALL_DIR} a symlink to ${SCRIPTDIR} [Y|n]? "
+            echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Make '${PREFIX_HOME}${INSTALL_DIR}' a symlink to ${SCRIPTDIR} [Y|n]? "
             ans='Yes'
             [ -z "${FORCE}" ] && read ans || true
             case $ans in
                 n*|N*)
                 ;;
-                *)  add_or_remove_link "${SCRIPTDIR}" "${INSTALL_DIR}";
+                *)  add_or_remove_link "${SCRIPTDIR}" "${PREFIX_HOME}${INSTALL_DIR}";
                     return
                     ;;
             esac
         fi
-        info "Cloning Falkor dotfiles in '${INSTALL_DIR}'";
-        execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${INSTALL_DIR}";
+        info "Cloning Falkor dotfiles in '${PREFIX_HOME}${INSTALL_DIR}'";
+        execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${PREFIX_HOME}${INSTALL_DIR}";
     fi
 
 }
