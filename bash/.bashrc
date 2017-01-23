@@ -41,7 +41,10 @@ esac
 : ${HOME=~}
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
-: ${BASH_CONFIG_DIR=$HOME/.config/bash.d}
+# See https://specifications.freedesktop.org/basedir-spec/latest/
+: ${XDG_CONFIG_HOME=$HOME/.config}
+: ${XDG_DATA_HOME=$HOME/.local/share}
+: ${BASH_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/bash/custom}
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
 
@@ -548,8 +551,8 @@ do
 done
 
 # Load Eventually custom local configs
-if [ -d "${BASH_CONFIG_DIR}" ]; then
-    for f in ${BASH_CONFIG_DIR}/*.sh
+if [ -d "${BASH_CUSTOM_CONFIG_DIR}" ]; then
+    for f in ${BASH_CUSTOM_CONFIG_DIR}/*.sh
     do
         if [ -r "$f" ]; then
             . $f

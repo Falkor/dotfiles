@@ -33,11 +33,11 @@ Use [git-for-windows](https://git-for-windows.github.io/), which includes Git Ba
 
 The way I organize my git configurations is as follows:
 
-| File                 | Visibility | Description                                        |
-|----------------------|------------|----------------------------------------------------|
-| `~/.gitconfig`       | Public     | general aliases and core/colors configurations     |
-| `~/.gitconfig.local` | Private    | username / credentials / private business etc. |
-|                      |            |                                                    |
+| File                         | Alternative          | Visibility | Description                                    |
+|------------------------------|----------------------|------------|------------------------------------------------|
+| `~/.config/git/config`       | `~/.gitconfig`       | Public     | general aliases and core/colors configurations |
+| `~/.config/git/config.local` | `~/.gitconfig.local` | Private    | username / credentials / private business etc. |
+|                              |                      |            |                                                |
 
 Note that this hierarchy assume the availability of the `include.path` directive within Git which was introduced in __Git >= 1.7.10__ (see <http://git-scm.com/docs/git-config#_includes>)
 
