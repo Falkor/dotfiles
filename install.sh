@@ -511,8 +511,11 @@ if [ -n "${WITH_BASH}" ]; then
     add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
     add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
     add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
-    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
+    info "${ACTION} custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
     add_or_remove_link "${PREFIX_HOME}${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX_HOME}${PREFIX}/bash/custom/aliases.sh"
+    if [ "${ACTION}" != "install" ]; then
+      execute "rm ${PREFIX_HOME}${INSTALL_DIR}/bash/custom/aliases.sh"
+    fi
 fi
 
 ## Zsh
