@@ -45,6 +45,8 @@
     diff   = auto
     status = auto
     branch = auto
+    ui = auto
+    ui = true
 
 [color "branch"]
     current = yellow reverse
@@ -64,7 +66,7 @@
 
 [core]
     autocrlf = input
-	safecrlf = warn
+    safecrlf = warn
     pager = less -FRSX
     editor = vim
     #editor = /Users/svarrette/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -t
