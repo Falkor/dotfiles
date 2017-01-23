@@ -5,7 +5,7 @@
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
 #     | |_ / _` | | |/ / _ \| '__|// __|  / _` |/ _ \| __| |_| | |/ _ \/ __|
 #     |  _| (_| | |   < (_) | |    \__ \ | (_| | (_) | |_|  _| | |  __/\__ \
-    #     |_|  \__,_|_|_|\_\___/|_|    |___/  \__,_|\___/ \__|_| |_|_|\___||___/
+#     |_|  \__,_|_|_|\_\___/|_|    |___/  \__,_|\___/ \__|_| |_|_|\___||___/
 #
 ################################################################################
 # Installation script for Falkor aka S.Varrette's dotfiles within the homedir of the
@@ -219,8 +219,10 @@ add_or_remove_link() {
             fi
         fi
     else
-        [ ! -e "${src}" ] && print_error_and_exit "Unable to find the dotfile '${src}'"
-        debug "attempt to add '$dst' symlink (pointing to '$source')"
+        # get rid of ../ in the path upon checking
+        real_srcpath=$(python -c "import os,sys; print os.path.abspath(sys.argv[1])" "${src}")
+        [ ! -e "${real_srcpath}" ] && print_error_and_exit "Unable to find the dotfile '${src}'\n(interpreted path: '${real_srcpath}')"
+        debug "attempt to add '$dst' symlink (pointing to '$source') if needed"
         # return if the symlink already exists
         [[ -h "${dst}" && "$(readlink "${dst}")" == "${source}" ]] && return
         if [ -e "${dst}" ]; then
@@ -348,17 +350,16 @@ setup_gitconfig_local () {
 #  [.git]config.local -- Private part of the GIT configuration
 #  .                   to hold username / credentials etc .
 #  NOT meant to be staged for commit under github
-#                _ _                   __ _         _                 _
-#           __ _(_) |_ ___ ___  _ __  / _(_) __ _  | | ___   ___ __ _| |
-#          / _` | | __/ __/ _ \| '_ \| |_| |/ _` | | |/ _ \ / __/ _` | |
-#         | (_| | | || (_| (_) | | | |  _| | (_| |_| | (_) | (_| (_| | |
-#        (_)__, |_|\__\___\___/|_| |_|_| |_|\__, (_)_|\___/ \___\__,_|_|
-#          |___/                            |___/
+#      __       _ _  __                  __ _         _                 _
+#     | _| __ _(_) ||_ | ___ ___  _ __  / _(_) __ _  | | ___   ___ __ _| |
+#     | | / _` | | __| |/ __/ _ \| '_ \| |_| |/ _` | | |/ _ \ / __/ _` | |
+#     | || (_| | | |_| | (_| (_) | | | |  _| | (_| |_| | (_) | (_| (_| | |
+#     | (_)__, |_|\__| |\___\___/|_| |_|_| |_|\__, (_)_|\___/ \___\__,_|_|
+#     |__||___/     |__|                      |___/
 #
 # See also: http://github.com/Falkor/dotfiles
 ################################################################################
 EOF
-
         local git_credential='cache'
         local git_authorname=
         local git_email=
@@ -371,11 +372,11 @@ EOF
         [ -n "${GIT_AUTHOR_NAME}"  ] && git_authorname="${GIT_AUTHOR_NAME}"
         [ -n "${GIT_AUTHOR_EMAIL}" ] && git_email="${GIT_AUTHOR_EMAIL}"
         if [ -z "${git_authorname}" ]; then
-            echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author name:"
+            echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author name: "
             read -e git_authorname
         fi
         if [ -z "${git_email}" ]; then
-            echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author email:"
+            echo -e -n  "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Enter you Git author (${git_authorname}) email: "
             read -e git_email
         fi
         cat >> $gitconfig_local <<EOF
@@ -497,7 +498,7 @@ if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN
     warning " "
     warning "By default, this installer does nothing except updating ${INSTALL_DIR}."
     warning "Use '$0 --all' to install all available configs. OR use a discrete set of options."
-    warning "Ex: '$0 $MODE --zsh --with'"
+    warning "Ex: '$0 $MODE --zsh --vim'"
     warning " "
     exit 0
 fi
@@ -510,8 +511,8 @@ if [ -n "${WITH_BASH}" ]; then
     add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
     add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
     add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
-    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/.bash_aliases"
-    add_or_remove_link "${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX}/bash/custom/aliases.sh"
+    info "add custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
+    add_or_remove_link "${PREFIX_HOME}${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX_HOME}${PREFIX}/bash/custom/aliases.sh"
 fi
 
 ## Zsh
