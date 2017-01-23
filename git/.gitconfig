@@ -20,7 +20,7 @@
 # As introduced in Git >= 1.7.10 (see http://git-scm.com/docs/git-config#_includes)
 [include]
     # For username / credentials / private business etc.
-    path = config.local
+    path = .gitconfig.local
 
 [alias]
     up  = pull origin
