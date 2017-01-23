@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <Mon 2017-01-23 01:19 svarrette>
+# Time-stamp: <Mon 2017-01-23 01:36 svarrette>
 ################################################################################
 #      _____     _ _              _           _       _    __ _ _
 #     |  ___|_ _| | | _____  _ __( )___    __| | ___ | |_ / _(_) | ___  ___
@@ -390,10 +390,10 @@ EOF
 setup_installdir() {
     [ "${ACTION}" != 'install' ] && return
     check_bin 'git'
-    if [ ! -d "${PREFIX}" ]; then
-        info "creating the prefix directory '${PREFIX}'"
+    if [ ! -d "${PREFIX_HOME}${PREFIX}" ]; then
+        info "creating the prefix directory '${PREFIX_HOME}${PREFIX}'"
         really_continue
-        execute "mkdir -p ${PREFIX}"
+        execute "mkdir -p ${PREFIX_HOME}${PREFIX}"
     fi
     if [ -d "${SCRIPTDIR}/.git" -a ! -e "${INSTALL_DIR}" ]; then
         # check that the install script really belongs to this git repository
