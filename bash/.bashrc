@@ -580,3 +580,5 @@ export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
 
 # I hate this ring
 #set bell-style visible
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

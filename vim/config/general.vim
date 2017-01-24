@@ -24,8 +24,11 @@ set formatoptions+=1         " Don't break lines after a one-letter word
 set formatoptions-=t         " Don't auto-wrap text
 
 if has('vim_starting')
-	set encoding=utf-8
-	scriptencoding utf-8
+	set encoding=utf-8         " The encoding displayed.
+	set fileencoding=utf-8     " The encoding written to file.
+	"setglobal bomb           "  put "byte order mark" (BOM) at the start of Unicode files.
+  "set fileencodings=ucs-bom,utf-8,latin1
+	set binary
 endif
 
 " What to save for views:
@@ -55,52 +58,7 @@ if has('wildmenu')
 endif
 
 " }}}
-" Vim Directories {{{
-" ---------------
-if has('nvim')
-	set shada='30,/100,:50,<10,@10,s50,h,n$VARPATH/shada
-else
-	set viminfo='30,/100,:500,<10,@10,s10,h,n$VARPATH/viminfo
-endif
-set undofile swapfile nobackup
-set directory=$VARPATH/swap//,$VARPATH,~/tmp,/var/tmp,/tmp
-set undodir=$VARPATH/undo//,$VARPATH,~/tmp,/var/tmp,/tmp
-set backupdir=$VARPATH/backup/,$VARPATH,~/tmp,/var/tmp,/tmp
-set viewdir=$VARPATH/view/
-set nospell spellfile=$VIMPATH/spell/en.utf-8.add
 
-" Don't backup files in temp directories or shm
-if exists('&backupskip')
-	set backupskip+=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
-endif
-
-" Don't keep swap files in temp directories or shm
-augroup swapskip
-	autocmd!
-	silent! autocmd BufNewFile,BufReadPre
-		\ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
-		\ setlocal noswapfile
-augroup END
-
-" Don't keep undo files in temp directories or shm
-if has('persistent_undo')
-	augroup undoskip
-		autocmd!
-		silent! autocmd BufWritePre
-			\ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
-			\ setlocal noundofile
-	augroup END
-endif
-
-" Don't keep viminfo for files in temp directories or shm
-augroup viminfoskip
-	autocmd!
-	silent! autocmd BufNewFile,BufReadPre
-		\ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
-		\ setlocal viminfo=
-augroup END
-
-" }}}
 " Tabs and Indents {{{
 " ----------------
 set textwidth=80    " Text width maximum chars before wrapping
@@ -175,8 +133,8 @@ set scrolloff=2         " Keep at least 2 lines above/below
 set sidescrolloff=2     " Keep at least 2 lines left/right
 set pumheight=20        " Pop-up menu's line height
 set number              " Show line numbers
-set relativenumber      " Use relative instead of absolute line numbers
-set noruler             " Disable default status ruler
+"set relativenumber      " Use relative instead of absolute line numbers
+set ruler               " Enable default status ruler
 set list                " Show hidden characters
 
 set showtabline=2       " Always show the tabs line
@@ -188,7 +146,7 @@ set helpheight=12       " Minimum help window height
 
 set display=lastline
 set notitle             " No need for a title
-set noshowcmd           " Don't show command in status line
+set showcmd             " Show command in status line
 set cmdheight=2         " Height of the command line
 set cmdwinheight=5      " Command-line lines
 set noequalalways       " Don't resize windows on split or close

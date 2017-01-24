@@ -14,14 +14,65 @@ nnoremap ,        <Nop>
 xnoremap ,        <Nop>
 
 " }}}
-" Ensure cache directory "{{{
-if ! isdirectory(expand($VARPATH))
-	" Create missing dirs i.e. cache/{undo,backup}
-	call mkdir(expand('$VARPATH/undo'), 'p')
-	call mkdir(expand('$VARPATH/backup'))
+
+" XDG and Vim directory Settings "{{{
+" mkdir -p "$(XDG_CACHE_HOME)/vim/"{backup,session,swap,tags,undo,view,notes}; "
+for vimdir in ['swap', 'backup', 'undo', 'plugins', 'shada', 'viminfo']
+  " swap: swp files, stored in directory
+  " backup .bak files, stored in backupdir
+  if !isdirectory($VARPATH . vimdir)
+    call mkdir(   $VARPATH . vimdir, "p")
+  endif
+endfor
+if has('nvim')
+	set shada='30,/100,:50,<10,@10,s50,h,n$VARPATH/shada
+else
+	set viminfo='30,/100,:500,<10,@10,s10,h,n$VARPATH/viminfo
 endif
 
+set undofile swapfile nobackup
+set directory=$VARPATH/swap//,$VARPATH,~/tmp,/var/tmp,/tmp
+set undodir=$VARPATH/undo//,$VARPATH,~/tmp,/var/tmp,/tmp
+set backupdir=$VARPATH/backup/,$VARPATH,~/tmp,/var/tmp,/tmp
+set viewdir=$VARPATH/view/
+set nospell spellfile=$VIMPATH/spell/en.utf-8.add
+
+
+" Don't backup files in temp directories or shm
+if exists('&backupskip')
+	set backupskip+=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+endif
+
+" Don't keep swap files in temp directories or shm
+augroup swapskip
+	autocmd!
+	silent! autocmd BufNewFile,BufReadPre
+		\ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+		\ setlocal noswapfile
+augroup END
+
+" Don't keep undo files in temp directories or shm
+if has('persistent_undo')
+	augroup undoskip
+		autocmd!
+		silent! autocmd BufWritePre
+			\ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+			\ setlocal noundofile
+	augroup END
+endif
+
+" Don't keep viminfo for files in temp directories or shm
+augroup viminfoskip
+	autocmd!
+	silent! autocmd BufNewFile,BufReadPre
+		\ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+		\ setlocal viminfo=
+augroup END
+
+set viminfo+=n$VARPATH/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
 " }}}
+
 " Set augroup "{{{
 augroup MyAutoCmd
 	autocmd!
@@ -49,6 +100,8 @@ if has('vim_starting')
 	if &runtimepath !~? '/neobundle.vim'
 		if ! isdirectory(s:plugins_dir.'/neobundle.vim')
 			" Clone NeoBundle if not found
+			echo "Installing NeoBundle..."
+		  echo ""
 			execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
 						\ (exists('$http_proxy') ? 'https' : 'git'))
 						\ s:plugins_dir.'/neobundle.vim'

@@ -417,11 +417,66 @@ setup_installdir() {
 
 }
 
+### Install/remove specific dotfiles
+__bash(){
+  [ -z "${WITH_BASH}" ] && return
+  info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
+  add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
+  add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
+  add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
+  add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
+  info "${ACTION} custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
+  add_or_remove_link "${PREFIX_HOME}${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX_HOME}${PREFIX}/bash/custom/aliases.sh"
+  if [ "${ACTION}" != "install" ]; then
+    execute "rm ${PREFIX_HOME}${INSTALL_DIR}/bash/custom/aliases.sh"
+  fi
+}
+# Zsh
+__zsh(){
+  [ -z "${WITH_ZSH}" ] && return
+  info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration"
+  add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"    "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
+  if [ "${MODE}" != "--delete" ]; then
+    install_ohmyzsh
+    install_custom_ohmyzsh
+  else
+    if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
+      execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
+    fi
+  fi
+  add_or_remove_link "${PREFIX}/zsh/.zshrc"       ~/.zshrc       "${PREFIX_HOME}"
+}
+# GNU Emacs
+__emacs(){
+  [ -z "${WITH_EMACS}" ] && return
+  info "${ACTION} Falkor's Emacs configuration"
+  warning "For performance reason, make this installation independently following instructions on"
+  warning "    https://github.com/Falkor/emacs-config2 "
+  # add_or_remove_link   $INSTALL_DIR/emacs     ~/.emacs.d
+  # add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
+}
+# VI iMproved ([m]Vim)
+__vim(){
+  [ -z "${WITH_VIM}" ] && return
+  info "${ACTION} Falkor's VIM configuration"
+  add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX_HOME}${PREFIX}"
+    # add_or_remove_link "${PREFIX}/vim/.vimrc"       ~/.vimrc       "${PREFIX_HOME}"
+    # if  [ "${MODE}" != "--delete" ]; then
+    #     warning "Run vim afterwards to download the expected package (using NeoBundle)"
+    #     if [ "$(uname -s)" == "Linux" ]; then
+    #         warning "After Neobundle installation and vim relaunch, you might encounter the bug #156"
+    #         warning "        https://github.com/avelino/vim-bootstrap/issues/156"
+    #     fi
+    # fi
+}
+
+
 
 ################################################################################
 ################################################################################
 # Let's go
 
+TARGETS=
 
 # Check for options
 while [ $# -ge 1 ]; do
@@ -444,21 +499,23 @@ while [ $# -ge 1 ]; do
         #     ;;
         # --dotfiledir) shift;     DOTFILES_DIR=$1;;
         --prefix)  shift;        PREFIX=$1;;
-        --with-bash  | --bash)   WITH_BASH='--with-bash';;
-        --with-zsh   | --zsh)    WITH_ZSH='--with-zsh';;
-        --with-emacs | --emacs)  WITH_EMACS='--with-emacs';;
-        --with-vim   | --vim)    WITH_VIM='--with-vim';;
-        --with-git   | --git)    WITH_GIT='--with-git';;
-        --with-screen| --screen) WITH_SCREEN='--with-screen';;
-        --with-brew  | --brew)   WITH_BREW='--with-brew';;
+        --with-bash  | --bash)   WITH_BASH='--with-bash';    TARGETS+=${WITH_BASH};;
+        --with-zsh   | --zsh)    WITH_ZSH='--with-zsh';      TARGETS+=${WITH_ZSH};;
+        --with-emacs | --emacs)  WITH_EMACS='--with-emacs';  TARGETS+=${WITH_EMACS};;
+        --with-vim   | --vim)    WITH_VIM='--with-vim';      TARGETS+=${WITH_VIM};;
+        --with-git   | --git)    WITH_GIT='--with-git';      TARGETS+=${WITH_GIT};;
+        --with-screen| --screen) WITH_SCREEN='--with-screen';TARGETS+=${WITH_SCREEN};;
+        --with-brew  | --brew)   WITH_BREW='--with-brew';    TARGETS+=${WITH_BREW};;
+        --with-curl  | --curl)   WITH_CURL='--with-curl';    TARGETS+=${WITH_CURL};;
         -a | --all)
-            WITH_BASH='--with-bash';
-            WITH_ZSH='--with-zsh';
-            WITH_EMACS='--with-emacs';
-            WITH_VIM='--with-vim';
-            WITH_GIT='--with-git';
+            WITH_BASH='--with-bash'
+            WITH_ZSH='--with-zsh'
+            WITH_EMACS='--with-emacs'
+            WITH_VIM='--with-vim'
+            WITH_GIT='--with-git'
             WITH_SCREEN='--with-screen'
             WITH_BREW='--with-brew'
+            WITH_CURL='--with-curl'
             ;;
 
     esac
@@ -503,58 +560,17 @@ if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN
     exit 0
 fi
 
+for target in ${TARGETS}; do
+    case $target in
+      *bash*)  __bash;;
+      *zsh*)   __zsh;;
+      *emacs*) __emacs;;
+      *vim*)   __vim;;
+    esac
+done
 
-## Bash
-if [ -n "${WITH_BASH}" ]; then
-    info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-    add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
-    add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
-    add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
-    add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
-    info "${ACTION} custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
-    add_or_remove_link "${PREFIX_HOME}${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX_HOME}${PREFIX}/bash/custom/aliases.sh"
-    if [ "${ACTION}" != "install" ]; then
-      execute "rm ${PREFIX_HOME}${INSTALL_DIR}/bash/custom/aliases.sh"
-    fi
-fi
 
-## Zsh
-if [ -n "${WITH_ZSH}" ]; then
-    info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc"
-    add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"    "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
-    if [ "${MODE}" != "--delete" ]; then
-        install_ohmyzsh
-        install_custom_ohmyzsh
-    else
-        if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
-            execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
-        fi
-    fi
-    add_or_remove_link "${PREFIX}/zsh/.zshrc"       ~/.zshrc       "${PREFIX_HOME}"
-fi
 
-## GNU Emacs
-if [ -n "${WITH_EMACS}" ]; then
-    info "${ACTION} Falkor's Emacs configuration ~/.emacs ~/.emacs.d"
-    warning "For performance reason, make this installation independently following instructions on"
-    warning "    https://github.com/Falkor/emacs-config2 "
-    # add_or_remove_link   $INSTALL_DIR/emacs     ~/.emacs.d
-    # add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
-fi
-
-## VI iMproved ([m]Vim)
-if [ -n "${WITH_VIM}" ]; then
-    info "${ACTION} Falkor's VIM configuration ~/.vimrc"
-    add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX_HOME}${PREFIX}"
-    add_or_remove_link "${PREFIX}/vim/.vimrc"       ~/.vimrc       "${PREFIX_HOME}"
-    if  [ "${MODE}" != "--delete" ]; then
-        warning "Run vim afterwards to download the expected package (using NeoBundle)"
-        if [ "$(uname -s)" == "Linux" ]; then
-            warning "After Neobundle installation and vim relaunch, you might encounter the bug #156"
-            warning "        https://github.com/avelino/vim-bootstrap/issues/156"
-        fi
-    fi
-fi
 
 ## Git
 if [ -n "${WITH_GIT}" ]; then

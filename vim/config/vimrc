@@ -51,25 +51,6 @@ else
 	let $VARPATH=expand('$HOME/.cache/vim')
 endif
 
-" mkdir -p "$(XDG_CACHE_HOME)/vim/"{backup,session,swap,tags,undo,view,notes}; "
-for vimdir in ['swap', 'backup', 'undo', 'plugins', 'shada', 'viminfo']
-  " swap: swp files, stored in directory
-  " backup .bak files, stored in backupdir
-  if !isdirectory($VARPATH . vimdir)
-    call mkdir(   $VARPATH . vimdir, "p")
-  endif
-endfor
-set directory=$VARPATH/swap//,/tmp//
-set backupdir=$VARPATH/backup//,/tmp//
-" Double slash does not actually work for backupdir, here's a fix
-au BufWritePre * let &backupext='@'.substitute(substitute(substitute(expand('%:p:h'), '/', '%', 'g'), '\', '%', 'g'), ':', '', 'g')
-" See :help persistent-undo
-set undodir=$VARPATH/undo//,/tmp//
-set undofile
-
-set viminfo+=n$VARPATH/viminfo
-set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
-
 
 function! s:source_file(path)
 	execute 'source' fnameescape($VIMPATH.'/config/'.a:path)
@@ -79,35 +60,27 @@ function! s:source_home_file(path)
 	execute 'source' fnameescape($HOME.'/'.a:path)
 endfunction
 
-" Initialize base requirements
+"=====================================================
+" Initialize base requirements, incl. NeoBundle Load
+"=====================================================
 call s:source_file('init.vim')
 
-" NeoBundle start plugins {{{
-set runtimepath+=$VARPATH/plugins/neobundle.vim/
-
-let neobundle_readme=expand('$VARPATH/plugins/neobundle.vim/README.md')
-if !filereadable(neobundle_readme)
-  echo "Installing NeoBundle..."
-  echo ""
-  silent !git clone https://github.com/Shougo/neobundle.vim  $VARPATH/plugins/neobundle.vim/
-  let g:not_finish_neobundle = "yes"
-
-  " Run shell script if exist on custom select language
-endif
-
+"==================================================
+"    NeoBundle installed packages / plugins
+"==================================================
+" See https://github.com/Shougo/neobundle.vim
+" TODO: migrate to Dein
 " Required:
-call neobundle#begin(expand('$VARPATH/plugins'))
-
-" Required:
+let s:plugins_dir = expand('$VARPATH/plugins')
+call neobundle#begin(s:plugins_dir)
 NeoBundleFetch 'Shougo/neobundle.vim'
-"==================================================
-"          NeoBundle install packages
-"==================================================
+"===== Define plugins to install =======
 call s:source_file('neobundle.vim')
 
-call neobundle#local(expand('$VARPATH/plugins/awesome-vim-colorschemes'), {})
+call neobundle#local(s:plugins_dir . '/awesome-vim-colorschemes', {})
 call neobundle#local(expand('$VIMPATH/dev'), {})
 
+" ===== Plugins configurations ==== "
 " call s:source_file('plugins.vim')
 if filereadable(expand('$VIMPATH/custom/vimrc.bundles'))
   source $VIMPATH/custom/vimrc.bundles
@@ -123,6 +96,9 @@ syntax enable
 " this will conveniently prompt you to install them.
 NeoBundleCheck
 
+"==================================================
+"       Topic-based Configuration Modules
+"==================================================
 " Loading configuration modules {{{
 call s:source_file('general.vim')
 " call s:source_file('theme.vim')
@@ -131,8 +107,14 @@ call s:source_file('general.vim')
 " call s:source_file('bindings.vim')
 " call s:source_file('tabline.vim')
 
+"==================================================
+"       Local customizations
+"==================================================
 if filereadable(expand('$HOME/.vimrc.local'))
 	call s:source_home_file('.vimrc.local')
+endif
+if filereadable(expand('$XDG_CONFIG_HOME/vim/custom/vimrc.local'))
+	source '$XDG_CONFIG_HOME/vim/custom/vimrc.local'
 endif
 
 if has('nvim')
@@ -142,7 +124,5 @@ endif
 
 call neobundle#call_hook('on_source')
 set secure
-
-"helptags ~/.vim/doc
 
 " vim: set ts=2 sw=2 tw=80 noet :
