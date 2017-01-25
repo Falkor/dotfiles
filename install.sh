@@ -36,6 +36,8 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOTFILES_DIR=dotfiles.falkor.d
 [ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="${HOME}/.config"
+[ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="${HOME}/.local/share"
+
 
 # What to take care of (default is empty)
 WITH_BASH=""
@@ -269,18 +271,19 @@ add_or_remove_copy() {
 
 install_ohmyzsh() {
     check_bin zsh
-    if [ ! -d "$HOME/.oh-my-zsh/" ]; then
-        info "installing Oh-My-ZSH -- see http://ohmyz.sh/"
+    local omzsh_dir="${DATADIR}/oh-my-zsh"
+    if [ ! -d "${omzsh_dir}" ]; then
+        info "installing Oh-My-ZSH in ${DATADIR} -- see http://ohmyz.sh/"
         # installation by curl if available
         if   [ -n "$(which curl)" ]; then
             echo "   - installation using curl"
             warning " "
             warning "Remember to Exit the zsh shell to continue the installation!!!"
             warning " "
-            [ -z "${SIMULATION}" ] && sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+            [ -z "${SIMULATION}" ] && sh -c "$(ZSH=${omzsh_dir} curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
         elif [ -n "$(which wget)" ]; then
             echo "   - installation using wget"
-            [ -z "${SIMULATION}" ] && sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+            [ -z "${SIMULATION}" ] && sh -c "$(ZSH=${omzsh_dir} wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
         else
             print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
         fi
@@ -469,7 +472,38 @@ __vim(){
     #     fi
     # fi
 }
-
+# Git
+__git(){
+  [ -z "${WITH_GIT}" ] && return
+  info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
+  add_or_remove_link "${DOTFILES_DIR}/git"    "${PREFIX}/git"     "${PREFIX_HOME}${PREFIX}"
+  #add_or_remove_link "${PREFIX}/git/.gitconfig"       ~/.gitconfig       "${PREFIX_HOME}"
+  #add_or_remove_link "${INSTALL_DIR}/git/.gitconfig" ~/.gitconfig
+  if [ "${MODE}" != "--delete" ]; then
+    setup_gitconfig_local
+    #~/.gitconfig.local
+    # else
+    #     add_or_remove_copy ' ' ${PREFIXHOME}${PREFIX}/git/config.local
+    #     #~/.gitconfig.local
+  fi
+}
+## GNU Screen
+__screen(){
+ [ -z "${WITH_SCREEN}" ] && return
+    info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
+    add_or_remove_link "${DOTFILES_DIR}/screen"    "${PREFIX}/screen"     "${PREFIX_HOME}${PREFIX}"
+    add_or_remove_link "${PREFIX}/screen/.screenrc"      ~/.screenrc       "${PREFIX_HOME}"
+}
+## HomeBrew -- http://brew.sh
+__brew(){
+  [ -z "${WITH_BREW}" -o "$(uname -s)" == "Darwin" -o "${ACTION}" != 'install' ]] && return
+  [ -z "$(which brew)" ] && return
+  brewfile="${INSTALL_DIR}/brew/Brewfile"
+  [ ! -f "${brewfile}" ] && print_error_and_exit "Unable to find the Brew file '${brewfile}'"
+  info "${ACTION} Brew Bundle configuration from '${brewfile}'"
+  execute "brew tap Homebrew/bundle"    # Install brew bundle -- see https://github.com/Homebrew/homebrew-bundle
+  execute "brew bundle --file=${brewfile} -v"
+}
 
 
 ################################################################################
@@ -507,16 +541,16 @@ while [ $# -ge 1 ]; do
         --with-screen| --screen) WITH_SCREEN='--with-screen';TARGETS+=${WITH_SCREEN};;
         --with-brew  | --brew)   WITH_BREW='--with-brew';    TARGETS+=${WITH_BREW};;
         --with-curl  | --curl)   WITH_CURL='--with-curl';    TARGETS+=${WITH_CURL};;
-        -a | --all)
-            WITH_BASH='--with-bash'
-            WITH_ZSH='--with-zsh'
-            WITH_EMACS='--with-emacs'
-            WITH_VIM='--with-vim'
-            WITH_GIT='--with-git'
-            WITH_SCREEN='--with-screen'
-            WITH_BREW='--with-brew'
-            WITH_CURL='--with-curl'
-            ;;
+        # -a | --all)
+        #     WITH_BASH='--with-bash'
+        #     WITH_ZSH='--with-zsh'
+        #     WITH_EMACS='--with-emacs'
+        #     WITH_VIM='--with-vim'
+        #     WITH_GIT='--with-git'
+        #     WITH_SCREEN='--with-screen'
+        #     WITH_BREW='--with-brew'
+        #     WITH_CURL='--with-curl'
+        #     ;;
 
     esac
     shift
@@ -527,21 +561,10 @@ if [[ $PREFIX == "${HOME}"* ]]; then
     PREFIX_HOME="$HOME/"
     PREFIX="${PREFIX/#$HOME\//}"
 fi
-#exit 1
+
 INSTALL_DIR=${PREFIX}/${DOTFILES_DIR}
 [ -z "${INSTALL_DIR}" ] && print_error_and_exit "Wrong installation directory"
 setup_installdir
-
-# echo "${DOTFILES}" | grep  '^\/' > /dev/null
-# greprc=$?
-# if [ $greprc -ne 0 ]; then
-#     if [ "${DOTFILES}" == "." ]; then
-#         DOTFILES=$PWD
-#     else
-#         warning "Assume dotfiles directory '${DOTFILES}' is relative to the home directory"
-#         DOTFILES="$HOME/${DOTFILES}"
-#     fi
-# fi
 
 info "About to ${ACTION} Falkor's dotfiles from ${INSTALL_DIR}"
 really_continue
@@ -566,40 +589,7 @@ for target in ${TARGETS}; do
       *zsh*)   __zsh;;
       *emacs*) __emacs;;
       *vim*)   __vim;;
+      *git*)   __git;;
+      *brew*)  __brew;;
     esac
 done
-
-
-
-
-## Git
-if [ -n "${WITH_GIT}" ]; then
-    info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-    add_or_remove_link "${DOTFILES_DIR}/git"    "${PREFIX}/git"     "${PREFIX_HOME}${PREFIX}"
-    #add_or_remove_link "${PREFIX}/git/.gitconfig"       ~/.gitconfig       "${PREFIX_HOME}"
-    #add_or_remove_link "${INSTALL_DIR}/git/.gitconfig" ~/.gitconfig
-    if [ "${MODE}" != "--delete" ]; then
-        setup_gitconfig_local
-        #~/.gitconfig.local
-    # else
-    #     add_or_remove_copy ' ' ${PREFIXHOME}${PREFIX}/git/config.local
-    #     #~/.gitconfig.local
-    fi
-fi
-
-## GNU Screen
-if [ -n "${WITH_SCREEN}" ]; then
-    info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
-    add_or_remove_link "${DOTFILES_DIR}/screen"    "${PREFIX}/screen"     "${PREFIX_HOME}${PREFIX}"
-    add_or_remove_link "${PREFIX}/screen/.screenrc"      ~/.screenrc       "${PREFIX_HOME}"
-fi
-
-## HomeBrew -- http://brew.sh
-if [ -n "${WITH_BREW}" -a "$(uname -s)" == "Darwin" -a "${ACTION}" == 'install' ]; then
-    brewfile="${INSTALL_DIR}/brew/Brewfile"
-    [ -z "$(which brew)" ] && print_error_and_exit "Unable to find the 'brew' command on your system"
-    [ ! -f "${brewfile}" ] && print_error_and_exit "Unable to find the Brew file '${brewfile}'"
-    info "${ACTION} Brew Bundle configuration from '${brewfile}'"
-    execute "brew tap Homebrew/bundle"    # Install brew bundle -- see https://github.com/Homebrew/homebrew-bundle
-    execute "brew bundle --file=${brewfile} -v"
-fi
