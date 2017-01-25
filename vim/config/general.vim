@@ -129,8 +129,8 @@ set nowrap                      " No wrap by default
 " --------------------
 set noshowmode          " Don't show mode in cmd window
 set shortmess=aoOTI     " Shorten messages and don't show intro
-set scrolloff=2         " Keep at least 2 lines above/below
-set sidescrolloff=2     " Keep at least 2 lines left/right
+set scrolloff=3         " Keep at least 3 lines above/below
+set sidescrolloff=3     " Keep at least 3 lines left/right
 set pumheight=20        " Pop-up menu's line height
 set number              " Show line numbers
 "set relativenumber      " Use relative instead of absolute line numbers
@@ -145,7 +145,10 @@ set previewheight=8     " Completion preview height
 set helpheight=12       " Minimum help window height
 
 set display=lastline
-set notitle             " No need for a title
+set title               " No need for a title
+" Title format: see https://coderwall.com/p/lznfyw/better-title-string-for-vim
+" directory info (max 12 char)          | buff. no | filename | modified | Type | Row no.
+set titlestring=...%{strpart(expand(\"%:p:h\"),stridx(expand(\"%:p:h\"),\"/\",strlen(expand(\"%:p:h\"))-12))}%=%n.\ \ %{expand(\"%:t:r\")}\ %m\ %Y\ \ \ \ %l\ of\ %L
 set showcmd             " Show command in status line
 set cmdheight=2         " Height of the command line
 set cmdwinheight=5      " Command-line lines

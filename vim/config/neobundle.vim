@@ -10,8 +10,6 @@ NeoBundle 'jistr/vim-nerdtree-tabs.git'    " single panel
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'ctrlpvim/ctrlp.vim'
-NeoBundle 'vim-airline/vim-airline'        " see https://github.com/vim-airline/vim-airline/wiki/Screenshots
-NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'itchyny/vim-cursorword'
 NeoBundle 'itchyny/vim-gitbranch'
 NeoBundle 'airblade/vim-gitgutter'
@@ -48,6 +46,8 @@ NeoBundle 'SirVer/ultisnips'
 NeoBundle 'honza/vim-snippets'
 
 "" Color Themes
+NeoBundle 'vim-airline/vim-airline'        " see https://github.com/vim-airline/vim-airline/wiki/Screenshots
+NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'scwood/vim-hybrid'

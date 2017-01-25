@@ -99,21 +99,21 @@ if has('vim_starting')
 	" Load NeoBundle for package management
 	if &runtimepath !~? '/neobundle.vim'
 		if ! isdirectory(s:plugins_dir.'/neobundle.vim')
-			" Clone NeoBundle if not found
-			echo "Installing NeoBundle..."
-		  echo ""
-			execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
-						\ (exists('$http_proxy') ? 'https' : 'git'))
-						\ s:plugins_dir.'/neobundle.vim'
-		endif
+        " Clone NeoBundle if not found
+        echo "Installing NeoBundle..."
+        echo " "
+      execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
+                  \ (exists('$http_proxy') ? 'https' : 'git'))
+                  \ s:plugins_dir.'/neobundle.vim'
+    endif
 
-		execute 'set runtimepath^='.s:plugins_dir.'/neobundle.vim'
-	endif
+    execute 'set runtimepath^='.s:plugins_dir.'/neobundle.vim'
+endif
 
-	" Load minimal version of vim while SSHing
-	if len($SSH_CLIENT)
-		let $VIM_MINIMAL = 1
-	endif
+" Load minimal version of vim while SSHing
+if len($SSH_CLIENT)
+    let $VIM_MINIMAL = 1
+endif
 endif
 
 " }}}
