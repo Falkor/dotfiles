@@ -134,17 +134,7 @@ if neobundle#tap('vim-jinja') "{{{
 endif
 
 "}}}
-if neobundle#tap('vim-gita') "{{{
-	nnoremap <silent> <leader>gs :<C-u>Gita status<CR>
-	nnoremap <silent> <leader>gd :<C-u>Gita diff<CR>
-	nnoremap <silent> <leader>gc :<C-u>Gita commit<CR>
-	nnoremap <silent> <leader>gb :<C-u>Gita blame<CR>
-	nnoremap <silent> <leader>gB :<C-u>Gita browse<CR>
-	nnoremap <silent> <leader>gp :<C-u>Gita push<CR>
-	call neobundle#untap()
-endif
 
-"}}}
 
 if neobundle#tap('undotree') "{{{
 	nnoremap <Leader>gu  :UndotreeToggle<CR>
@@ -178,16 +168,15 @@ endif
 
 "}}}
 if neobundle#tap('vim-indent-guides') "{{{
-	let g:indent_guides_enable_on_vim_startup = 0
+	let g:indent_guides_enable_on_vim_startup = 1
 	let g:indent_guides_exclude_filetypes = ['help', 'unite', 'vimfiler']
 	let g:indent_guides_default_mapping = 0
 	let g:indent_guides_indent_levels = 10
-
-	nmap <silent><Leader>i :<C-u>IndentGuidesToggle<CR>
+	" nmap <silent><Leader>i :<C-u>IndentGuidesToggle<CR>
 
 	if !has('nvim')
 		function! neobundle#hooks.on_post_source(bundle)
-			autocmd MyAutoCmd BufEnter *.py,*.js if &expandtab
+			autocmd MyAutoCmd BufEnter *.py,*.js,*.rb if &expandtab
 				\ |   IndentGuidesEnable
 				\ | else
 				\ |   IndentGuidesDisable
@@ -223,13 +212,7 @@ if neobundle#tap('incsearch.vim') "{{{
 endif
 
 "}}}
-if neobundle#tap('vim-expand-region') "{{{
-  xmap v <Plug>(expand_region_expand)
-  xmap V <Plug>(expand_region_shrink)
-  call neobundle#untap()
-endif
 
-"}}}
 if neobundle#tap('vim-quickrun') "{{{
   nmap <silent> <Leader>r <Plug>(quickrun)
   call neobundle#untap()
@@ -255,8 +238,12 @@ endif
 
 "}}}
 
+if neobundle#tap('vimacs') "{{{
+	let g:VM_Enabled=1
+	call neobundle#untap()
+endif
 
-
+"}}}
 
 
 " vim: set ts=2 sw=2 tw=80 noet :

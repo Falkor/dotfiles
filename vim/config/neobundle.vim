@@ -2,7 +2,7 @@
 " Plugins with NeoBundle
 "---------------------------------------------------------
 
-" Always loaded {{{}
+" Always loaded {{{
 " -------------
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/nerdcommenter'
@@ -35,7 +35,6 @@ endif
 
 NeoBundle 'rafi/vim-tinyline'
 NeoBundle 'rafi/vim-tagabana'
-NeoBundle 'lambdalisue/vim-gita'
 
 "" Vim-Session
 NeoBundle 'xolox/vim-misc'
@@ -59,6 +58,20 @@ NeoBundle 'NLKNguyen/papercolor-theme'
 "" Vim-Bootstrap Updater
 NeoBundle 'sherzberg/vim-bootstrap-updater'
 
+"" Give me back my emacs bindings ;)
+" NeoBundle 'andrep/vimacs'
+
+" visually select increasingly larger regions of text
+NeoBundle 'terryma/vim-expand-region'
+" Custom textobjects
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-entire'
+NeoBundle 'kana/vim-textobj-indent'
+NeoBundle 'kana/vim-textobj-syntax'
+NeoBundle 'kana/vim-textobj-line'
+NeoBundle 'nelstrom/vim-textobj-rubyblock'
+
+NeoBundle 'vim-scripts/gitignore'
 
 " LAZY LOADING from here on!
 " --------------------------------------------------------
