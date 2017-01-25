@@ -94,3 +94,13 @@ export EDITOR="vim"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export PATH="$HOME/bin:$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+SHELL_CUSTOM_CONFIG_DIR=$HOME/.config/shell/custom
+
+if [ -d "${SHELL_CUSTOM_CONFIG_DIR}" ]; then
+	for f in ${SHELL_CUSTOM_CONFIG_DIR}/*.sh; do
+        if [ -r "$f" ]; then
+           . $f       
+	fi
+	done
+fi
