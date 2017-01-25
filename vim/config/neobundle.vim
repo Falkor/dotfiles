@@ -2,15 +2,15 @@
 " Plugins with NeoBundle
 "---------------------------------------------------------
 
-" Always loaded {{{
+" Always loaded {{{}
 " -------------
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'jistr/vim-nerdtree-tabs.git'
+NeoBundle 'jistr/vim-nerdtree-tabs.git'    " single panel
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'ctrlpvim/ctrlp.vim'
-NeoBundle 'vim-airline/vim-airline'
+NeoBundle 'vim-airline/vim-airline'        " see https://github.com/vim-airline/vim-airline/wiki/Screenshots
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'itchyny/vim-cursorword'
 NeoBundle 'itchyny/vim-gitbranch'
@@ -24,20 +24,27 @@ NeoBundle 'jiangmiao/auto-pairs'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'windows' : 'tools\\update-dll-mingw',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ }
+\ 'build' : {
+\     'windows' : 'tools\\update-dll-mingw',
+\     'cygwin' :  'make -f make_cygwin.mak',
+\     'mac' :     'make -f make_mac.mak',
+\     'unix' :    'make -f make_unix.mak',
+\    },
+\ }
+if v:version > 702
+  NeoBundle 'Shougo/vimshell.vim'
+endif
+
 NeoBundle 'rafi/vim-tinyline'
 NeoBundle 'rafi/vim-tagabana'
+NeoBundle 'lambdalisue/vim-gita'
 
 "" Vim-Session
 NeoBundle 'xolox/vim-misc'
 NeoBundle 'xolox/vim-session'
 
+"" Snippets
+NeoBundle 'SirVer/ultisnips'
 NeoBundle 'honza/vim-snippets'
 
 "" Color Themes
@@ -48,6 +55,9 @@ NeoBundle 'mhinz/vim-janah'
 NeoBundle 'sickill/vim-monokai'
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'NLKNguyen/papercolor-theme'
+
+"" Vim-Bootstrap Updater
+NeoBundle 'sherzberg/vim-bootstrap-updater'
 
 
 " LAZY LOADING from here on!
@@ -84,13 +94,6 @@ NeoBundleLazy 'fatih/vim-go', {
 " }}}
 " Commands {{{
 " --------
-NeoBundleLazy 'Shougo/vimfiler.vim', {
-	\ 'depends': 'Shougo/unite.vim',
-	\ 'on_map': '<Plug>',
-	\ 'on_path': '.*',
-	\ 'on_cmd': [
-	\    {'name': ['VimFiler'], 'complete': 'customlist,vimfiler#complete'}
-	\ ]}
 NeoBundleLazy 'mbbill/undotree', {'on_cmd': 'UndotreeToggle'}
 
 if $VIM_MINIMAL ==? ''

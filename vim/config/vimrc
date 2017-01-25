@@ -81,7 +81,7 @@ call neobundle#local(s:plugins_dir . '/awesome-vim-colorschemes', {})
 call neobundle#local(expand('$VIMPATH/dev'), {})
 
 " ===== Plugins configurations ==== "
-" call s:source_file('plugins.vim')
+call s:source_file('plugins.vim')
 if filereadable(expand('$VIMPATH/custom/vimrc.bundles'))
   source $VIMPATH/custom/vimrc.bundles
 endif

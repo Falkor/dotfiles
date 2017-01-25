@@ -135,7 +135,7 @@ set pumheight=20        " Pop-up menu's line height
 set number              " Show line numbers
 "set relativenumber      " Use relative instead of absolute line numbers
 set ruler               " Enable default status ruler
-set list                " Show hidden characters
+set nolist                " Show hidden characters
 
 set showtabline=2       " Always show the tabs line
 set tabpagemax=30       " Maximum number of tab pages
