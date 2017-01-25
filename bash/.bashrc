@@ -48,6 +48,7 @@ esac
 export XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
 
 : ${BASH_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/bash/custom}
+: ${COMMON_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/shell/custom}
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
 
@@ -567,9 +568,15 @@ if [ -d "${BASH_CUSTOM_CONFIG_DIR}" ]; then
         fi
     done
 fi
+if [ -d "${COMMON_CUSTOM_CONFIG_DIR}" ]; then
+    for f in ${COMMON_CUSTOM_CONFIG_DIR}/*.sh
+    do
+        if [ -r "$f" ]; then
+            . $f
+        fi
+    done
+fi
 
-# RVM specific (see http://beginrescueend.com/)
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
 # condense PATH entries
 PATH="$(puniq "$PATH")"
@@ -581,4 +588,6 @@ export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
 # I hate this ring
 #set bell-style visible
 
+# RVM specific (see http://beginrescueend.com/)
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
