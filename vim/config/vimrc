@@ -104,7 +104,7 @@ call s:source_file('general.vim')
 call s:source_file('theme.vim')
 " call s:source_file('filetype.vim')
 " call s:source_file('utils.vim')
-" call s:source_file('bindings.vim')
+call s:source_file('bindings.vim')
 " call s:source_file('tabline.vim')
 
 "==================================================
