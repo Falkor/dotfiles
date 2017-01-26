@@ -240,7 +240,7 @@ add_or_remove_link() {
 ##
 shell_custom_enable() {
   local name=$1
-  local configdir="${PREFIX_HOME}/${PREFIX}/shell/"
+  local configdir="${PREFIX_HOME}${PREFIX}/shell"
   if [ ! -d "${configdir}" ]; then
     WITH_SHELL="--shell"
     __shell
