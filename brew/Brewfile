@@ -2,6 +2,7 @@
 # Minimal Brewfile
 #
 # Pre-configuration for brew sources
+tap 'buo/cask-upgrade'
 tap 'caskroom/cask'
 tap 'homebrew/bundle'
 tap 'homebrew/core'
@@ -28,6 +29,7 @@ brew 'imapfilter'
 brew 'jpegoptim'
 brew 'libyaml'
 brew 'lua'
+brew 'mas'
 brew 'mr'
 brew 'ninja'
 brew 'nmap'
@@ -59,8 +61,12 @@ cask 'atom'
 cask 'calibre'
 cask 'dropbox'
 cask 'gpgtools'
+cask 'google-chrome'
+cask 'gpgtools'
 cask 'mactex'
 cask 'marked'
+cask 'rowanj-gitx'
+cask 'skype'
 cask 'the-unarchiver'
 cask 'vagrant'
 cask 'vagrant-manager'
@@ -68,8 +74,8 @@ cask 'virtualbox'
 cask 'yujitach-menumeters'
 
 # Mac Store Apps
-mas 'Tweetbot', id: 557168941
-mas 'Slack', id: 803453959
-mas 'Pages', id: 409201541
 mas 'Numbers', id: 409203825
 mas 'Keynote', id: 409183694
+mas 'Slack', id: 803453959
+mas 'Pages', id: 409201541
+mas 'Tweetbot', id: 557168941
