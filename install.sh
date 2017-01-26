@@ -566,9 +566,9 @@ __rvm(){
   [ -z "${WITH_RVM}" ]  && return
   info "${ACTION} RVM -- see https://rvm.io/rvm/install"
   if [ "${ACTION}" == 'install' ]; then
-    execute "gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+    execute "gpg --keyserver hkp://keys.gnupg.net --keyserver-options timeout=5 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
     check_bin 'curl'
-    execute "\curl -sSL https://get.rvm.io | bash -s stable --with-default-gems='bundler rake git_remote_branch'"
+    execute "\curl -sSL https://get.rvm.io | bash -s stable --ignore-dotfiles --with-default-gems='bundler rake git_remote_branch'"
   else
     [ -z "$(which rvm)" ] && warning "Unable to find the rvm command thus exiting" && return
     execute "rvm implode"
@@ -612,7 +612,7 @@ while [ $# -ge 1 ]; do
         --with-screen| --screen) TARGETS+='--screen';;
         --with-brew  | --brew)   TARGETS+='--brew';;
         --with-curl  | --curl)   TARGETS+='--curl';;
-        --with-rvm   | --rvm)    TARGETS+='--curl';;
+        --with-rvm   | --rvm)    TARGETS+='--curl --rvm';;
         -r | --recommended)      TARGETS+='--bash --vim --git --screen --curl';;
         -a | --all)              TARGETS+='--bash --brew --zsh --emacs --vim --git --screen --curl --rvm';;
     esac
