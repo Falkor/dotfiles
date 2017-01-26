@@ -577,8 +577,6 @@ if [ -z "${TARGETS}" ]; then
 fi
 
 for target in ${TARGETS}; do
-  echo "target = '${target}'"
-  break
     case $target in
       *bash*)  WITH_BASH="$target";  __bash;;
       *zsh*)   WITH_ZSH="$target";   __zsh;;
