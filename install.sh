@@ -35,11 +35,11 @@ COLOR_BACK="\033[0m"
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOTFILES_DIR=dotfiles.falkor.d
-[ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="${HOME}/.config"
-[ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="${HOME}/.local/share"
-
+[ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="$HOME/.config"
+[ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="$HOME/.local/share"
 
 # What to take care of (default is empty)
+WITH_SHELL=""     # Common shell stuff
 WITH_BASH=""
 WITH_ZSH=""
 WITH_EMACS=""
@@ -80,7 +80,7 @@ print_error_and_exit() {
 print_version() {
     cat <<EOF
 This is Falkor/dotfiles/$COMMAND version "$VERSION".
-Copyright (c) 2011-2016 Sebastien Varrette  (sebastien.varrette@uni.lu)
+Copyright (c) 2011-2017 Sebastien Varrette  (sebastien.varrette@uni.lu)
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 EOF
@@ -92,8 +92,8 @@ NAME
 
 SYNOPSIS
     $COMMAND [-V | -h]
-    $COMMAND [--debug] [-v] [-n] [-d DIR] [--offline] [options]
-    $COMMAND --delete [-d DIR] [options]
+    $COMMAND [--debug] [-v] [-n] [--offline] [options]
+    $COMMAND --delete [options]
 
 OPTIONS
     --debug
@@ -120,16 +120,16 @@ OPTIONS
         Install / delete ALL Falkor's dotfiles
     --bash --with-bash
         Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc
-    --brew
+    --brew --with-brew
         Install with brew bundle
     --zsh --with-zsh
-        Falkor's ZSH / Oh-My-ZSH configuration ~/.oh-my-zsh/ ~/.zshrc
+        Falkor's ZSH / Oh-My-ZSH configuration
     --emacs --with-emacs
-        Falkor's Emacs configuration ~/.emacs ~/.emacs.d/
+        Falkor's Emacs configuration
     --vim --with-vim
-        Falkor's VIM configuration ~/.vimrc
+        Falkor's VIM configuration
     --git --with-git
-        Falkor's Git configuration ~/.gitconfig[.local]
+        Falkor's Git configuration gitconfig[.local]
     --screen --with-screen
         Falkor's GNU Screen configuration ~/.screenrc
 
@@ -233,6 +233,23 @@ add_or_remove_link() {
         fi
         execute "ln -sf ${source} ${dst}"
     fi
+}
+
+###
+# Enable a specific dotfile customization to the shells (bash, zsh...)
+##
+shell_custom_enable() {
+  local name=$1
+  local configdir="${PREFIX_HOME}/${PREFIX}/shell/"
+  if [ ! -d "${configdir}" ]; then
+    WITH_SHELL="--shell"
+    __shell
+  fi
+  local src="${configdir}/available/${name}.sh"
+  local dst="${configdir}/${name}.sh"
+  if [[ -d "${configdir}" && -f "${src}" ]]; then
+    add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
+  fi
 }
 
 add_or_remove_copy() {
@@ -420,7 +437,17 @@ setup_installdir() {
 
 }
 
-### Install/remove specific dotfiles
+## Install common shells
+__shell(){
+  [ -z "${WITH_SHELL}" ] && return
+  info "${ACTION} Common Shell configuration ~/.config/shell/"
+  add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
+  for n in ${SCRIPTDIR}/shell/available/*.sh; do
+    shell_custom_enable $(basename ${n} .sh)
+  done
+
+}
+## Install/remove specific dotfiles
 __bash(){
   [ -z "${WITH_BASH}" ] && return
   info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
@@ -433,6 +460,7 @@ __bash(){
   if [ "${ACTION}" != "install" ]; then
     execute "rm ${PREFIX_HOME}${INSTALL_DIR}/bash/custom/aliases.sh"
   fi
+  __shell
 }
 # Zsh
 __zsh(){
@@ -448,6 +476,7 @@ __zsh(){
     fi
   fi
   add_or_remove_link "${PREFIX}/zsh/.zshrc"       ~/.zshrc       "${PREFIX_HOME}"
+  __shell
 }
 # GNU Emacs
 __emacs(){
@@ -463,6 +492,7 @@ __vim(){
   [ -z "${WITH_VIM}" ] && return
   info "${ACTION} Falkor's VIM configuration"
   add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX_HOME}${PREFIX}"
+  shell_custom_enable 'vim'
     # add_or_remove_link "${PREFIX}/vim/.vimrc"       ~/.vimrc       "${PREFIX_HOME}"
     # if  [ "${MODE}" != "--delete" ]; then
     #     warning "Run vim afterwards to download the expected package (using NeoBundle)"
@@ -496,7 +526,7 @@ __screen(){
 }
 ## HomeBrew -- http://brew.sh
 __brew(){
-  [ -z "${WITH_BREW}" -o "$(uname -s)" == "Darwin" -o "${ACTION}" != 'install' ]] && return
+  [ -z "${WITH_BREW}" -o "$(uname -s)" == "Darwin" -o "${ACTION}" != "install" ] && return
   [ -z "$(which brew)" ] && return
   brewfile="${INSTALL_DIR}/brew/Brewfile"
   [ ! -f "${brewfile}" ] && print_error_and_exit "Unable to find the Brew file '${brewfile}'"
@@ -541,6 +571,8 @@ while [ $# -ge 1 ]; do
         --with-screen| --screen) TARGETS+='--screen';;
         --with-brew  | --brew)   TARGETS+='--brew';;
         --with-curl  | --curl)   TARGETS+='--curl';;
+        -r | --recommended)
+        TARGETS+='--bash --vim --git --screen --curl';;
         -a | --all)
         TARGETS+='--bash --zsh --emacs --vim --git --screen --brew --curl'
         ;;
@@ -577,11 +609,9 @@ if [ -z "${TARGETS}" ]; then
 fi
 
 for target in ${TARGETS}; do
-  echo "target = '${target}'"
-  break
     case $target in
-      *bash*)  WITH_BASH="$target";  __bash;;
-      *zsh*)   WITH_ZSH="$target";   __zsh;;
+      *bash*)  WITH_SHELL='--shell'; WITH_BASH="$target"; __bash;;
+      *zsh*)   WITH_SHELL='--shell'; WITH_ZSH="$target";  __zsh;;
       *emacs*) WITH_EMACS="$target"; __emacs;;
       *vim*)   WITH_VIM="$target";   __vim;;
       *git*)   WITH_GIT="$target";   __git;;

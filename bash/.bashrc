@@ -47,8 +47,6 @@ esac
 : ${XDG_CACHE_HOME=$HOME/.cache}
 export XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
 
-: ${BASH_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/bash/custom}
-: ${COMMON_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/shell/custom}
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
 
@@ -57,6 +55,12 @@ export XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
 
 # Get rid of mail notification
 unset MAILCHECK
+
+# Local configuration
+BASH_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/bash/custom
+COMMON_CONFIG_DIR=$XDG_CONFIG_HOME/shell
+COMMON_CUSTOM_CONFIG_DIR=$COMMON_CONFIG_DIR/custom
+
 
 # ----------------------------------------------------------------------
 #  SHELL OPTIONS
@@ -559,24 +563,23 @@ do
     fi
 done
 
-# Load Eventually custom local configs
-if [ -d "${BASH_CUSTOM_CONFIG_DIR}" ]; then
-    for f in ${BASH_CUSTOM_CONFIG_DIR}/*.sh
-    do
-        if [ -r "$f" ]; then
-            . $f
-        fi
-    done
-fi
-if [ -d "${COMMON_CUSTOM_CONFIG_DIR}" ]; then
-    for f in ${COMMON_CUSTOM_CONFIG_DIR}/*.sh
-    do
-        if [ -r "$f" ]; then
-            . $f
-        fi
-    done
-fi
+# Load Eventually [custom] local configs either
+# - common to all shells (from ~/.config/shell/[custom/]*.sh typically)
+# - specific to bash (from ~/.config/bash/custom/*.sh typically)
 
+for d in \
+${COMMON_CONFIG_DIR} \
+${COMMON_CUSTOM_CONFIG_DIR} \
+${BASH_CUSTOM_CONFIG_DIR}
+do
+  if [ -d "${d}" ]; then
+    for f in ${d}/*.sh; do
+      if [ -r "$f" ]; then
+          . $f
+      fi
+    done
+  fi
+done
 
 # condense PATH entries
 PATH="$(puniq "$PATH")"
@@ -587,10 +590,3 @@ export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
 
 # I hate this ring
 #set bell-style visible
-
-# RVM specific (see http://beginrescueend.com/)
-if [ -d "$HOME/.rvm" ]; then
-  [[ -s "$HOME/.rvm/scripts/rvm" ]]        && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-  [[ -r "$HOME/.rvm/scripts/completion" ]] && . $HOME/.rvm/scripts/completion
-  export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-fi
