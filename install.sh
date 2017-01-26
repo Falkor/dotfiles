@@ -38,6 +38,9 @@ DOTFILES_DIR=dotfiles.falkor.d
 [ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="$HOME/.config"
 [ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="$HOME/.local/share"
 
+# List of available dotfiles
+AVAILABLE_DOTFILES=$(ls -d */ | cut -f1 -d'/' | grep -Ev '(bin|docs|screenshots|tests)' | xargs echo rvm )
+
 # What to take care of (default is empty)
 WITH_SHELL=""     # Common shell stuff
 WITH_BASH=""
@@ -47,6 +50,8 @@ WITH_VIM=""
 WITH_GIT=""
 WITH_SCREEN=""
 WITH_BREW=""
+WITH_CURL=""
+WITH_RVM=""
 
 # Default action
 ACTION="install"
@@ -447,16 +452,17 @@ setup_installdir() {
 
 }
 
-## Install common shells
+## Install common shell configs
 __shell(){
   [ -z "${WITH_SHELL}" ] && return
   info "${ACTION} Common Shell configuration ~/.config/shell/"
   add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
   for n in ${SCRIPTDIR}/shell/available/*.sh; do
     name=$(basename ${n} .sh)
-    upper=$(echo $name | awk '{print toupper($0)}')
-    echo "upper=${upper}"
-    #[ -n "${WITH_${upper}}" ] && echo "skip ${name}" && continue
+    if [[ "${AVAILABLE_DOTFILES}" == *${name}* ]]; then
+      warning "skipping ${name} custom shell setup as it comes bundled separately"
+      continue
+    fi
     shell_custom_enable "${name}"
   done
 
@@ -642,13 +648,14 @@ fi
 
 for target in ${TARGETS}; do
     case $target in
-      *bash*)  WITH_SHELL='--shell'; WITH_BASH="$target"; __bash;;
-      *zsh*)   WITH_SHELL='--shell'; WITH_ZSH="$target";  __zsh;;
-      *emacs*) WITH_EMACS="$target"; __emacs;;
-      *vim*)   WITH_VIM="$target";   __vim;;
-      *git*)   WITH_GIT="$target";   __git;;
-      *brew*)  WITH_BREW="$target";  __brew;;
-      *curl*)  WITH_CURL="$target";  __curl;;
-      *rvm*)   WITH_RVM="$target";   __rvm;;
+      *bash*)   WITH_SHELL='--shell'; WITH_BASH="$target"; __bash;;
+      *zsh*)    WITH_SHELL='--shell'; WITH_ZSH="$target";  __zsh;;
+      *emacs*)  WITH_EMACS="$target";  __emacs;;
+      *vim*)    WITH_VIM="$target";    __vim;;
+      *git*)    WITH_GIT="$target";    __git;;
+      *screen*) WITH_SCREEN="$target"; __screen;;
+      *brew*)   WITH_BREW="$target";   __brew;;
+      *curl*)   WITH_CURL="$target";   __curl;;
+      *rvm*)    WITH_RVM="$target";    __rvm;;
     esac
 done
