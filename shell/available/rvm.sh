@@ -1,6 +1,9 @@
 # RVM specific (see http://beginrescueend.com/)
-if [ -d "$HOME/.rvm" ]; then
-  [[ -s "$HOME/.rvm/scripts/rvm" ]]        && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-  [[ -r "$HOME/.rvm/scripts/completion" ]] && . $HOME/.rvm/scripts/completion
-  export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+RVM_HOME=$HOME/.rvm
+
+if [ -d "${RVM_HOME}" ]; then
+  [[ -s "${RVM_HOME}/scripts/rvm" ]]        && . "${RVM_HOME}/scripts/rvm" # Load RVM function
+  [[ -r "${RVM_HOME}/scripts/completion" ]] && . ${RVM_HOME}/scripts/completion
+  export PATH="$PATH:${RVM_HOME}/bin" # Add RVM to PATH for scripting
 fi

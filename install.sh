@@ -132,17 +132,22 @@ OPTIONS
         Falkor's Git configuration gitconfig[.local]
     --screen --with-screen
         Falkor's GNU Screen configuration ~/.screenrc
+    --rvm --with-rvm
+        Install RVM (Ruby Version Manager)
 
 EXAMPLES
 
     To install/remove all available dotfiles:
         $COMMAND [--delete] --all
 
+    To install/remove recommended dotfiles:
+        $COMMAND [--delete] --recommended
+
     To install ONLY the zsh/vim/git and screen dotfiles:
         $COMMAND [--delete] --zsh --vim --git --screen
 
 AUTHOR
-    Falkor aka Sebastien Varrette (sebastien.varrette@uni.lu)
+    Falkor aka Sebastien Varrette <sebastien.varrette@uni.lu>
 
 REPORTING BUGS
     Please report bugs using the Issue Tracker of the project:
@@ -241,12 +246,17 @@ add_or_remove_link() {
 shell_custom_enable() {
   local name=$1
   local configdir="${PREFIX_HOME}${PREFIX}/shell"
+  [ "${ACTION}" != 'install' ] && configdir=${PREFIX_HOME}${INSTALL_DIR}/shell
+  local src="${configdir}/available/${name}.sh"
+  local dst="${configdir}/${name}.sh"
+  if [ "${ACTION}" != 'install' ]; then
+    [ -h "${dst}" ] && add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
+    return
+  fi
   if [ ! -d "${configdir}" ]; then
     WITH_SHELL="--shell"
     __shell
   fi
-  local src="${configdir}/available/${name}.sh"
-  local dst="${configdir}/${name}.sh"
   if [[ -d "${configdir}" && -f "${src}" ]]; then
     add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
   fi
@@ -443,7 +453,11 @@ __shell(){
   info "${ACTION} Common Shell configuration ~/.config/shell/"
   add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
   for n in ${SCRIPTDIR}/shell/available/*.sh; do
-    shell_custom_enable $(basename ${n} .sh)
+    name=$(basename ${n} .sh)
+    upper=$(echo $name | awk '{print toupper($0)}')
+    echo "upper=${upper}"
+    #[ -n "${WITH_${upper}}" ] && echo "skip ${name}" && continue
+    shell_custom_enable "${name}"
   done
 
 }
@@ -533,7 +547,29 @@ __brew(){
   execute "brew tap Homebrew/bundle"    # Install brew bundle -- see https://github.com/Homebrew/homebrew-bundle
   execute "brew bundle --file=${brewfile} -v"
 }
-
+## Curl -- https://curl.haxx.se
+__curl() {
+  [ -z "${WITH_CURL}" ]  && return
+  [ -z "$(which curl)" ] && return
+  info "${ACTION} CURL configuration"
+  add_or_remove_link "${DOTFILES_DIR}/curl"    "${PREFIX}/curl"     "${PREFIX_HOME}${PREFIX}"
+  shell_custom_enable 'curl'
+}
+## RVM -- see https://rvm.io/rvm/install
+__rvm(){
+  [ -z "${WITH_RVM}" ]  && return
+  info "${ACTION} RVM -- see https://rvm.io/rvm/install"
+  if [ "${ACTION}" == 'install' ]; then
+    execute "gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+    check_bin 'curl'
+    execute "\curl -sSL https://get.rvm.io | bash -s stable --with-default-gems='bundler rake git_remote_branch'"
+  else
+    [ -z "$(which rvm)" ] && warning "Unable to find the rvm command thus exiting" && return
+    execute "rvm implode"
+    execute "gem uninstall rvm"
+  fi
+  shell_custom_enable 'rvm'
+}
 
 ################################################################################
 ################################################################################
@@ -570,12 +606,9 @@ while [ $# -ge 1 ]; do
         --with-screen| --screen) TARGETS+='--screen';;
         --with-brew  | --brew)   TARGETS+='--brew';;
         --with-curl  | --curl)   TARGETS+='--curl';;
-        -r | --recommended)
-        TARGETS+='--bash --vim --git --screen --curl';;
-        -a | --all)
-        TARGETS+='--bash --zsh --emacs --vim --git --screen --brew --curl'
-        ;;
-
+        --with-rvm   | --rvm)    TARGETS+='--curl';;
+        -r | --recommended)      TARGETS+='--bash --vim --git --screen --curl';;
+        -a | --all)              TARGETS+='--bash --brew --zsh --emacs --vim --git --screen --curl --rvm';;
     esac
     shift
 done
@@ -594,7 +627,7 @@ info "About to ${ACTION} Falkor's dotfiles from ${INSTALL_DIR}"
 really_continue
 
 # Update the repository if already present
-[[ -z "${OFFLINE}" && -d "${INSTALL_DIR}" ]]   && execute "( cd ${INSTALL_DIR} ; git pull )"
+[[ -z "${OFFLINE}" && -d "${PREFIX_HOME}${INSTALL_DIR}" ]]   && execute "( cd ${PREFIX_HOME}${INSTALL_DIR} ; git pull )"
 
 cd ~
 
@@ -615,5 +648,7 @@ for target in ${TARGETS}; do
       *vim*)   WITH_VIM="$target";   __vim;;
       *git*)   WITH_GIT="$target";   __git;;
       *brew*)  WITH_BREW="$target";  __brew;;
+      *curl*)  WITH_CURL="$target";  __curl;;
+      *rvm*)   WITH_RVM="$target";   __rvm;;
     esac
 done
