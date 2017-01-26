@@ -533,24 +533,17 @@ while [ $# -ge 1 ]; do
         #     ;;
         # --dotfiledir) shift;     DOTFILES_DIR=$1;;
         --prefix)  shift;        PREFIX=$1;;
-        --with-bash  | --bash)   WITH_BASH='--with-bash';    TARGETS+=${WITH_BASH};;
-        --with-zsh   | --zsh)    WITH_ZSH='--with-zsh';      TARGETS+=${WITH_ZSH};;
-        --with-emacs | --emacs)  WITH_EMACS='--with-emacs';  TARGETS+=${WITH_EMACS};;
-        --with-vim   | --vim)    WITH_VIM='--with-vim';      TARGETS+=${WITH_VIM};;
-        --with-git   | --git)    WITH_GIT='--with-git';      TARGETS+=${WITH_GIT};;
-        --with-screen| --screen) WITH_SCREEN='--with-screen';TARGETS+=${WITH_SCREEN};;
-        --with-brew  | --brew)   WITH_BREW='--with-brew';    TARGETS+=${WITH_BREW};;
-        --with-curl  | --curl)   WITH_CURL='--with-curl';    TARGETS+=${WITH_CURL};;
-        # -a | --all)
-        #     WITH_BASH='--with-bash'
-        #     WITH_ZSH='--with-zsh'
-        #     WITH_EMACS='--with-emacs'
-        #     WITH_VIM='--with-vim'
-        #     WITH_GIT='--with-git'
-        #     WITH_SCREEN='--with-screen'
-        #     WITH_BREW='--with-brew'
-        #     WITH_CURL='--with-curl'
-        #     ;;
+        --with-bash  | --bash)   TARGETS+='--bash';;
+        --with-zsh   | --zsh)    TARGETS+='--zsh';;
+        --with-emacs | --emacs)  TARGETS+='--emacs';;
+        --with-vim   | --vim)    TARGETS+='--vim';;
+        --with-git   | --git)    TARGETS+='--git';;
+        --with-screen| --screen) TARGETS+='--screen';;
+        --with-brew  | --brew)   TARGETS+='--brew';;
+        --with-curl  | --curl)   TARGETS+='--curl';;
+        -a | --all)
+        TARGETS+='--bash --zsh --emacs --vim --git --screen --brew --curl'
+        ;;
 
     esac
     shift
@@ -574,7 +567,7 @@ really_continue
 
 cd ~
 
-if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN}${WITH_BREW}" ]; then
+if [ -z "${TARGETS}" ]; then
     warning " "
     warning "By default, this installer does nothing except updating ${INSTALL_DIR}."
     warning "Use '$0 --all' to install all available configs. OR use a discrete set of options."
@@ -584,12 +577,14 @@ if [ -z "${WITH_BASH}${WITH_ZSH}${WITH_EMACS}${WITH_VIM}${WITH_GIT}${WITH_SCREEN
 fi
 
 for target in ${TARGETS}; do
+  echo "target = '${target}'"
+  break
     case $target in
-      *bash*)  __bash;;
-      *zsh*)   __zsh;;
-      *emacs*) __emacs;;
-      *vim*)   __vim;;
-      *git*)   __git;;
-      *brew*)  __brew;;
+      *bash*)  WITH_BASH="$target";  __bash;;
+      *zsh*)   WITH_ZSH="$target";   __zsh;;
+      *emacs*) WITH_EMACS="$target"; __emacs;;
+      *vim*)   WITH_VIM="$target";   __vim;;
+      *git*)   WITH_GIT="$target";   __git;;
+      *brew*)  WITH_BREW="$target";  __brew;;
     esac
 done
