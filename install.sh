@@ -493,7 +493,6 @@ __vim(){
   info "${ACTION} Falkor's VIM configuration"
   add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX_HOME}${PREFIX}"
   shell_custom_enable 'vim'
-    # add_or_remove_link "${PREFIX}/vim/.vimrc"       ~/.vimrc       "${PREFIX_HOME}"
     # if  [ "${MODE}" != "--delete" ]; then
     #     warning "Run vim afterwards to download the expected package (using NeoBundle)"
     #     if [ "$(uname -s)" == "Linux" ]; then
