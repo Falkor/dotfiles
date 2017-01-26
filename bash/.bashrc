@@ -589,5 +589,8 @@ export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
 #set bell-style visible
 
 # RVM specific (see http://beginrescueend.com/)
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+if [ -d "$HOME/.rvm" ]; then
+  [[ -s "$HOME/.rvm/scripts/rvm" ]]        && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+  [[ -r "$HOME/.rvm/scripts/completion" ]] && . $HOME/.rvm/scripts/completion
+  export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+fi
