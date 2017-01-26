@@ -106,15 +106,10 @@ endif
 "}}}
 
 if neobundle#tap('vim-gitgutter') "{{{
+	let g:gitgutter_highlight_lines = 1
 	let g:gitgutter_realtime = 1
 	let g:gitgutter_eager    = 0
 	let g:gitgutter_map_keys = 0
-
-	nmap <Leader>hj <Plug>GitGutterNextHunk
-	nmap <Leader>hk <Plug>GitGutterPrevHunk
-	nmap <Leader>hs <Plug>GitGutterStageHunk
-	nmap <Leader>hr <Plug>GitGutterRevertHunk
-	nmap <Leader>hp <Plug>GitGutterPreviewHunk
 
 	call neobundle#untap()
 endif

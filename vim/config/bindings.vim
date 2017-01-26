@@ -82,15 +82,14 @@ noremap <leader>q :bd<CR>
 nmap <Leader><Leader> V
 vmap < <gv
 vmap > >gv
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
-" }}}
-
 if neobundle#tap('vim-expand-region') "{{{
-  xmap v <Plug>(expand_region_expand)
-  xmap V <Plug>(expand_region_shrink)
+  vmap v <Plug>(expand_region_expand)
+  vmap V <Plug>(expand_region_shrink)
   call neobundle#untap()
 endif
+" }}}
+
+
 "}}}
 
 " Git {{{
@@ -102,6 +101,13 @@ noremap <Leader>gs :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
+if neobundle#tap('vim-gitgutter')
+  nmap <Leader>ggn <Plug>GitGutterNextHunk
+	nmap <Leader>ggp <Plug>GitGutterPrevHunk
+	nmap <Leader>ggp <Plug>GitGutterPreviewHunk
+
+  call neobundle#untap()
+endif
 " }}}
 
 " Tabs {{{
