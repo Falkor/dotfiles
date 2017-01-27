@@ -13,7 +13,7 @@ COLOR_BACK="\033[0m"
 
 # Constant
 #DOTFILES_D=${DOTFILES_D:=$HOME/.config/dotfiles.falkor.d}
-DOTFILES_D=${DOTFILES_D:=$HOME/.config/}
+DOTFILES_D=${DOTFILES_D:=$HOME/.config}
 TARGET=${TARGET:=$HOME}
 
 
