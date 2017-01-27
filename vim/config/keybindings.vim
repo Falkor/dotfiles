@@ -62,6 +62,13 @@ cnoreabbrev Qall qall
 noremap  <F1> :NERDTreeToggle %<CR>
 nnoremap <F2> :set nonumber!<CR>
 
+if neobundle#tap('undotree') "{{{
+  nnoremap <F7>  :UndotreeToggle<CR>
+
+  call neobundle#untap()
+endif
+" }}}
+
 
 nmap     <F8> :TagbarToggle<CR>    " displays tags in a window, ordered by scope
 
@@ -97,7 +104,7 @@ endif
 " a better paste
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
 noremap YY "+y<CR>
-" noremap <leader>p "+gP<CR>
+noremap <Leader>p "+gP<CR>
 noremap XX "+x<CR>
 
 " Automatically jump to end of text you pasted:

@@ -2,7 +2,7 @@
 " General Settings
 "---------------------------------------------------------
 " General {{{
-set mouse=nvi                " Disable mouse in command-line mode
+set mouse=a                  " Enable mouse to scroll in command-line mode
 set modeline                 " automatically setting options from modelines
 set report=0                 " Don't report on line changes
 set noerrorbells             " Don't trigger bell on error
@@ -13,7 +13,7 @@ set fileformats=unix,dos,mac " Use Unix as the standard file type
 set magic                    " For regular expressions turn magic on
 set path=.,**                " Directories to search when using gf
 set virtualedit=block        " Position cursor anywhere in visual block
-set history=500              " Search and commands remembered
+set history=1000             " Search and commands remembered
 set synmaxcol=1000           " Don't syntax highlight long lines
 syntax on
 syntax sync minlines=256     " Update syntax highlighting for more lines
@@ -39,10 +39,12 @@ set sessionoptions-=folds
 set sessionoptions-=help
 set sessionoptions-=buffers
 
-if has('clipboard') || has('gui_running')
-	set clipboard=unnamed,unnamedplus
-endif
+set clipboard=unnamed
+" if has('clipboard') || has('gui_running')
+" 	set clipboard=unnamed,unnamedplus
+" endif
 " General }}}
+
 " Wildmenu {{{
 " --------
 if has('wildmenu')
@@ -122,6 +124,9 @@ set complete=.                  " No wins, buffs, tags, include scanning
 set nowrap                      " No wrap by default
 
 " }}}
+
+set shell=/bin/sh       " Use Bourne shell for command substitution
+
 " Editor UI Appearance {{{
 " --------------------
 set noshowmode          " Don't show mode in cmd window
