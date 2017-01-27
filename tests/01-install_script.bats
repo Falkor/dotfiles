@@ -80,17 +80,17 @@ setup() {
     assert_falkor_dotfile_present "bash/.bashrc"
     assert_falkor_dotfile_present "bash/.inputrc"
     assert_falkor_dotfile_present "bash/.bash_profile"
-    assert [ -e "${TARGET}/.bash_aliases" ]
+    assert [ -e "${TARGET}/aliases.sh" ]
 }
 
-# @test "install --bash --delete" {
-#     run $DOTFILE_INSTALL --bash --delete
-#     assert_success
-#     assert_falkor_dotfile_absent "bash/.bashrc"
-#     assert_falkor_dotfile_absent "bash/.inputrc"
-#     assert_falkor_dotfile_absent "bash/.bash_profile"
-#     assert [ ! -e "${TARGET}/.bash_aliases" ]
-# }
+@test "install --bash --delete" {
+    run $DOTFILE_INSTALL --bash --delete
+    assert_success
+    assert_falkor_dotfile_absent "bash/.bashrc"
+    assert_falkor_dotfile_absent "bash/.inputrc"
+    assert_falkor_dotfile_absent "bash/.bash_profile"
+    assert [ ! -e "${TARGET}/aliases.sh" ]
+}
 
 
 # @test "install --vim" {

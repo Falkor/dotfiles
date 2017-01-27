@@ -14,7 +14,7 @@ COLOR_BACK="\033[0m"
 # Constant
 #DOTFILES_D=${DOTFILES_D:=$HOME/.config/dotfiles.falkor.d}
 DOTFILES_D=${DOTFILES_D:=$HOME/.config}
-TARGET=${TARGET:=$HOME}
+TARGET=${TARGET:=$DOTFILES_D/bash/custom}
 
 
 # See https://github.com/jasonkarns/bats-assert
