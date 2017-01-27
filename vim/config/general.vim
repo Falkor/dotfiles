@@ -30,7 +30,7 @@ if has('vim_starting')
 endif
 
 " What to save for views:
-set viewoptions-=options viewoptions+=slash,unix
+" set viewoptions-=options viewoptions+=slash,unix
 
 " What not to save in sessions:
 set sessionoptions-=options
@@ -40,8 +40,7 @@ set sessionoptions-=help
 set sessionoptions-=buffers
 
 if has('clipboard') || has('gui_running')
-	" Do not do anything with system's clipboard
-	set clipboard=
+	set clipboard=unnamed,unnamedplus
 endif
 " General }}}
 " Wildmenu {{{

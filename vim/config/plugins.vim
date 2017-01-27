@@ -1,6 +1,22 @@
 
-" Plugin Settings
+" Plugin Settings -- Keybindings are defined separatel
 "---------------------------------------------------------
+
+if neobundle#tap('nerdtree') "{{{
+	let g:NERDTreeChDirMode=2
+	let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__', '\.md\.tex$', '\.elc$']
+	let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+	let g:NERDTreeShowBookmarks=1
+	let g:nerdtree_tabs_focus_on_files=1
+	let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
+	let g:NERDTreeWinSize = 50
+	set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
+	" nnoremap <silent> <F2> :NERDTreeFind %<CR>
+	call neobundle#untap()
+endif
+
+"}}}
+
 
 if neobundle#tap('neocomplete') && has('lua') "{{{
 	let g:neocomplete#enable_at_startup = 1
@@ -12,7 +28,24 @@ endif
 
 "}}}
 
-if neobundle#tap('neosnippet.vim') "{{{
+if neobundle#tap('grep.vim') "{{{
+	let Grep_Default_Options = '-IR'
+	let Grep_Skip_Files = '*.log *.db'
+	let Grep_Skip_Dirs = '.git node_modules'
+	call neobundle#untap()
+endif
+"}}}
+
+
+
+if neobundle#tap('vimshell.vim') "{{{
+	let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+	let g:vimshell_prompt =  '$ '
+endif
+"}}}
+
+
+if neobundle#tap('neosnippet') "{{{
 	let g:neosnippet#enable_snipmate_compatibility = 0
 	let g:neosnippet#enable_preview = 1
 	let g:neosnippet#disable_runtime_snippets = { '_': 1 }
@@ -92,19 +125,28 @@ if neobundle#tap('jedi-vim') "{{{
 	let g:jedi#popup_select_first = 1
 	let g:jedi#use_splits_not_buffers = 'right'
 	let g:jedi#completions_command = ''
-	let g:jedi#goto_command = '<leader>d'
-	let g:jedi#goto_assignments_command = '<leader>a'
-	let g:jedi#documentation_command = 'K'
-	let g:jedi#rename_command = '<leader>r'
-	let g:jedi#usages_command = '<leader>n'
 	let g:jedi#popup_on_dot = 0
 	let g:jedi#max_doc_height = 40
 	let g:jedi#show_call_signatures = 0
 	let g:jedi#show_call_signatures_delay = 1000
+
 	call neobundle#untap()
 endif
 
 "}}}
+
+
+if neobundle#tap('vim-ruby') "{{{
+	let g:rubycomplete_buffer_loading    = 1
+	let g:rubycomplete_classes_in_global = 1
+	let g:rubycomplete_rails             = 1
+
+	call neobundle#untap()
+endif
+
+"}}}
+
+
 
 if neobundle#tap('vim-gitgutter') "{{{
 	let g:gitgutter_highlight_lines = 1
@@ -121,12 +163,14 @@ if neobundle#tap('vim-markdown') "{{{
 	let g:vim_markdown_initial_foldlevel = 5
 	let g:vim_markdown_frontmatter = 1
 	let g:vim_markdown_conceal = 0
+
 	call neobundle#untap()
 endif
 
 "}}}
 if neobundle#tap('vim-jinja') "{{{
 	let g:htmljinja_disable_detection = 0
+
 	call neobundle#untap()
 endif
 
@@ -135,6 +179,7 @@ endif
 
 if neobundle#tap('undotree') "{{{
 	nnoremap <Leader>gu  :UndotreeToggle<CR>
+
 	call neobundle#untap()
 endif
 
@@ -197,18 +242,7 @@ if neobundle#tap('vim-asterisk') "{{{
 endif
 
 "}}}
-if neobundle#tap('incsearch.vim') "{{{
-	let g:incsearch#auto_nohlsearch = 1
 
-	map /  <Plug>(incsearch-forward)
-	map ?  <Plug>(incsearch-backward)
-	map g/ <Plug>(incsearch-stay)
-	map n  <Plug>(incsearch-nohl-n)
-	map N  <Plug>(incsearch-nohl-N)
-	call neobundle#untap()
-endif
-
-"}}}
 
 if neobundle#tap('vim-quickrun') "{{{
   nmap <silent> <Leader>r <Plug>(quickrun)
@@ -241,6 +275,43 @@ if neobundle#tap('vimacs') "{{{
 endif
 
 "}}}
+
+if neobundle#tap('syntastic') "{{{
+	let g:syntastic_always_populate_loc_list=1
+	let g:syntastic_error_symbol='✗'
+	let g:syntastic_warning_symbol='⚠'
+	let g:syntastic_style_error_symbol = '✗'
+	let g:syntastic_style_warning_symbol = '⚠'
+	let g:syntastic_auto_loc_list=1
+	let g:syntastic_aggregate_errors = 1
+	let g:syntastic_python_checkers=['python', 'flake8']
+	let g:syntastic_python_flake8_post_args='--ignore=W391'
+	let g:syntastic_tex_chktex_showmsgs = 0
+	" let g:syntastic_disabled_filetypes=['tex']
+	call neobundle#untap()
+endif
+
+"}}}
+
+if neobundle#tap('UltiSnips') "{{{
+	let g:UltiSnipsExpandTrigger="<tab>"
+	let g:UltiSnipsJumpForwardTrigger="<tab>"
+	let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+	let g:UltiSnipsEditSplit="vertical"
+
+	call neobundle#untap()
+endif
+
+"}}}
+
+if neobundle#tap('tagbar') "{{{
+	let g:tagbar_autofocus = 1
+
+	call neobundle#untap()
+endif
+
+"}}}
+
 
 
 " vim: set ts=2 sw=2 tw=80 noet :

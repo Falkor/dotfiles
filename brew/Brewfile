@@ -18,6 +18,7 @@ brew 'bash-completion'
 brew 'boost', args: ['with-mpi', 'without-single']
 brew 'cmake'
 brew 'coreutils'
+brew 'ctags-exuberant'
 brew 'dsh'
 brew 'figlet'
 brew 'gdbm'

@@ -18,7 +18,7 @@ NeoBundle 'sheerun/vim-polyglot'
 NeoBundle 'vim-scripts/grep.vim'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'jiangmiao/auto-pairs'
-NeoBundle 'majutsushi/tagbar'
+NeoBundle 'majutsushi/tagbar'          " displays tags in a window, ordered by scope, require 'brew install ctags-exuberant'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/vimproc.vim', {
 \ 'build' : {
@@ -93,6 +93,7 @@ NeoBundleLazy 'groenewege/vim-less', {'on_ft': 'less'}
 NeoBundleLazy 'hail2u/vim-css3-syntax', {'on_ft': 'css'}
 NeoBundleLazy 'chrisbra/csv.vim', {'on_ft': 'csv'}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', {'on_ft': 'python'}
+NeoBundleLazy 'jmcantrell/vim-virtualenv', {'on_ft': 'python'}
 NeoBundleLazy 'elzr/vim-json', {'on_ft': 'json'}
 NeoBundleLazy 'cespare/vim-toml', {'on_ft': 'toml'}
 NeoBundleLazy 'PotatoesMaster/i3-vim-syntax', {'on_ft': 'i3'}

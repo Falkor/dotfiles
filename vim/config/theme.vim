@@ -16,8 +16,11 @@ colorscheme PaperColor
 " Airline - lean & mean status/tabline {{{
 if neobundle#tap('vim-airline-themes')
 	let g:airline_theme = 'papercolor'     " you probably want to match your color scheme
+	let g:airline#extensions#virtualenv#enabled = 1
+
 	call neobundle#untap()
 endif
+let g:airline_powerline_fonts = 1
 
 "}}}
 
