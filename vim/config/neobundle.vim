@@ -16,7 +16,6 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'sheerun/vim-polyglot'
 NeoBundle 'vim-scripts/grep.vim'
-NeoBundle 'vim-scripts/CSApprox'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'jiangmiao/auto-pairs'
 NeoBundle 'majutsushi/tagbar'
@@ -45,6 +44,7 @@ NeoBundle 'SirVer/ultisnips'
 NeoBundle 'honza/vim-snippets'
 
 "" Color Themes
+NeoBundle 'vim-scripts/CSApprox'           " Make gvim-only colorschemes work transparently in terminal vim
 NeoBundle 'vim-airline/vim-airline'        " see https://github.com/vim-airline/vim-airline/wiki/Screenshots
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'tomasr/molokai'

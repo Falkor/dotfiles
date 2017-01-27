@@ -76,6 +76,7 @@ if neobundle#tap('vim-session') "{{{
 	let g:session_autosave = 'no'
 	let g:session_autoload = 'no'
 	let g:session_persist_colors = 0
+	let g:session_command_aliases = 1
 	let g:session_menu = 0
 	call neobundle#untap()
 endif
@@ -119,6 +120,7 @@ endif
 if neobundle#tap('vim-markdown') "{{{
 	let g:vim_markdown_initial_foldlevel = 5
 	let g:vim_markdown_frontmatter = 1
+	let g:vim_markdown_conceal = 0
 	call neobundle#untap()
 endif
 

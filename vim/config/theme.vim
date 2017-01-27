@@ -44,6 +44,7 @@ else
 endif
 
 " UI elements "{{{
+let no_buffers_menu=1
 set showbreak=↪
 set fillchars=vert:│,fold:─
 set listchars=tab:\⋮\ ,extends:⟫,precedes:⟪,nbsp:.,trail:·
