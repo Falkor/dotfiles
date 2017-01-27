@@ -80,7 +80,7 @@ setup() {
     assert_falkor_dotfile_present "bash/.bashrc"
     assert_falkor_dotfile_present "bash/.inputrc"
     assert_falkor_dotfile_present "bash/.bash_profile"
-    assert [ -e "${TARGET}/aliases.sh" ]
+    assert [ -e "${DOTFILES_D}/bash/custom/aliases.sh" ]
 }
 
 @test "install --bash --delete" {
@@ -89,7 +89,7 @@ setup() {
     assert_falkor_dotfile_absent "bash/.bashrc"
     assert_falkor_dotfile_absent "bash/.inputrc"
     assert_falkor_dotfile_absent "bash/.bash_profile"
-    assert [ ! -e "${TARGET}/aliases.sh" ]
+    assert [ ! -e "${DOTFILES_D}/bash/custom/aliases.sh" ]
 }
 
 
