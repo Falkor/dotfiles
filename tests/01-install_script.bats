@@ -96,13 +96,13 @@ setup() {
 @test "install --vim" {
     run $DOTFILE_INSTALL --vim
     assert_success
-    assert_falkor_dotfile_present "vim/.vimrc"
+    assert_falkor_dotfile_present "vim/vimrc"
 }
 
 @test "install --vim --delete" {
     run $DOTFILE_INSTALL --vim --delete
     assert_success
-    assert_falkor_dotfile_absent "vim/.vimrc"
+    assert_falkor_dotfile_absent "vim/vimrc"
 }
 
 @test "install --screen" {
