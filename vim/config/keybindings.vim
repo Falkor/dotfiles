@@ -85,7 +85,15 @@ nnoremap <Leader>o :CtrlP <CR>        " open new file
 nnoremap <Leader>b :CtrlPBuffer<CR>   " open buffer
 " }}}
 
-" Type <Space>w to save file (a lot faster than :w<Enter>):
+" " Type <Space>w to save file (a lot faster than :w<Enter>):
+" function! <SID>StripTrailingWhitespaces(command)
+"     let l = line(".")
+"     let c = col(".")
+"     %s/\s\+$//e
+"     call cursor(l, c)
+" endfun
+"
+
 nnoremap <Leader>w :w<CR>
 
 

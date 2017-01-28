@@ -104,7 +104,7 @@ if has('vim_starting')
         echo " "
         execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
         \ (exists('$http_proxy') ? 'https' : 'git'))
-        \ s:plugins_dir.'/neobundle.vim'         
+        \ s:plugins_dir.'/neobundle.vim'
     endif
 
     execute 'set runtimepath^='.s:plugins_dir.'/neobundle.vim'

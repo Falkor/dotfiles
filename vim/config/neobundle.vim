@@ -35,6 +35,8 @@ endif
 NeoBundle 'rafi/vim-tinyline'
 NeoBundle 'rafi/vim-tagabana'
 
+NeoBundle 'dietsche/vim-lastplace'
+
 "" Vim-Session
 NeoBundle 'xolox/vim-misc'
 NeoBundle 'xolox/vim-session'

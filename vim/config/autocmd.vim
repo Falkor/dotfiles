@@ -2,22 +2,16 @@
 " File Types {{{
 "-------------------------------------------------
 "" The PC is fast enough, do syntax highlight syncing from start
-augroup vimrc-sync-fromstart
-  autocmd!
-  autocmd BufEnter * :syntax sync fromstart
-augroup END
-
-"" Remember cursor position
-augroup vimrc-remember-cursor-position
-  autocmd!
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-augroup END
+" augroup vimrc-sync-fromstart
+"   autocmd!
+"   autocmd BufEnter * :syntax sync fromstart
+" augroup END
 
 "" txt
-augroup vimrc-wrapping
-  autocmd!
-  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
-augroup END
+" augroup vimrc-wrapping
+"   autocmd!
+"   autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
+" augroup END
 
 " authorize change of line using left/right arrow
 set whichwrap=<,>,[,]
@@ -37,6 +31,9 @@ set autoread
 let g:extra_whitespace_ignored_filetypes = [ 'md' ]
 autocmd BufWritePre * :FixWhitespace
 
+
+" Update Emacs Time-stamp
+autocmd BufWritePre *.* :%s/^\s*\(\/\/\|#\|%\|"\)\s\+Time-stamp:\s\+<\zs.*/\=strftime('%a %Y-%m-%d') . ' ' . strftime('%H:%M') . ' ' . $USER . '>'/e<cr>
 
 augroup MyAutoCmd
 

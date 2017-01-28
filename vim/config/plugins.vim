@@ -304,6 +304,7 @@ if neobundle#tap('syntastic') "{{{
 	let g:syntastic_python_checkers=['python', 'flake8']
 	let g:syntastic_python_flake8_post_args='--ignore=W391'
 	let g:syntastic_tex_chktex_showmsgs = 0
+	let g:syntastic_auto_jump = 0
 	" let g:syntastic_disabled_filetypes=['tex']
 	call neobundle#untap()
 endif
