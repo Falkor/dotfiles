@@ -33,7 +33,7 @@ autocmd BufWritePre * :FixWhitespace
 
 
 " Update Emacs Time-stamp
-autocmd BufWritePre *.* :%s/^\s*\(\/\/\|#\|%\|"\)\s\+Time-stamp:\s\+<\zs.*/\=strftime('%a %Y-%m-%d') . ' ' . strftime('%H:%M') . ' ' . $USER . '>'/e<cr>
+" autocmd BufWritePre *.* :%s/^\s*\(\/\/\|#\|%\|"\)\s\+Time-stamp:\s\+<\zs.*/\=strftime('%a %Y-%m-%d') . ' ' . strftime('%H:%M') . ' ' . $USER . '>'/e
 
 augroup MyAutoCmd
 

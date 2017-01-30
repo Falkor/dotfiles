@@ -102,23 +102,24 @@ nnoremap <Leader>w :w<CR>
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
 endif
+" see http://tilvim.com/2014/03/18/a-better-paste.html
+" a better paste
+map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
+noremap YY "+y<CR>
+" noremap <leader>p "+gP<CR>
+noremap XX "+x<CR>
+
 if has('macunix')
   " pbcopy for OSX copy/paste
   vmap <C-x> :!pbcopy<CR>
   vmap <C-c> :w !pbcopy<CR><CR>
 endif
 
-" see http://tilvim.com/2014/03/18/a-better-paste.html
-" a better paste
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
-noremap YY "+y<CR>
-noremap <Leader>p "+gP<CR>
-noremap XX "+x<CR>
 
-" Automatically jump to end of text you pasted:
-vnoremap <silent> y y`]
-vnoremap <silent> p p`]
-nnoremap <silent> p p`]
+" " Automatically jump to end of text you pasted:
+" vnoremap <silent> y y`]
+" vnoremap <silent> p p`]
+" nnoremap <silent> p p`]
 
 " Quickly select text you just pasted:
 " noremap gV `[v`]
