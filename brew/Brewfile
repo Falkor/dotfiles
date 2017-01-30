@@ -4,6 +4,7 @@
 # Pre-configuration for brew sources
 tap 'buo/cask-upgrade'
 tap 'caskroom/cask'
+tap 'caskroom/fonts'
 tap 'homebrew/bundle'
 tap 'homebrew/core'
 tap 'homebrew/dupes'
@@ -78,6 +79,10 @@ cask 'vagrant'
 cask 'vagrant-manager'
 cask 'virtualbox'
 cask 'yujitach-menumeters'
+
+# Special fonts
+cask 'font-source-code-pro-for-powerline'
+cask 'font-hack-nerd-font'
 
 # Mac Store Apps
 mas 'Numbers', id: 409203825

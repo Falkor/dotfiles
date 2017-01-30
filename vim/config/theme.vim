@@ -38,7 +38,7 @@ let g:base16_shell_path = $VARPATH.'/plugins/base16-shell/'
 
 set guioptions=aci
 if has("gui_mac") || has("gui_macvim")
-	set guifont=Menlo:h12
+	set guifont=Source\ Code\ Pro\ for\ Powerline:h14
 	set transparency=7
 else
 	let g:CSApprox_loaded = 1
