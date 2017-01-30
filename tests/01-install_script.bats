@@ -102,7 +102,7 @@ setup() {
 @test "install --vim --delete" {
     run $DOTFILE_INSTALL --vim --delete
     assert_success
-    assert [ ! -e "${DOTFILES_D}/vim/vimrc" ]
+    assert [ ! -e "${DOTFILES_D}/vim" ]
 }
 
 @test "install --screen" {
