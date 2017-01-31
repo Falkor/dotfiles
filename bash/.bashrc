@@ -3,7 +3,7 @@
 #  .bashrc -- my personal Bourne-Again shell (aka bash) configuration
 #             see https://github.com/Falkor/dotfiles
 #
-#  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+#  Copyright (c) 2010-2017 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 #                https://varrette.gforge.uni.lu
 #                   _               _
 #                  | |__   __ _ ___| |__  _ __ ___
@@ -131,7 +131,7 @@ esac
 # enable en_US locale w/ UTF-8 encodings if not already configured
 : ${LANG:="en_US.UTF-8"}
 : ${LANGUAGE:="en"}
-: ${LC_ALL:="C"}
+: ${LC_ALL:="en_US.UTF-8"}
 export LANG LANGUAGE LC_ALL
 
 # ----------------------------------------------------------------------
@@ -439,18 +439,6 @@ fi
 # test -r ~/.dotfiles.github.d/bash/preexec.bash &&
 # . ~/.dotfiles.github.d/bash/preexec.bash
 
-# set_xterm_title () {
-#     local title="$1"
-#     echo -ne "\e]0;$title\007"
-# }
-
-# precmd () {
-#     set_xterm_title "${TERM} - ${USER}@${HOSTNAME} `dirs -0` $PROMPTCHAR"
-# }
-
-# preexec () {
-#     set_xterm_title "${TERM} - $1 {`dirs -0`} (${USER}@${HOSTNAME})"
-# }
 
 # This function is called from a subshell in $PS1, to provide the colorized
 # exit status of the last run command.
