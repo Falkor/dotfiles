@@ -16,12 +16,21 @@ colorscheme PaperColor
 " Airline - lean & mean status/tabline {{{
 if neobundle#tap('vim-airline-themes')
 	let g:airline_theme = 'papercolor'     " you probably want to match your color scheme
+	let g:airline#extensions#virtualenv#enabled = 1
+
 	call neobundle#untap()
 endif
+let g:airline_powerline_fonts = 1
 
 "}}}
 
 set gcr=a:blinkon0       " Disable the blinking cursor.
+
+" Change cursor shape between insert and normal mode in iTerm2.app
+if $TERM_PROGRAM =~ "iTerm"
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+endif
 
 " base16 themes - Access colors present in 256 colorspace
 let g:base16colorspace = 256
@@ -29,8 +38,9 @@ let g:base16_shell_path = $VARPATH.'/plugins/base16-shell/'
 
 set guioptions=aci
 if has("gui_mac") || has("gui_macvim")
-	set guifont=Menlo:h12
+	set guifont=Source\ Code\ Pro\ for\ Powerline:h14
 	set transparency=7
+	set langmenu=en_EN.UTF-8
 else
 	let g:CSApprox_loaded = 1
 	set guifont=Anonymous\ Pro\ 12
@@ -44,6 +54,7 @@ else
 endif
 
 " UI elements "{{{
+let no_buffers_menu=1
 set showbreak=↪
 set fillchars=vert:│,fold:─
 set listchars=tab:\⋮\ ,extends:⟫,precedes:⟪,nbsp:.,trail:·

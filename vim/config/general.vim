@@ -2,7 +2,7 @@
 " General Settings
 "---------------------------------------------------------
 " General {{{
-set mouse=nvi                " Disable mouse in command-line mode
+set mouse=a                  " Enable mouse to scroll in command-line mode
 set modeline                 " automatically setting options from modelines
 set report=0                 " Don't report on line changes
 set noerrorbells             " Don't trigger bell on error
@@ -13,8 +13,9 @@ set fileformats=unix,dos,mac " Use Unix as the standard file type
 set magic                    " For regular expressions turn magic on
 set path=.,**                " Directories to search when using gf
 set virtualedit=block        " Position cursor anywhere in visual block
-set history=500              " Search and commands remembered
+set history=1000             " Search and commands remembered
 set synmaxcol=1000           " Don't syntax highlight long lines
+syntax on
 syntax sync minlines=256     " Update syntax highlighting for more lines
 set ttyfast                  " Indicate a fast terminal connection
 set formatoptions+=1         " Don't break lines after a one-letter word
@@ -29,7 +30,7 @@ if has('vim_starting')
 endif
 
 " What to save for views:
-set viewoptions-=options viewoptions+=slash,unix
+" set viewoptions-=options viewoptions+=slash,unix
 
 " What not to save in sessions:
 set sessionoptions-=options
@@ -38,11 +39,12 @@ set sessionoptions-=folds
 set sessionoptions-=help
 set sessionoptions-=buffers
 
-if has('clipboard') || has('gui_running')
-	" Do not do anything with system's clipboard
-	set clipboard=
-endif
+set clipboard=unnamed
+" if has('clipboard') || has('gui_running')
+" 	set clipboard=unnamed,unnamedplus
+" endif
 " General }}}
+
 " Wildmenu {{{
 " --------
 if has('wildmenu')
@@ -63,7 +65,7 @@ set expandtab       " Do expand tabs to spaces as default
 set tabstop=2       " The number of spaces a tab is
 set softtabstop=2   " While performing editing operations
 set smarttab        " Tab insert blanks according to 'shiftwidth'
-set autoindent      " Use same indenting on new lines
+set autoindent    " Don't Use same indenting on new lines
 set smartindent     " Smart autoindenting on new lines
 set shiftround      " Round indent to multiple of 'shiftwidth'
 set shiftwidth=2    " Number of spaces to use in auto(indent)
@@ -114,7 +116,7 @@ set nostartofline               " Cursor in same column for few commands
 set whichwrap+=h,l,<,>,[,],~    " Move to following line on certain keys
 set splitbelow splitright       " Splits open bottom right
 set switchbuf=usetab,split      " Switch buffer behavior
-set backspace=indent,eol,start  " Intuitive backspacing in insert mode
+set backspace=eol,start,indent  " Intuitive backspacing in insert mode
 set diffopt=filler,iwhite       " Diff mode: show fillers, ignore white
 set showfulltag                 " Show tag and tidy search in completion
 set completeopt=menuone         " Show menu even for one item
@@ -122,6 +124,9 @@ set complete=.                  " No wins, buffs, tags, include scanning
 set nowrap                      " No wrap by default
 
 " }}}
+
+set shell=/bin/sh       " Use Bourne shell for command substitution
+
 " Editor UI Appearance {{{
 " --------------------
 set noshowmode          " Don't show mode in cmd window

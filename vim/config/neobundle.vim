@@ -16,10 +16,9 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'sheerun/vim-polyglot'
 NeoBundle 'vim-scripts/grep.vim'
-NeoBundle 'vim-scripts/CSApprox'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'jiangmiao/auto-pairs'
-NeoBundle 'majutsushi/tagbar'
+NeoBundle 'majutsushi/tagbar'          " displays tags in a window, ordered by scope, require 'brew install ctags-exuberant'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/vimproc.vim', {
 \ 'build' : {
@@ -36,6 +35,8 @@ endif
 NeoBundle 'rafi/vim-tinyline'
 NeoBundle 'rafi/vim-tagabana'
 
+NeoBundle 'dietsche/vim-lastplace'
+
 "" Vim-Session
 NeoBundle 'xolox/vim-misc'
 NeoBundle 'xolox/vim-session'
@@ -45,6 +46,7 @@ NeoBundle 'SirVer/ultisnips'
 NeoBundle 'honza/vim-snippets'
 
 "" Color Themes
+NeoBundle 'vim-scripts/CSApprox'           " Make gvim-only colorschemes work transparently in terminal vim
 NeoBundle 'vim-airline/vim-airline'        " see https://github.com/vim-airline/vim-airline/wiki/Screenshots
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'tomasr/molokai'
@@ -71,7 +73,6 @@ NeoBundle 'kana/vim-textobj-syntax'
 NeoBundle 'kana/vim-textobj-line'
 NeoBundle 'nelstrom/vim-textobj-rubyblock'
 
-
 NeoBundle 'vim-scripts/gitignore'
 
 " LAZY LOADING from here on!
@@ -93,6 +94,7 @@ NeoBundleLazy 'groenewege/vim-less', {'on_ft': 'less'}
 NeoBundleLazy 'hail2u/vim-css3-syntax', {'on_ft': 'css'}
 NeoBundleLazy 'chrisbra/csv.vim', {'on_ft': 'csv'}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', {'on_ft': 'python'}
+NeoBundleLazy 'jmcantrell/vim-virtualenv', {'on_ft': 'python'}
 NeoBundleLazy 'elzr/vim-json', {'on_ft': 'json'}
 NeoBundleLazy 'cespare/vim-toml', {'on_ft': 'toml'}
 NeoBundleLazy 'PotatoesMaster/i3-vim-syntax', {'on_ft': 'i3'}
