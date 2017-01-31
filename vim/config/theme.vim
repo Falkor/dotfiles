@@ -40,6 +40,7 @@ set guioptions=aci
 if has("gui_mac") || has("gui_macvim")
 	set guifont=Source\ Code\ Pro\ for\ Powerline:h14
 	set transparency=7
+	set langmenu=en_EN.UTF-8
 else
 	let g:CSApprox_loaded = 1
 	set guifont=Anonymous\ Pro\ 12

@@ -295,6 +295,7 @@ endif
 
 if neobundle#tap('syntastic') "{{{
 	let g:syntastic_always_populate_loc_list=1
+	let g:syntastic_auto_loc_list = 1
 	let g:syntastic_error_symbol='✗'
 	let g:syntastic_warning_symbol='⚠'
 	let g:syntastic_style_error_symbol = '✗'
@@ -305,6 +306,7 @@ if neobundle#tap('syntastic') "{{{
 	let g:syntastic_python_flake8_post_args='--ignore=W391'
 	let g:syntastic_tex_chktex_showmsgs = 0
 	let g:syntastic_auto_jump = 0
+	let g:syntastic_check_on_wq = 0
 	" let g:syntastic_disabled_filetypes=['tex']
 	call neobundle#untap()
 endif
