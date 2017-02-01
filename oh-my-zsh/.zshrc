@@ -34,7 +34,7 @@ ZSH_CUSTOM=$ZDOTDIR/custom
 # - Custom themes: '$ZSH_CUSTOM/themes/*' i.e. ~/config/zsh/custom/themes/*
 
 # Specific to powerlevel9k
-# POWERLEVEL9K_MODE='awesome-fontconfig'
+#POWERLEVEL9K_MODE='flat'
 ZSH_THEME="powerlevel9k/powerlevel9k"
 # Customization of powerlevel9k: see custom falkor plugin below
 # OR overwrite these settings in $ZDOTDIR/custom.zshrc i.e. ~/config/zsh/custom.zshrc

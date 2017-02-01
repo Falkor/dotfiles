@@ -462,7 +462,7 @@ setup_installdir() {
         esac
       fi
     fi
-    # Final fallback solution: clone it
+    # Final fallback solution: clone it (in recursive mode to collect all submodules)
     if [ ! -e "${PREFIX_HOME}${INSTALL_DIR}" ]; then
         info "Cloning Falkor dotfiles in '${PREFIX_HOME}${INSTALL_DIR}'";
         execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${PREFIX_HOME}${INSTALL_DIR}";
@@ -518,24 +518,34 @@ __zsh(){
   [ -z "${WITH_ZSH}" ] && return
   info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration"
   check_bin zsh
+  # specific Oh-my-zsh config dirs
   local omzsh_dir="${DATADIR}/oh-my-zsh"
   local omzsh_custom_dir="${omzsh_dir}/custom"
   local omzsh_custom_theme_dir="${omzsh_custom_dir}/themes"
+  # falkor's dotfiles config dirs for ZSH
+  local zsh_dir="${PREFIX_HOME}${PREFIX}/zsh"
+  local zsh_custom_dir="${zsh_dir}/custom"
+  local zsh_custom_theme_dir="${zsh_custom_dir}/themes"
+  powerlevel9k_themedir="${zsh_custom_theme_dir}/powerlevel9k"
+
   # Let's go
   add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"  "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
   add_or_remove_link "${PREFIX}/zsh/.zshenv"      ~/.zshenv           "${PREFIX_HOME}"
   if [ "${ACTION}" == "install" ]; then
     if [ ! -d "${omzsh_dir}" ]; then
-      if [ -n "$(which git)" ]; then
-        execute "git clone ${OH_MY_ZSH_REPO} ${omzsh_dir}"
-      else
-        print_error_and_exit "Unable to install oh-my-zsh/. Check your network connection"
-      fi
+      check_bin git
+      execute "git clone ${OH_MY_ZSH_REPO} ${omzsh_dir}" || print_error_and_exit "Unable to install oh-my-zsh/. Check your network connection"
     fi
-    powerlevel9k_themedir="${omzsh_custom_theme_dir}/powerlevel9k"
     if [ ! -d "${powerlevel9k_themedir}" ]; then
       info "Installing Powerlevel9k custom theme for ZSH"
       execute "git clone ${ZSH_THEME_POWERLEVEL9K_REPO} ${powerlevel9k_themedir}"
+    else
+      # it might still be an (empty) git submodule
+      if [ ! -d "${powerlevel9k_themedir}/.git" ]; then
+        info "updating (expected) git submodule for powerlevel9k theme"
+        execute "git submodule init"
+        execute "git submodule update"
+      fi
     fi
     #__change_user_shell 'zsh'
   else

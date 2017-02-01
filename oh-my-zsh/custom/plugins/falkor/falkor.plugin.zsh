@@ -46,14 +46,15 @@
 # To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
 # Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
 #
-#POWERLEVEL9K_MODE='awesome-patched'
+#POWERLEVEL9K_MODE='awesome-patched' #awesome-fontconfig'
+#awesome-patched'
 
-# Disable dir/git icons
-POWERLEVEL9K_HOME_ICON=''
-POWERLEVEL9K_HOME_SUB_ICON=''
-POWERLEVEL9K_FOLDER_ICON=''
-
-DISABLE_AUTO_TITLE="true"
+# # Disable dir/git icons
+# POWERLEVEL9K_HOME_ICON=''
+# POWERLEVEL9K_HOME_SUB_ICON=''
+# POWERLEVEL9K_FOLDER_ICON=''
+#
+# DISABLE_AUTO_TITLE="true"
 
 # POWERLEVEL9K_VCS_GIT_ICON=''
 # POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
@@ -69,15 +70,21 @@ DISABLE_AUTO_TITLE="true"
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
 # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs virtualenv rbenv rvm time)
 
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+# POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
+# POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+#
+# POWERLEVEL9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
+#
+# #POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='orange'
+# POWERLEVEL9K_STATUS_VERBOSE=false
+# export DEFAULT_USER="$USER"
 
-POWERLEVEL9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
 
-#POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='orange'
-POWERLEVEL9K_STATUS_VERBOSE=false
-export DEFAULT_USER="$USER"
-
+# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status rbenv)
+# POWERLEVEL9K_STATUS_VERBOSE=false
+# POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
+# POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 
 # ===================================================================
 # ================== Falkor's Command Aliases =======================
@@ -96,7 +103,7 @@ alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
 alias ll='ls -l'      #long list
 
 # -------------------------------------------------------------------
-# Git -- most comes from the git plugin 
+# Git -- most comes from the git plugin
 # -------------------------------------------------------------------
 alias g='git'
 alias ga='git add'
