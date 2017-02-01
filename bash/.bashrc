@@ -551,10 +551,10 @@ do
     fi
 done
 
+#______________________________________________
 # Load Eventually [custom] local configs either
 # - common to all shells (from ~/.config/shell/[custom/]*.sh typically)
 # - specific to bash (from ~/.config/bash/custom/*.sh typically)
-
 for d in \
 ${COMMON_CONFIG_DIR} \
 ${COMMON_CUSTOM_CONFIG_DIR} \
@@ -569,6 +569,7 @@ do
   fi
 done
 
+#______________________
 # condense PATH entries
 PATH="$(puniq "$PATH")"
 MANPATH="$(puniq "$MANPATH")"
