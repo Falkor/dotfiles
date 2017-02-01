@@ -96,6 +96,15 @@ nnoremap <Leader>b :CtrlPBuffer<CR>   " open buffer
 
 nnoremap <Leader>w :w<CR>
 
+"___________________
+" Bash/Emacs-like {{{
+map <C-e> $
+map <C-a> 0|
+map <C-k> d$
+map! <C-e> <esc>A
+map! <C-a> <esc>0i
+map! <C-k> <esc>d$
+" }}}
 
 "___________________
 " Copy/Paste/Cut {{{
