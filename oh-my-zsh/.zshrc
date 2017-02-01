@@ -64,9 +64,6 @@ plugins=()
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
 plugins+=(ruby rvm rake vagrant gem)                  # Ruby stuff
-if ! type 'brew' > /dev/null; then
-	plugins+=(brew brew-cask) # Homebrew
-fi
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
 plugins+=(colored-man-page cp marked2 taskwarrior)
@@ -103,8 +100,22 @@ ${XDG_CONFIG_HOME}/shell/custom \
 ${ZDOTDIR}/custom
 do
   if [ -d "${d}" ]; then
-    for f in ${d}/*.[z]sh(N); do
-      [[ -r "$f" ]] && source $f
+    for f in ${d}/*.(sh|zsh)(N); do
+			#echo "sourcing '${f}'"
+			[[ -r "$f" ]] && source $f
     done
   fi
 done
+
+#______________________
+# condense PATH entries
+puniq () {
+    echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n |
+        cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
+}
+
+PATH="$(puniq "$PATH")"
+MANPATH="$(puniq "$MANPATH")"
+PKG_CONFIG_PATH="$(puniq "$PKG_CONFIG_PATH")"
+LD_LIBRARY_PATH="$(puniq "$LD_LIBRARY_PATH")"
+export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH

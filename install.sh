@@ -490,7 +490,9 @@ __change_user_shell() {
 __shell(){
   [ -z "${WITH_SHELL}" ] && return
   info "${ACTION} Common Shell configuration ~/.config/shell/"
-  [ "${ACTION}" == "install" ] && add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
+  if [ "${ACTION}" == "install" ]; then
+    add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX_HOME}${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
+  fi
   for n in ${SCRIPTDIR}/shell/available/*.sh; do
     name=$(basename ${n} .sh)
     if [[ "${AVAILABLE_DOTFILES}" == *${name}* ]]; then
@@ -499,7 +501,7 @@ __shell(){
     fi
     shell_custom_enable "${name}"
   done
-  [ "${ACTION}" != "install" ] && add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
+  [ "${ACTION}" != "install" ] && add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX_HOME}${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
 
 }
 ## Install/remove specific dotfiles
@@ -702,8 +704,8 @@ cd ~
 if [ -z "${TARGETS}" ]; then
     warning " "
     warning "By default, this installer does nothing except updating ${INSTALL_DIR}."
-    warning "Use '$0 --all' to install all available configs. OR use a discrete set of options."
-    warning "Ex: '$0 $MODE --zsh --vim'"
+    warning "Use '$COMMAND --all' to install all available configs. OR use a discrete set of options."
+    warning "Ex: '$COMMAND $MODE --zsh --vim'"
     warning " "
     exit 0
 fi

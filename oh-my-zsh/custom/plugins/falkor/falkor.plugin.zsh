@@ -48,8 +48,7 @@
 #
 # Eventually adapt (in custom.zshrc) the below POWERLEVEL9K_MODE to match
 # your font installation.
-#POWERLEVEL9K_MODE='awesome-patched' #awesome-fontconfig'
-#awesome-patched'
+#POWERLEVEL9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
 
 # Disable dir/git icons
 POWERLEVEL9K_HOME_ICON=''
@@ -57,6 +56,8 @@ POWERLEVEL9K_HOME_SUB_ICON=''
 POWERLEVEL9K_FOLDER_ICON=''
 
 POWERLEVEL9K_APPLE_ICON='\uE26E'
+POWERLEVEL9K_LINUX_ICON='\uE271'
+POWERLEVEL9K_BACKGROUND_JOBS_ICON='\uE82F '
 DISABLE_AUTO_TITLE="true"
 
 POWERLEVEL9K_VCS_GIT_ICON=''
@@ -250,8 +251,8 @@ alias em="emacsclient -nw --alternate-editor='vim'"
 # ---------------
 # ZSH management
 # ---------------
-alias zshrc="$EDITOR ~/.zshrc" # Quick access to the ~/.zshrc file
-alias sourcezshrc="source ~/.zshrc"
+alias zshrc="$EDITOR ${XDG_CONFIG_HOME}/zsh/zshrc" # Quick access to the .zshrc file
+alias sourcezshrc="source ${XDG_CONFIG_HOME}/zsh/zshrc"
 alias zshfalkor="$EDITOR ~/.oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
 
 #--------------

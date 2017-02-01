@@ -55,8 +55,7 @@ On __Linux__:
 
 ~~~bash
 # Debian / Ubuntu
-$> sudo apt-get install git git-flow bash-completion screen curl subversion zsh
-$> sudo apt-get install python-pip git
+$> sudo apt-get install git git-flow bash-completion screen curl subversion zsh fonts-font-awesome
 ~~~
 
 ## Falkor's dotfiles Installation
