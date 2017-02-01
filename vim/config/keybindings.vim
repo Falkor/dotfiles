@@ -114,9 +114,9 @@ endif
 " see http://tilvim.com/2014/03/18/a-better-paste.html
 " a better paste
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
-noremap YY "+y<CR>
+" noremap YY "+y<CR>
 " noremap <leader>p "+gP<CR>
-noremap XX "+x<CR>
+" noremap XX "+x<CR>
 
 if has('macunix')
   " pbcopy for OSX copy/paste
