@@ -243,17 +243,17 @@ alias t='task'
 # ---------------
 # Emacs business
 # ---------------
-
 alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
-alias es="emacs --daemon"
-alias em="emacsclient -nw --alternate-editor='vim'"
+#alias es="emacs --daemon"
+#alias em="emacsclient -nw --alternate-editor='vim'"
 
 # ---------------
 # ZSH management
 # ---------------
+alias zshenv="$EDITOR ${HOME}/.zshenv" # Quick access to the .zshenv file
 alias zshrc="$EDITOR ${XDG_CONFIG_HOME}/zsh/zshrc" # Quick access to the .zshrc file
 alias sourcezshrc="source ${XDG_CONFIG_HOME}/zsh/zshrc"
-alias zshfalkor="$EDITOR ~/.oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
+alias zshfalkor="$EDITOR ${XDG_CONFIG_HOME}/zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
 
 #--------------
 # Global alias
