@@ -544,8 +544,8 @@ __zsh(){
       # it might still be an (empty) git submodule
       if [ ! -d "${powerlevel9k_themedir}/.git" ]; then
         info "updating (expected) git submodule for powerlevel9k theme"
-        execute "git submodule init"
-        execute "git submodule update"
+        execute "cd ${PREFIX_HOME}${INSTALL_DIR} && git submodule init"
+        execute "cd ${PREFIX_HOME}${INSTALL_DIR} && git submodule update"
       fi
     fi
     __change_user_shell 'zsh'
