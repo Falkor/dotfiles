@@ -37,6 +37,7 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOTFILES_DIR=dotfiles.falkor.d
 [ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="$HOME/.config"
 [ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="$HOME/.local/share"
+[ "$COMMAND" == 'bash' ] && COMMAND="${PREFIX}/${DOTFILES_DIR}/install.sh"
 
 # List of available dotfiles -- now get by __set_falkor_dotfiles_available(<path>)
 #AVAILABLE_DOTFILES=$(find ${SCRIPTDIR}/ -mindepth 1 -maxdepth 1 -type d \( ! -iname '.*' \) -exec basename {} \; | grep -Ev '(bin|docs|screenshots|tests)' | xargs echo rvm )
@@ -444,7 +445,7 @@ setup_installdir() {
     check_bin 'git'
     if [ ! -d "${PREFIX_HOME}${PREFIX}" ]; then
         info "creating the prefix directory '${PREFIX_HOME}${PREFIX}'"
-        really_continue
+        #really_continue
         execute "mkdir -p ${PREFIX_HOME}${PREFIX}"
     fi
     if [ -d "${SCRIPTDIR}/.git" -a ! -e "${PREFIX_HOME}${INSTALL_DIR}" ]; then
