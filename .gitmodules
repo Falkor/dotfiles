@@ -2,9 +2,6 @@
 	path = .submodules/Makefiles
 	url = https://github.com/Falkor/Makefiles.git
 	branch = devel
-[submodule "oh-my-zsh/custom/plugins/zsh-completions"]
-	path = oh-my-zsh/custom/plugins/zsh-completions
-	url = https://github.com/zsh-users/zsh-completions
 [submodule "tests/helpers/assertions"]
 	path = tests/helpers/assertions
 	url = https://github.com/jasonkarns/bats-assert
