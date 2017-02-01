@@ -11,8 +11,6 @@ tap 'homebrew/core'
 tap 'homebrew/dupes'
 tap 'homebrew/services'
 tap 'homebrew/versions'
-
-tap 'buo/cask-upgrade'
 tap 'railwaycat/emacsmacport'
 
 # Couple of mandatory applications

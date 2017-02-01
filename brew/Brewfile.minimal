@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# Minimal Brewfile for Falkor's dotfile installation --
+# see https://github.com/Falkor/dotfiles
+
+# Pre-configuration for brew sources
+tap 'buo/cask-upgrade'
+tap 'caskroom/cask'
+tap 'caskroom/fonts'
+tap 'homebrew/bundle'
+tap 'homebrew/completions'
+tap 'homebrew/core'
+tap 'railwaycat/emacsmacport'
+
+# Couple of mandatory applications
+brew 'readline'
+brew 'bash'
+brew 'bash-completion'
+brew 'coreutils'
+brew 'curl'
+brew 'git'
+brew 'git-flow'
+brew 'mas'
+brew 'subversion'
+brew 'terminal-notifier'
+brew 'tig'
+brew 'vim'
+brew 'wget'
+
+# completions
+brew 'bash-completion'
+brew 'brew-cask-completion'
+brew 'zsh-completions'
+
+# Mac GUIs Apps
+cask 'atom'
+cask 'emacs-mac'
+cask 'macvim'
+
+# Special fonts
+cask 'font-source-code-pro-for-powerline'
+cask 'font-hack-nerd-font'
