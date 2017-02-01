@@ -40,7 +40,7 @@ these config files:
 * vim
 * screen
 
-On Mac OS, assuming you have installed [HomeBrew](http://brew.sh/) (you really should), you can use `brew/Brewfile.minimal` to install these dependencies as follows:
+On __Mac OS__, assuming you have installed [HomeBrew](http://brew.sh/) (you really should), you can use `brew/Brewfile.minimal` to install these dependencies as follows:
 
 ~~~bash
 # Install brew bundle -- see https://github.com/Homebrew/homebrew-bundle
@@ -51,7 +51,14 @@ $> curl -o /tmp/Brewfile https://raw.githubusercontent.com/Falkor/dotfiles/maste
 $> brew bundle --file=/tmp/Brewfile -v
 ~~~
 
-## Installation
+On __Linux__:
+
+~~~bash
+# Debian / Ubuntu
+$> sudo apt-get install git git-flow bash-completion screen curl subversion zsh
+~~~
+
+## Falkor's dotfiles Installation
 
 ### All-in-one git-free install
 

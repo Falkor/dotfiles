@@ -1,0 +1,3 @@
+.zcompdump*
+/custom.zshenv
+/custom.zshrc

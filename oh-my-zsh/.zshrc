@@ -1,7 +1,28 @@
 # -*- mode:sh; -*-
+###############################################################################
+#              __ ___  _           __  __      __ _________  _   _
+#             | _/ _ \| |__       |  \/  |_   |_ |__  / ___|| | | |
+#             | | | | | '_ \ _____| |\/| | | | | | / /\___ \| |_| |
+#             | | |_| | | | |_____| |  | | |_| | |/ /_ ___) |  _  |
+#             | |\___/|_| |_|     |_|  |_|\__, | /____|____/|_| |_|
+#             |__|                        |___/__|
+#
+###############################################################################
+# Resources:
+# - https://github.com/smaximov/zsh-config
+#
+# You SHOULD have made `~/.zshenv` a symbolic link pointing to
+# `$ZDOTDIR/.zshenv` as follow:
+#
+#           ln -s .config/zsh/.zshenv ~/.zshenv
+#
+# This ensure all expected environment variable (in particular the ones of
+# XDG Base Directory Specification (see https://specifications.freedesktop.org/basedir-spec/latest/)
+# are set
+###############################################################################
 
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH=$XDG_DATA_HOME/oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -100,7 +121,7 @@ SHELL_CUSTOM_CONFIG_DIR=$HOME/.config/shell/custom
 if [ -d "${SHELL_CUSTOM_CONFIG_DIR}" ]; then
 	for f in ${SHELL_CUSTOM_CONFIG_DIR}/*.sh; do
         if [ -r "$f" ]; then
-           . $f       
+           . $f
 	fi
 	done
 fi

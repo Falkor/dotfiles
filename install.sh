@@ -486,16 +486,26 @@ __bash(){
 __zsh(){
   [ -z "${WITH_ZSH}" ] && return
   info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration"
-  add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"    "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
-  if [ "${MODE}" != "--delete" ]; then
-    install_ohmyzsh
-    install_custom_ohmyzsh
+  check_bin zsh
+  local omzsh_dir="${DATADIR}/oh-my-zsh"
+  add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"  "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
+  add_or_remove_link "${PREFIX}/zsh/.zshenv"      ~/.zshenv           "${PREFIX_HOME}"
+  if [ "${ACTION}" == "install" ]; then
+    if [ ! -d "${omzsh_dir}" ]; then
+      if [ -n "$(which git)" ]; then
+        execute "git clone https://github.com/robbyrussell/oh-my-zsh.git ${omzsh_dir}"
+      else
+        print_error_and_exit "Unable to install oh-my-zsh/. Check your network connection"
+      fi
+    fi
+
+#    install_ohmyzsh
+#    install_custom_ohmyzsh
   else
-    if [ -f ~/.oh-my-zsh/tools/uninstall.sh ]; then
-      execute "bash ~/.oh-my-zsh/tools/uninstall.sh"
+    if [ -f ${omzsh_dir}/tools/uninstall.sh ]; then
+      execute "bash ${omzsh_dir}/tools/uninstall.sh"
     fi
   fi
-  add_or_remove_link "${PREFIX}/zsh/.zshrc"       ~/.zshrc       "${PREFIX_HOME}"
   __shell
 }
 # GNU Emacs
