@@ -260,7 +260,8 @@ add_or_remove_link() {
 }
 
 ###
-# Enable a specific dotfile customization to the shells (bash, zsh...)
+# Enable (or disable) a specific dotfile customization common to all shells
+# (bash, zsh...)
 ##
 shell_custom_enable() {
   local name=$1
@@ -269,19 +270,6 @@ shell_custom_enable() {
   local src="${configdir}/available/${name}.sh"
   local dst="${configdir}/${name}.sh"
   add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
-
-  #
-  # if [ "${ACTION}" != 'install' ]; then
-  #   [ -h "${dst}" ] && add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
-  #   return
-  # fi
-  # if [ ! -d "${configdir}" ]; then
-  #   WITH_SHELL="--shell"
-  #   __shell
-  # fi
-  # if [[ -d "${configdir}" && -f "${src}" ]]; then
-  #   add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
-  # fi
 }
 
 add_or_remove_copy() {
@@ -339,62 +327,62 @@ add_or_remove_copy() {
 #     fi
 # }
 
-install_custom_ohmyzsh() {
-    info "installing Falkor custom plugins for oh-my-zsh/"
-    local customdir="$HOME/.oh-my-zsh/custom/"
-    #local falkor_customdir="${INSTALL_DIR}/oh-my-zsh/custom"
-    local falkor_customdir="${PREFIX_HOME}${PREFIX}/zsh/custom"
-    [ ! -h "${customdir}/.ref" ] && execute "ln -s ${falkor_customdir} ${customdir}/.ref"
-    for f in `ls ${falkor_customdir}/*.zsh`; do
-        ff="$(basename $f)"
-        if [ ! -h "${customdir}/$ff" ]; then
-            echo "     - add custom '$ff'"
-            execute "ln -s .ref/$ff ${customdir}/$ff"
-        fi
-    done
-    local private_aliases="${customdir}/private_aliases.zsh"
-    if [ ! -f "${private_aliases}" ]; then
-        cat  << 'EOF' > ${private_aliases}
+# install_custom_ohmyzsh() {
+#     info "installing Falkor custom plugins for oh-my-zsh/"
+#     local customdir="$HOME/.oh-my-zsh/custom/"
+#     #local falkor_customdir="${INSTALL_DIR}/oh-my-zsh/custom"
+#     local falkor_customdir="${PREFIX_HOME}${PREFIX}/zsh/custom"
+#     [ ! -h "${customdir}/.ref" ] && execute "ln -s ${falkor_customdir} ${customdir}/.ref"
+#     for f in `ls ${falkor_customdir}/*.zsh`; do
+#         ff="$(basename $f)"
+#         if [ ! -h "${customdir}/$ff" ]; then
+#             echo "     - add custom '$ff'"
+#             execute "ln -s .ref/$ff ${customdir}/$ff"
+#         fi
+#     done
+#     local private_aliases="${customdir}/private_aliases.zsh"
+#     if [ ! -f "${private_aliases}" ]; then
+#         cat  << 'EOF' > ${private_aliases}
+# #
+# # private_aliases.zsh
+# #
+# # Add your local (private) aliases for zsh here.
+# EOF
+#     fi
+#     local plugindir="${customdir}/plugins"
+#     local falkor_plugindir="${falkor_customdir}/plugins"
+#     [ ! -h "${plugindir}/.ref" ] && execute "ln -s ../.ref/plugins ${plugindir}/.ref"
+#     for d in `ls -d ${falkor_plugindir}/*`; do
+#         dd=`basename $d`
+#         if [ ! -h "${plugindir}/$dd" ]; then
+#             echo "     - installing custom oh-my-zsh plugin '$dd'"
+#             execute "ln -s .ref/$dd ${plugindir}/$dd"
+#         fi
+#     done
+#     local themedir="${customdir}/themes"
+#     [ ! -d "${themedir}" ] && execute "mkdir -p ${customdir}/themes"
+#     local falkor_themedir="${falkor_customdir}/themes"
+#     [ ! -h "${themedir}/.ref" ] && execute "ln -s ../.ref/themes ${themedir}/.ref"
+#     for d in `ls -d ${falkor_themedir}/*`; do
+#         dd=`basename $d`
+#         if [ ! -h "${themedir}/$dd" ]; then
+#             echo "     - installing custom oh-my-zsh theme '$dd'"
+#             execute "ln -s .ref/$dd ${themedir}/$dd"
+#         fi
+#     done
 #
-# private_aliases.zsh
-#
-# Add your local (private) aliases for zsh here.
-EOF
-    fi
-    local plugindir="${customdir}/plugins"
-    local falkor_plugindir="${falkor_customdir}/plugins"
-    [ ! -h "${plugindir}/.ref" ] && execute "ln -s ../.ref/plugins ${plugindir}/.ref"
-    for d in `ls -d ${falkor_plugindir}/*`; do
-        dd=`basename $d`
-        if [ ! -h "${plugindir}/$dd" ]; then
-            echo "     - installing custom oh-my-zsh plugin '$dd'"
-            execute "ln -s .ref/$dd ${plugindir}/$dd"
-        fi
-    done
-    local themedir="${customdir}/themes"
-    [ ! -d "${themedir}" ] && execute "mkdir -p ${customdir}/themes"
-    local falkor_themedir="${falkor_customdir}/themes"
-    [ ! -h "${themedir}/.ref" ] && execute "ln -s ../.ref/themes ${themedir}/.ref"
-    for d in `ls -d ${falkor_themedir}/*`; do
-        dd=`basename $d`
-        if [ ! -h "${themedir}/$dd" ]; then
-            echo "     - installing custom oh-my-zsh theme '$dd'"
-            execute "ln -s .ref/$dd ${themedir}/$dd"
-        fi
-    done
-
-}
+# }
 
 # courtesy of https://github.com/holman/dotfiles/blob/master/script/bootstrap
 setup_gitconfig_local () {
-    local gitconfig_local=${1:-"${PREFIXHOME}${PREFIX}/git/config.local"}
-    local dotfile_gitconfig_local="${INSTALL_DIR}/git/$(basename ${gitconfig_local})"
+    local gitconfig_local=${1:-"${PREFIX_HOME}${PREFIX}/git/config.local"}
+    local dotfile_gitconfig_local="${PREFIX_HOME}${INSTALL_DIR}/git/$(basename ${gitconfig_local})"
     if [ -f "${dotfile_gitconfig_local}" ]; then
         #add_or_remove_link "${dotfile_gitconfig_local}" "${gitconfig_local}"
         return
     fi
     if [ ! -f "${gitconfig_local}" ]; then
-        info "setup Local / private gitconfig '${gitconfig_local}'"
+        info "setup Local/private gitconfig '${gitconfig_local}'"
         [ -n "${SIMULATION}" ] && return
         cat > $gitconfig_local <<'EOF'
 # -*- mode: gitconfig; -*-
@@ -486,13 +474,37 @@ __change_user_shell() {
   fi
 }
 
+###
+# Utility function to bootstrap (or clean) a specific dotfile
+# configuration directory
+# Usage: __setup_or_clean_configdir '<name>' '<action>'
+# where:
+#  - <name> is a dotfile directory (under ~/.config/dotfiles.falkor.d/)
+#  - <action> is [ 'install', 'uninstall']
+##
+__setup_or_clean_configdir() {
+  [ $# -ne 2 ] && print_error_and_exit "[${FUNCNAME[0]}] missing command argument"
+  local name=$1
+  local action=$2
+  local shortname=${name}
+  [ "${name}" == 'oh-my-zsh' ] && shortname='zsh'
+  [ ! -d "${PREFIX_HOME}${INSTALL_DIR}/${name}" ] && return
+  if [ "${ACTION}" == "${action}" ]; then
+    add_or_remove_link "${DOTFILES_DIR}/${name}"  "${PREFIX_HOME}${PREFIX}/${shortname}"  "${PREFIX_HOME}${PREFIX}"
+  fi
+}
+setup_configdir() {
+  __setup_or_clean_configdir "$1" 'install'
+}
+clean_configdir() {
+  __setup_or_clean_configdir "$1" 'uninstall'
+}
+
 ## Install common shell configs
 __shell(){
   [ -z "${WITH_SHELL}" ] && return
   info "${ACTION} Common Shell configuration ~/.config/shell/"
-  if [ "${ACTION}" == "install" ]; then
-    add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX_HOME}${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
-  fi
+  setup_configdir 'shell'
   for n in ${SCRIPTDIR}/shell/available/*.sh; do
     name=$(basename ${n} .sh)
     if [[ "${AVAILABLE_DOTFILES}" == *${name}* ]]; then
@@ -501,20 +513,19 @@ __shell(){
     fi
     shell_custom_enable "${name}"
   done
-  [ "${ACTION}" != "install" ] && add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX_HOME}${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
-
+  clean_configdir 'shell'
 }
 ## Install/remove specific dotfiles
 __bash(){
   [ -z "${WITH_BASH}" ] && return
   info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-  [ "${ACTION}" == "install" ] && add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
+  setup_configdir 'bash'
   add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
   add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
   add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
   info "${ACTION} custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
   add_or_remove_link "${PREFIX_HOME}${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX_HOME}${PREFIX}/bash/custom/aliases.sh"
-  [ "${ACTION}" != "install" ] && add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
+  clean_configdir 'bash'
   __shell
 }
 # Zsh
@@ -522,6 +533,7 @@ __zsh(){
   [ -z "${WITH_ZSH}" ] && return
   info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration"
   check_bin zsh
+  setup_configdir 'oh-my-zsh'
   # specific Oh-my-zsh config dirs
   local omzsh_dir="${DATADIR}/oh-my-zsh"
   local omzsh_custom_dir="${omzsh_dir}/custom"
@@ -533,7 +545,6 @@ __zsh(){
   powerlevel9k_themedir="${zsh_custom_theme_dir}/powerlevel9k"
 
   # Let's go
-  add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"  "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
   add_or_remove_link "${PREFIX}/zsh/.zshenv"      ~/.zshenv           "${PREFIX_HOME}"
   if [ "${ACTION}" == "install" ]; then
     if [ ! -d "${omzsh_dir}" ]; then
@@ -556,6 +567,7 @@ __zsh(){
     [ -d "${omzsh_dir}" ] && execute "rm -rf ${omzsh_dir}" || true
     __change_user_shell 'bash'
   fi
+  clean_configdir 'oh-my-zsh'
   __shell
 }
 # GNU Emacs
@@ -571,37 +583,33 @@ __emacs(){
 __vim(){
   [ -z "${WITH_VIM}" ] && return
   info "${ACTION} Falkor's VIM configuration"
-  add_or_remove_link "${DOTFILES_DIR}/vim"    "${PREFIX}/vim"     "${PREFIX_HOME}${PREFIX}"
+  setup_configdir 'vim'
   shell_custom_enable 'vim'
-    # if  [ "${MODE}" != "--delete" ]; then
-    #     warning "Run vim afterwards to download the expected package (using NeoBundle)"
-    #     if [ "$(uname -s)" == "Linux" ]; then
-    #         warning "After Neobundle installation and vim relaunch, you might encounter the bug #156"
-    #         warning "        https://github.com/avelino/vim-bootstrap/issues/156"
-    #     fi
-    # fi
+  if  [ "${MODE}" != "--delete" ]; then
+    warning "To use effectively this vim configuration, you need to export VIMINIT"
+    warning "as done in ~/${PREFIX}/shell/vim.sh : "
+    warning " "
+    warning "   export VIMINIT='let \$MYVIMRC=\"\$XDG_CONFIG_HOME/vim/vimrc\" | source \$MYVIMRC'"
+    warning " "
+  fi
+  clean_configdir 'vim'
 }
 # Git
 __git(){
   [ -z "${WITH_GIT}" ] && return
   info "${ACTION} Falkor's Git configuration ~/.gitconfig[.local]"
-  add_or_remove_link "${DOTFILES_DIR}/git"    "${PREFIX}/git"     "${PREFIX_HOME}${PREFIX}"
-  #add_or_remove_link "${PREFIX}/git/.gitconfig"       ~/.gitconfig       "${PREFIX_HOME}"
-  #add_or_remove_link "${INSTALL_DIR}/git/.gitconfig" ~/.gitconfig
-  if [ "${MODE}" != "--delete" ]; then
-    setup_gitconfig_local
-    #~/.gitconfig.local
-    # else
-    #     add_or_remove_copy ' ' ${PREFIXHOME}${PREFIX}/git/config.local
-    #     #~/.gitconfig.local
-  fi
+  setup_configdir 'git'
+  [ "${ACTION}" != "install" ] && setup_gitconfig_local
+  clean_configdir 'git'
+
 }
 ## GNU Screen
 __screen(){
  [ -z "${WITH_SCREEN}" ] && return
     info "${ACTION} ULHPC GNU Screen configuration ~/.screenrc"
-    add_or_remove_link "${DOTFILES_DIR}/screen"    "${PREFIX}/screen"     "${PREFIX_HOME}${PREFIX}"
+    setup_configdir 'screen'
     add_or_remove_link "${PREFIX}/screen/.screenrc"      ~/.screenrc       "${PREFIX_HOME}"
+    clean_configdir 'screen'
 }
 ## HomeBrew -- http://brew.sh
 __brew(){
@@ -618,8 +626,9 @@ __curl() {
   [ -z "${WITH_CURL}" ]  && return
   [ -z "$(which curl)" ] && return
   info "${ACTION} CURL configuration"
-  add_or_remove_link "${DOTFILES_DIR}/curl"    "${PREFIX}/curl"     "${PREFIX_HOME}${PREFIX}"
+  setup_configdir 'curl'
   shell_custom_enable 'curl'
+  clean_configdir 'curl'
 }
 ## RVM -- see https://rvm.io/rvm/install
 __rvm(){
@@ -629,7 +638,7 @@ __rvm(){
     [ -z "$(which rvm)" ] && warning "Unable to find the rvm command thus exiting" && return
     execute "rvm implode"
     execute "gem uninstall rvm"
-    return    # Exiting ininstall
+    return    # Exiting uninstall
   fi
   if [ ! -d "$HOME/.rvm" ]; then
     execute "gpg --keyserver hkp://keys.gnupg.net --keyserver-options timeout=5 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
@@ -668,6 +677,7 @@ while [ $# -ge 1 ]; do
         --prefix)  shift;        PREFIX=$1;;
         --with-bash  | --bash)   TARGETS+='--bash';;
         --with-zsh   | --zsh)    TARGETS+='--zsh';;
+        --with-shell | --shell)  TARGETS+='--shell';;
         --with-emacs | --emacs)  TARGETS+='--emacs';;
         --with-vim   | --vim)    TARGETS+='--vim';;
         --with-git   | --git)    TARGETS+='--git';;
@@ -710,10 +720,12 @@ if [ -z "${TARGETS}" ]; then
     exit 0
 fi
 
+
 for target in ${TARGETS}; do
     case $target in
       *bash*)   WITH_SHELL='--shell'; WITH_BASH="$target"; __bash;;
       *zsh*)    WITH_SHELL='--shell'; WITH_ZSH="$target";  __zsh;;
+      *shell*)  WITH_SHELL="$target";  __shell;;
       *emacs*)  WITH_EMACS="$target";  __emacs;;
       *vim*)    WITH_VIM="$target";    __vim;;
       *git*)    WITH_GIT="$target";    __git;;
