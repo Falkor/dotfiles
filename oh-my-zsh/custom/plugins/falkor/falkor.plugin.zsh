@@ -36,6 +36,9 @@
 #    plugins+=(falkor)
 
 #####################################################################################
+_homebrew-installed() {
+  type brew &> /dev/null
+}
 
 # =========================================
 # ================ Color theme ============
@@ -63,6 +66,7 @@ POWERLEVEL9K_BACKGROUND_JOBS_ICON='\uE82F '
 DISABLE_AUTO_TITLE="true"
 
 POWERLEVEL9K_VCS_GIT_ICON=''
+POWERLEVEL9K_VCS_TAG_ICON='\uE817 '
 POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
 POWERLEVEL9K_VCS_STASH_ICON='\uE133 '
 POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
