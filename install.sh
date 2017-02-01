@@ -465,8 +465,9 @@ setup_installdir() {
     # Final fallback solution: clone it (in recursive mode to collect all submodules)
     if [ ! -e "${PREFIX_HOME}${INSTALL_DIR}" ]; then
         info "Cloning Falkor dotfiles in '${PREFIX_HOME}${INSTALL_DIR}'";
-        execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${PREFIX_HOME}${INSTALL_DIR}";
-        # in this case, we need to update AVAILABLE_DOTFILES
+        execute "git clone -q https://github.com/Falkor/dotfiles.git ${PREFIX_HOME}${INSTALL_DIR}";
+        execute "cd ${PREFIX_HOME}${INSTALL_DIR} && git submodule init"
+        execute "cd ${PREFIX_HOME}${INSTALL_DIR} && git submodule update"
     fi
     __set_falkor_dotfiles_available "${PREFIX_HOME}${INSTALL_DIR}"
 }
@@ -547,10 +548,10 @@ __zsh(){
         execute "git submodule update"
       fi
     fi
-    #__change_user_shell 'zsh'
+    __change_user_shell 'zsh'
   else
     [ -d "${omzsh_dir}" ] && execute "rm -rf ${omzsh_dir}" || true
-    #__change_user_shell 'bash'
+    __change_user_shell 'bash'
   fi
   __shell
 }
@@ -621,14 +622,16 @@ __curl() {
 __rvm(){
   [ -z "${WITH_RVM}" ]  && return
   info "${ACTION} RVM -- see https://rvm.io/rvm/install"
-  if [ "${ACTION}" == 'install' ]; then
-    execute "gpg --keyserver hkp://keys.gnupg.net --keyserver-options timeout=5 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
-    check_bin 'curl'
-    execute "\curl -sSL https://get.rvm.io | bash -s stable --ignore-dotfiles --with-default-gems='bundler rake git_remote_branch'"
-  else
+  if [ "${ACTION}" != 'install' ]; then
     [ -z "$(which rvm)" ] && warning "Unable to find the rvm command thus exiting" && return
     execute "rvm implode"
     execute "gem uninstall rvm"
+    return    # Exiting ininstall
+  fi
+  if [ ! -d "$HOME/.rvm" ]; then
+    execute "gpg --keyserver hkp://keys.gnupg.net --keyserver-options timeout=5 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+    check_bin 'curl'
+    execute "\curl -sSL https://get.rvm.io | bash -s stable --ignore-dotfiles --with-default-gems='bundler rake git_remote_branch'"
   fi
   shell_custom_enable 'rvm'
 }
