@@ -21,14 +21,14 @@
 #
 ### Organization
 #
-# ~/.oh-my-zsh/
+# ~/.config/zsh/custom
 #   ├── plugins
 #       └── falkor
 #           └── falkor.plugin.zsh
 #
 ### Usage:
 #
-# In your ~/.zshrc,  add the following
+# In your .zshrc,  add the following
 #
 #    [...]
 #    plugins=(...) # Whatever default plugins you wish to use
@@ -46,7 +46,7 @@
 # To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
 # Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
 #
-POWERLEVEL9K_MODE='awesome-patched'
+#POWERLEVEL9K_MODE='awesome-patched'
 
 # Disable dir/git icons
 POWERLEVEL9K_HOME_ICON=''
@@ -55,19 +55,19 @@ POWERLEVEL9K_FOLDER_ICON=''
 
 DISABLE_AUTO_TITLE="true"
 
-POWERLEVEL9K_VCS_GIT_ICON=''
-POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
-#POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
-
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs virtualenv rbenv rvm time)
+# POWERLEVEL9K_VCS_GIT_ICON=''
+# POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
+# POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
+# POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
+# POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
+# POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
+#
+# POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
+# POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
+# #POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
+#
+# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs virtualenv rbenv rvm time)
 
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
@@ -96,7 +96,7 @@ alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
 alias ll='ls -l'      #long list
 
 # -------------------------------------------------------------------
-# Git
+# Git -- most comes from the git plugin 
 # -------------------------------------------------------------------
 alias g='git'
 alias ga='git add'

@@ -47,8 +47,17 @@ export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local/share
 
+# enable en_US locale w/ UTF-8 encodings if not already configured
+export LANG=en_US.UTF-8
+export LANGUAGE=en
+export LC_ALL="${LANG}"
+
+# Editor / pager
 unset ALTERNATE_EDITOR
+# Preferred editor for local and remote sessions
 test -n "$(command -v vim)" && EDITOR=vim || EDITOR=nano
+# Uncomment if you prefer macvim on local sessions
+# [[ -n $SSH_CONNECTION ]] && EDITOR='mvim'
 export EDITOR
 #export EDITOR='emacsclient -t'
 if test -n "$(command -v less)" ; then
@@ -67,14 +76,14 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 # ====== ZSH Specific variables =========
 export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 export ZSH_CACHE_DIR=$XDG_CACHE_HOME/zsh
-
 # Store ZSH files under XDG_CONFIG_HOME base directory.
 # This works by symlinking ~/.zshenv to ~/.config/zsh/.zshenv (this file).
-
 export HISTFILE=$ZSH_CACHE_DIR/zhistory
 
-# Custom enviroment variables
+#================================================================
+# [Final] Custom ZSH enviroment variables
 [[ -f $ZDOTDIR/custom.zshenv ]] && source $ZDOTDIR/custom.zshenv
+#================================================================
 
 # $HOME, sweet $HOME
 export PATH

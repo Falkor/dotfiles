@@ -24,30 +24,23 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$XDG_DATA_HOME/oh-my-zsh
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
+# Custom directory location
+ZSH_CUSTOM=$ZDOTDIR/custom
+
+################## Oh-My-ZSH (optional) customizations ########################
+#
+# === Oh-My-ZSH Prompt Theme ===
+# - Default themes:'$ZSH/themes/*' i.e. ~/.local/share/oh-my-zsh/themes/*
+# - Custom themes: '$ZSH_CUSTOM/themes/*' i.e. ~/config/zsh/custom/themes/*
+
+# Specific to powerlevel9k
+# POWERLEVEL9K_MODE='awesome-fontconfig'
 ZSH_THEME="powerlevel9k/powerlevel9k"
-#
-# Customization of powerlevel9k: see custom falkor plugin
-#
+# Customization of powerlevel9k: see custom falkor plugin below
+# OR overwrite these settings in $ZDOTDIR/custom.zshrc i.e. ~/config/zsh/custom.zshrc
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+# update every 7 days by default
+export UPDATE_ZSH_DAYS=7
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -62,66 +55,57 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
+##############################################################################
+#
+# === Oh-My-ZSH Plugins ===
+plugins=()
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+# Add them wisely, as too many plugins slow down shell startup.
+# - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
+#   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
+plugins+=(git-flow git-extras git-remote-branch hub)  # Git
+plugins+=(ruby rvm rake vagrant gem)                  # Ruby stuff
+if ! type 'brew' > /dev/null; then
+	plugins+=(brew brew-cask) # Homebrew
+fi
+[[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
+# Misc
+plugins+=(colored-man-page cp marked2 taskwarrior)
+#
+# - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
+#
+plugins+=(falkor)
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+#_______________________________________
+# [Final] Custom Oh-my-ZSH configuration
+# (for instance to change the plugins/themes set by Falkor's dotfiles)
+[[ -f $ZDOTDIR/custom.zshrc ]] && source $ZDOTDIR/custom.zshrc
+##############################################################################
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git-flow git-extras git-remote-branch hub rvm ruby brew brew-cask colored-man-page cp extract gem marked2 osx rake taskwarrior vagrant)
+# Create ZSH cache directory unless it already exists
+[[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
 
-# Custom plugins
-plugins+=(falkor zsh-completions)
-autoload -U compinit && compinit
+# Disable fancy colored shell prompts and auto-update on dumb terminals
+if [ $TERM = "dumb" ]; then
+   unsetopt zle
+   PS1="$ "
+   DISABLE_AUTO_UPDATE=true
+fi
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
+# Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-export EDITOR="vim"
-
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-export PATH="$HOME/bin:$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-SHELL_CUSTOM_CONFIG_DIR=$HOME/.config/shell/custom
-
-if [ -d "${SHELL_CUSTOM_CONFIG_DIR}" ]; then
-	for f in ${SHELL_CUSTOM_CONFIG_DIR}/*.sh; do
-        if [ -r "$f" ]; then
-           . $f
-	fi
-	done
-fi
+# Load eventually common [custom] configuration, either:
+# - common to all shells (from ~/.config/shell/[custom/]*.sh typically)
+# - specific to zsh (from ~/.config/zsh/custom/*.zsh
+for d in \
+${XDG_CONFIG_HOME}/shell \
+${XDG_CONFIG_HOME}/shell/custom \
+${ZDOTDIR}/custom
+do
+  if [ -d "${d}" ]; then
+    for f in ${d}/*.[z]sh(N); do
+      [[ -r "$f" ]] && source $f
+    done
+  fi
+done
