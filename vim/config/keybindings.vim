@@ -96,6 +96,11 @@ nnoremap <Leader>b :CtrlPBuffer<CR>   " open buffer
 
 nnoremap <Leader>w :w<CR>
 
+" " Mimic Emacs ??? {{{
+" autocmd FileType * setlocal indentkeys+=!<Tab>  " Use tab to indent
+
+" }}}
+
 "___________________
 " Bash/Emacs-like {{{
 map <C-e> $
@@ -105,6 +110,9 @@ map! <C-e> <esc>A
 map! <C-a> <esc>0i
 map! <C-k> <esc>d$
 " }}}
+
+" Comments comes from The NERD Commenter (A plugin that allows for easy
+" commenting of code for many filetypes.  http://www.vim.org/scripts/script.php?script_id=1218
 
 "___________________
 " Copy/Paste/Cut {{{
@@ -149,10 +157,6 @@ nnoremap <Leader><Right> gt
 nnoremap te :tabe<Space>
 " }}}
 
-" " Mimic Emacs ??? {{{
-autocmd FileType * setlocal indentkeys+=!<Tab>  " Use tab to indent
-
-" }}}
 
 " Buffer {{{
 noremap <leader>q :bd<CR>
