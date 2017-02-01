@@ -20,7 +20,7 @@ COMMAND=$(basename "$0")
 VERBOSE=""
 DEBUG=""
 SIMULATION=""
-OFFLINE=""
+UPDATE=""
 MODE=""
 FORCE=""
 
@@ -38,8 +38,13 @@ DOTFILES_DIR=dotfiles.falkor.d
 [ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="$HOME/.config"
 [ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="$HOME/.local/share"
 
-# List of available dotfiles
-AVAILABLE_DOTFILES=$(ls -d */ | cut -f1 -d'/' | grep -Ev '(bin|docs|screenshots|tests)' | xargs echo rvm )
+# List of available dotfiles -- now get by __set_falkor_dotfiles_available(<path>)
+#AVAILABLE_DOTFILES=$(find ${SCRIPTDIR}/ -mindepth 1 -maxdepth 1 -type d \( ! -iname '.*' \) -exec basename {} \; | grep -Ev '(bin|docs|screenshots|tests)' | xargs echo rvm )
+AVAILABLE_DOTFILES=
+
+# GIT URLs
+OH_MY_ZSH_REPO="https://github.com/robbyrussell/oh-my-zsh.git"
+ZSH_THEME_POWERLEVEL9K_REPO="https://github.com/bhilburn/powerlevel9k.git"
 
 # What to take care of (default is empty)
 WITH_SHELL=""     # Common shell stuff
@@ -97,7 +102,7 @@ NAME
 
 SYNOPSIS
     $COMMAND [-V | -h]
-    $COMMAND [--debug] [-v] [-n] [--offline] [options]
+    $COMMAND [--debug] [-v] [-n] [--update] [options]
     $COMMAND --delete [options]
 
 OPTIONS
@@ -119,8 +124,8 @@ OPTIONS
         Set the prefix directory for the dotfiles (Default: ~/.config)
     --delete --remove --uninstall
         Remove / Restore the installed components
-    --offline
-        Proceed in offline mode (assuming you have already cloned the repository)
+    --update
+        Update the Falkor's dotfile repository to the lastest version
     --all -a
         Install / delete ALL Falkor's dotfiles
     --bash --with-bash
@@ -207,6 +212,14 @@ check_bin() {
     done
 }
 
+###
+# Get the available dotfiles out of <path>
+##
+__set_falkor_dotfiles_available() {
+  local path=${1:-${SCRIPTDIR}}
+  AVAILABLE_DOTFILES=$(find ${path}/ -mindepth 1 -maxdepth 1 -type d \( ! -iname '.*' \) -exec basename {} \; | grep -Ev '(bin|docs|screenshots|tests)' | xargs echo rvm)
+}
+
 ####
 # Add (or remove) a given link pointing to the corresponding dotfile.
 # A backup of the file is performed if it previoiusly existed.
@@ -254,17 +267,20 @@ shell_custom_enable() {
   [ "${ACTION}" != 'install' ] && configdir=${PREFIX_HOME}${INSTALL_DIR}/shell
   local src="${configdir}/available/${name}.sh"
   local dst="${configdir}/${name}.sh"
-  if [ "${ACTION}" != 'install' ]; then
-    [ -h "${dst}" ] && add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
-    return
-  fi
-  if [ ! -d "${configdir}" ]; then
-    WITH_SHELL="--shell"
-    __shell
-  fi
-  if [[ -d "${configdir}" && -f "${src}" ]]; then
-    add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
-  fi
+  add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
+
+  #
+  # if [ "${ACTION}" != 'install' ]; then
+  #   [ -h "${dst}" ] && add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
+  #   return
+  # fi
+  # if [ ! -d "${configdir}" ]; then
+  #   WITH_SHELL="--shell"
+  #   __shell
+  # fi
+  # if [[ -d "${configdir}" && -f "${src}" ]]; then
+  #   add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
+  # fi
 }
 
 add_or_remove_copy() {
@@ -301,26 +317,26 @@ add_or_remove_copy() {
     fi
 }
 
-install_ohmyzsh() {
-    check_bin zsh
-    local omzsh_dir="${DATADIR}/oh-my-zsh"
-    if [ ! -d "${omzsh_dir}" ]; then
-        info "installing Oh-My-ZSH in ${DATADIR} -- see http://ohmyz.sh/"
-        # installation by curl if available
-        if   [ -n "$(which curl)" ]; then
-            echo "   - installation using curl"
-            warning " "
-            warning "Remember to Exit the zsh shell to continue the installation!!!"
-            warning " "
-            [ -z "${SIMULATION}" ] && sh -c "$(ZSH=${omzsh_dir} curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-        elif [ -n "$(which wget)" ]; then
-            echo "   - installation using wget"
-            [ -z "${SIMULATION}" ] && sh -c "$(ZSH=${omzsh_dir} wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-        else
-            print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
-        fi
-    fi
-}
+# install_ohmyzsh() {
+#     check_bin zsh
+#     local omzsh_dir="${DATADIR}/oh-my-zsh"
+#     if [ ! -d "${omzsh_dir}" ]; then
+#         info "installing Oh-My-ZSH in ${DATADIR} -- see http://ohmyz.sh/"
+#         # installation by curl if available
+#         if   [ -n "$(which curl)" ]; then
+#             echo "   - installation using curl"
+#             warning " "
+#             warning "Remember to Exit the zsh shell to continue the installation!!!"
+#             warning " "
+#             [ -z "${SIMULATION}" ] && sh -c "$(ZSH=${omzsh_dir} curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#         elif [ -n "$(which wget)" ]; then
+#             echo "   - installation using wget"
+#             [ -z "${SIMULATION}" ] && sh -c "$(ZSH=${omzsh_dir} wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+#         else
+#             print_error_and_exit "Unable to install oh-my-zsh/. You shall install 'curl' or 'wget' on your system"
+#         fi
+#     fi
+# }
 
 install_custom_ohmyzsh() {
     info "installing Falkor custom plugins for oh-my-zsh/"
@@ -432,31 +448,47 @@ setup_installdir() {
         execute "mkdir -p ${PREFIX_HOME}${PREFIX}"
     fi
     if [ -d "${SCRIPTDIR}/.git" -a ! -e "${PREFIX_HOME}${INSTALL_DIR}" ]; then
-        # check that the install script really belongs to this git repository
-        ok=$(git --git-dir=${SCRIPTDIR}/.git ls-files $COMMAND --error-unmatch 2>/dev/null)
-        if [ $? -eq 0 ]; then
-            echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Make '${PREFIX_HOME}${INSTALL_DIR}' a symlink to ${SCRIPTDIR} [Y|n]? "
-            ans='Yes'
-            [ -z "${FORCE}" ] && read ans || true
-            case $ans in
-                n*|N*)
-                ;;
-                *)  add_or_remove_link "${SCRIPTDIR}" "${PREFIX_HOME}${INSTALL_DIR}";
-                    return
-                    ;;
-            esac
-        fi
+      # check that the install script really belongs to this git repository
+      ok=$(git --git-dir=${SCRIPTDIR}/.git ls-files $COMMAND --error-unmatch 2>/dev/null)
+      if [ $? -eq 0 ]; then
+        echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] Make '${PREFIX_HOME}${INSTALL_DIR}' a symlink to ${SCRIPTDIR} [Y|n]? "
+        ans='Yes'
+        [ -z "${FORCE}" ] && read ans || true
+        case $ans in
+          n*|N*)
+          ;;
+          *)  add_or_remove_link "${SCRIPTDIR}" "${PREFIX_HOME}${INSTALL_DIR}";
+          ;;
+        esac
+      fi
+    fi
+    # Final fallback solution: clone it
+    if [ ! -e "${PREFIX_HOME}${INSTALL_DIR}" ]; then
         info "Cloning Falkor dotfiles in '${PREFIX_HOME}${INSTALL_DIR}'";
         execute "git clone -q --recursive --depth 1 https://github.com/Falkor/dotfiles.git ${PREFIX_HOME}${INSTALL_DIR}";
+        # in this case, we need to update AVAILABLE_DOTFILES
     fi
+    __set_falkor_dotfiles_available "${PREFIX_HOME}${INSTALL_DIR}"
+}
 
+## Try to change the current shell to $1 if needed using chsh
+__change_user_shell() {
+  local target=${1:-bash}
+  local current_shell=$(expr "$SHELL" : '.*/\(.*\)')
+  local real_target=$(grep /${target}$ /etc/shells | tail -1)
+  if [ "${current_shell}" != "${target}" ]; then
+    check_bin chsh
+    warning "Attempt to change current shell (${current_shell}) to ${target} (actually ${real_target})"
+    really_continue
+    execute "chsh -s ${real_target}"
+  fi
 }
 
 ## Install common shell configs
 __shell(){
   [ -z "${WITH_SHELL}" ] && return
   info "${ACTION} Common Shell configuration ~/.config/shell/"
-  add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
+  [ "${ACTION}" == "install" ] && add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
   for n in ${SCRIPTDIR}/shell/available/*.sh; do
     name=$(basename ${n} .sh)
     if [[ "${AVAILABLE_DOTFILES}" == *${name}* ]]; then
@@ -465,21 +497,20 @@ __shell(){
     fi
     shell_custom_enable "${name}"
   done
+  [ "${ACTION}" != "install" ] && add_or_remove_link "${DOTFILES_DIR}/shell"  "${PREFIX}/shell"  "${PREFIX_HOME}${PREFIX}"
 
 }
 ## Install/remove specific dotfiles
 __bash(){
   [ -z "${WITH_BASH}" ] && return
   info "${ACTION} Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc ~/.inputrc ~/.bash_profile"
-  add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
+  [ "${ACTION}" == "install" ] && add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
   add_or_remove_link "${PREFIX}/bash/.bashrc"       ~/.bashrc       "${PREFIX_HOME}"
   add_or_remove_link "${PREFIX}/bash/.inputrc"      ~/.inputrc      "${PREFIX_HOME}"
   add_or_remove_link "${PREFIX}/bash/.bash_profile" ~/.bash_profile
   info "${ACTION} custom aliases from Falkor's Oh-My-ZSH plugin (made compatible with bash) ~/${PREFIX}/bash/custom/aliases.sh"
   add_or_remove_link "${PREFIX_HOME}${INSTALL_DIR}/oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh"  "${PREFIX_HOME}${PREFIX}/bash/custom/aliases.sh"
-  if [ "${ACTION}" != "install" ]; then
-    execute "rm ${PREFIX_HOME}${INSTALL_DIR}/bash/custom/aliases.sh"
-  fi
+  [ "${ACTION}" != "install" ] && add_or_remove_link "${DOTFILES_DIR}/bash"    "${PREFIX}/bash"     "${PREFIX_HOME}${PREFIX}"
   __shell
 }
 # Zsh
@@ -488,23 +519,28 @@ __zsh(){
   info "${ACTION} Falkor's ZSH / Oh-My-ZSH configuration"
   check_bin zsh
   local omzsh_dir="${DATADIR}/oh-my-zsh"
+  local omzsh_custom_dir="${omzsh_dir}/custom"
+  local omzsh_custom_theme_dir="${omzsh_custom_dir}/themes"
+  # Let's go
   add_or_remove_link "${DOTFILES_DIR}/oh-my-zsh"  "${PREFIX}/zsh"     "${PREFIX_HOME}${PREFIX}"
   add_or_remove_link "${PREFIX}/zsh/.zshenv"      ~/.zshenv           "${PREFIX_HOME}"
   if [ "${ACTION}" == "install" ]; then
     if [ ! -d "${omzsh_dir}" ]; then
       if [ -n "$(which git)" ]; then
-        execute "git clone https://github.com/robbyrussell/oh-my-zsh.git ${omzsh_dir}"
+        execute "git clone ${OH_MY_ZSH_REPO} ${omzsh_dir}"
       else
         print_error_and_exit "Unable to install oh-my-zsh/. Check your network connection"
       fi
     fi
-
-#    install_ohmyzsh
-#    install_custom_ohmyzsh
-  else
-    if [ -f ${omzsh_dir}/tools/uninstall.sh ]; then
-      execute "bash ${omzsh_dir}/tools/uninstall.sh"
+    powerlevel9k_themedir="${omzsh_custom_theme_dir}/powerlevel9k"
+    if [ ! -d "${powerlevel9k_themedir}" ]; then
+      info "Installing Powerlevel9k custom theme for ZSH"
+      execute "git clone ${ZSH_THEME_POWERLEVEL9K_REPO} ${powerlevel9k_themedir}"
     fi
+    #__change_user_shell 'zsh'
+  else
+    [ -d "${omzsh_dir}" ] && execute "rm -rf ${omzsh_dir}" || true
+    #__change_user_shell 'bash'
   fi
   __shell
 }
@@ -603,9 +639,9 @@ while [ $# -ge 1 ]; do
         -v | --verbose) VERBOSE="--verbose";;
         -f | --force)   FORCE="--force";;
         -n | --dry-run) SIMULATION="--dry-run";;
-        --offline)      OFFLINE="--offline";;
+        -u | --update)  UPDATE="--update";;
         --delete | --remove | --uninstall)
-            ACTION="uninstall"; OFFLINE="--offline"; MODE="--delete";;
+            ACTION="uninstall"; MODE="--delete";;
         # -d | --dir | --installdir)
         #     shift;
         #     INSTALL_DIR=$1
@@ -629,6 +665,8 @@ while [ $# -ge 1 ]; do
     shift
 done
 
+debug "SCRIPTDIR=${SCRIPTDIR}"
+
 PREFIX_HOME=''
 if [[ $PREFIX == "${HOME}"* ]]; then
     PREFIX_HOME="$HOME/"
@@ -643,7 +681,7 @@ info "About to ${ACTION} Falkor's dotfiles from ${INSTALL_DIR}"
 really_continue
 
 # Update the repository if already present
-[[ -z "${OFFLINE}" && -d "${PREFIX_HOME}${INSTALL_DIR}" ]]   && execute "( cd ${PREFIX_HOME}${INSTALL_DIR} ; git pull )"
+[[ -n "${UPDATE}" && -d "${PREFIX_HOME}${INSTALL_DIR}" ]]   && execute "( cd ${PREFIX_HOME}${INSTALL_DIR} ; git pull )"
 
 cd ~
 
