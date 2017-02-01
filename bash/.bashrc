@@ -569,6 +569,13 @@ do
   fi
 done
 
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+if [ -d "$HOME/.rvm" ]; then
+  export PATH="$PATH:$HOME/.rvm/bin"
+  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+  [[ -r "${RVM_HOME}/scripts/completion" ]] && . ${RVM_HOME}/scripts/completion
+fi
+
 #______________________
 # condense PATH entries
 PATH="$(puniq "$PATH")"

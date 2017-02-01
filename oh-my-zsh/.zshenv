@@ -56,7 +56,7 @@ export LC_ALL="${LANG}"
 unset ALTERNATE_EDITOR
 # Preferred editor for local and remote sessions
 test -n "$(command -v vim)" && EDITOR=vim || EDITOR=nano
-# Uncomment if you prefer macvim on local sessions
+# Uncomment if you prefer macvim
 # [[ -n $SSH_CONNECTION ]] && EDITOR='mvim'
 export EDITOR
 #export EDITOR='emacsclient -t'

@@ -63,14 +63,16 @@ plugins=()
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
-plugins+=(ruby rvm rake vagrant gem)                  # Ruby stuff
+plugins+=(ruby rake vagrant gem)                  # Ruby stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
 plugins+=(colored-man-page cp marked2 taskwarrior)
 #
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #
-plugins+=(falkor)
+plugins+=(falkor zsh-completions)
+# Force re-completion
+autoload -U compinit && compinit
 
 #_______________________________________
 # [Final] Custom Oh-my-ZSH configuration
@@ -107,15 +109,27 @@ do
   fi
 done
 
-#______________________
-# condense PATH entries
-puniq () {
-    echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n |
-        cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
-}
 
-PATH="$(puniq "$PATH")"
-MANPATH="$(puniq "$MANPATH")"
-PKG_CONFIG_PATH="$(puniq "$PKG_CONFIG_PATH")"
-LD_LIBRARY_PATH="$(puniq "$LD_LIBRARY_PATH")"
-export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+if [ -n "${rvm_path}" -a -d "$rvm_path" ]; then
+	path+=($rvm_path/bin)
+fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH
+
+# #______________________
+# # condense PATH entries
+# puniq () {
+# 	echo "BEFORE: '$1'"
+# 	echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n | cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
+# 	echo "AFTER: '$1'"
+#
+# }
+#
+# PATH="$(puniq "$PATH")"
+# # MANPATH="$(puniq "$MANPATH")"
+# # PKG_CONFIG_PATH="$(puniq "$PKG_CONFIG_PATH")"
+# # LD_LIBRARY_PATH="$(puniq "$LD_LIBRARY_PATH")"
+# export PATH
+# # MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
