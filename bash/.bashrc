@@ -153,13 +153,13 @@ pathadd $HOME/.rvm/bin after
 
 manpathadd() {
     if [ -d "$1" ] && ! echo $MANPATH | grep -E -q "(^|:)$1($|:)" ; then
-        [ "$2" = "after" ] && MANPATH="$MANPATH:${1%/}" || MANPATH="${1%/}:$PATH"
+        [ "$2" = "after" ] && MANPATH="$MANPATH:${1%/}" || MANPATH="${1%/}:$MANPATH"
     fi
 }
 # Complete default MANPATH eventually
-for mandir in /usr/local/share/man $HOME/share/man; do
-    manpathadd ${mandir}
-done
+# for mandir in /usr/local/share/man $HOME/share/man; do
+#     manpathadd ${mandir}
+# done
 
 PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
