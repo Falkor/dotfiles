@@ -177,6 +177,10 @@ alias o='open'
 alias skim='open -a Skim'
 if [[ -n ${ZSH_VERSION-}  ]]; then
 	zstyle ":completion:*:*:skim:*" file-patterns "*.pdf *(-/)"
+  zcompclean() {
+    rm -rf ${XDG_CONFIG_HOME}/zsh/.zcompdump*
+    autoload -U compinit && compinit
+  }
 fi
 alias mkdir='mkdir -p'
 # Search for files and page it
