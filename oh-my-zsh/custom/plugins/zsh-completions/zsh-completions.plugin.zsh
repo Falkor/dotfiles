@@ -9,11 +9,14 @@ _zsh-completion-from-homebrew-installed() {
     brew --prefix zsh-completions &> /dev/null
 }
 
-completiondirs=("${XDG_CONFIG_HOME}/zsh/custom/completions")
+# RVM Completion
+if [[ -d "$HOME/.rvm/scripts/zsh/Completion" ]]; then
+    fpath=($HOME/.rvm/scripts/zsh/Completion $fpath)
+fi
+# General Homebrew ZSH completions
 if _homebrew-installed && _zsh-completion-from-homebrew-installed ; then
-  completiondirs=('/usr/local/share/zsh-completions' $completiondirs)
+  fpath=('/usr/local/share/zsh-completions' $fpath)
 fi
 
-for completiondir ($completiondirs); do
-  fpath=($completiondir $fpath)
-done
+# My custom completions
+fpath=("${XDG_CONFIG_HOME}/zsh/custom/completions" $fpath)

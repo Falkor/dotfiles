@@ -27,6 +27,12 @@ export ZSH=$XDG_DATA_HOME/oh-my-zsh
 # Custom directory location
 ZSH_CUSTOM=$ZDOTDIR/custom
 
+## Update / check ZSH config
+# Courtesy https://github.com/smaximov/zsh-config/blob/master/lib/functions.zsh
+update-zsh-config() {
+	upgrade_oh_my_zsh
+}
+
 ################## Oh-My-ZSH (optional) customizations ########################
 #
 # === Oh-My-ZSH Prompt Theme ===
@@ -58,8 +64,8 @@ export UPDATE_ZSH_DAYS=7
 #
 # === Oh-My-ZSH Plugins ===
 plugins=()
-
 # Add them wisely, as too many plugins slow down shell startup.
+#___________________
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
@@ -67,7 +73,7 @@ plugins+=(rvm rake gem)                  # Ruby stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
 plugins+=(colored-man-page cp marked2 taskwarrior)
-#
+#__________________
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #
 plugins+=(falkor zsh-completions)
@@ -82,56 +88,37 @@ plugins+=(falkor zsh-completions)
 [[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
 
 # Disable fancy colored shell prompts and auto-update on dumb terminals
-if [ $TERM = "dumb" ]; then
-   unsetopt zle
-   PS1="$ "
-   DISABLE_AUTO_UPDATE=true
-fi
+# if [ $TERM = "dumb" ]; then
+#    unsetopt zle
+#    PS1="$ "
+#    DISABLE_AUTO_UPDATE=true
+# fi
 
 typeset -U fpath
 # Force re-completion
-autoload -U compinit && compinit
+# autoload -U compinit && compinit
 
 # Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
 # Load eventually common [custom] configuration, either:
+# - generic ZSH functions defined in $ZDOTDIR/lib
 # - common to all shells (from ~/.config/shell/[custom/]*.sh typically)
-# - specific to zsh (from ~/.config/zsh/custom/*.zsh
+# - specific custom to zsh (from ~/.config/zsh/custom/*.zsh
 for d in \
+${ZDOTDIR}/lib \
 ${XDG_CONFIG_HOME}/shell \
 ${XDG_CONFIG_HOME}/shell/custom \
 ${ZDOTDIR}/custom
 do
   if [ -d "${d}" ]; then
     for f in ${d}/*.(sh|zsh)(N); do
-			#echo "sourcing '${f}'"
 			[[ -r "$f" ]] && source $f
     done
   fi
 done
 
-
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-if [ -n "${rvm_path}" -a -d "$rvm_path" ]; then
-	path+=($rvm_path/bin)
-fi
-typeset -U PATH
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH
+export PATH="$PATH:$HOME/.rvm/bin"
 
-# #______________________
-# # condense PATH entries
-# puniq () {
-# 	echo "BEFORE: '$1'"
-# 	echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n | cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
-# 	echo "AFTER: '$1'"
-#
-# }
-#
-# PATH="$(puniq "$PATH")"
-# # MANPATH="$(puniq "$MANPATH")"
-# # PKG_CONFIG_PATH="$(puniq "$PKG_CONFIG_PATH")"
-# # LD_LIBRARY_PATH="$(puniq "$LD_LIBRARY_PATH")"
-# export PATH
-# # MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
+typeset -U PATH path

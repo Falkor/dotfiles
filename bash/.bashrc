@@ -562,9 +562,10 @@ ${BASH_CUSTOM_CONFIG_DIR}
 do
   if [ -d "${d}" ]; then
     for f in ${d}/*.sh; do
-      if [ -r "$f" ]; then
-          . $f
-      fi
+      [[ -r "$f" ]] && source $f
+    done
+    for f in ${d}/*.bash; do
+      [[ -r "$f" ]] && source $f
     done
   fi
 done
@@ -573,7 +574,7 @@ done
 if [ -d "$HOME/.rvm" ]; then
   export PATH="$PATH:$HOME/.rvm/bin"
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-  [[ -r "${RVM_HOME}/scripts/completion" ]] && . ${RVM_HOME}/scripts/completion
+  [[ -r "${rvm_path}/scripts/completion" ]] && . ${rvm_path}/scripts/completion
 fi
 
 #______________________

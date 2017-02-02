@@ -645,7 +645,6 @@ __rvm(){
     check_bin 'curl'
     execute "\curl -sSL https://get.rvm.io | bash -s stable --ignore-dotfiles --with-default-gems='bundler rake git_remote_branch'"
   fi
-  shell_custom_enable 'rvm'
 }
 
 ################################################################################
