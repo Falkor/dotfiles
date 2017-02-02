@@ -1,0 +1,55 @@
+#compdef mkdocs
+########################################################################################
+# -*- mode:sh; -*-
+# Time-stamp: <Thu 2017-02-02 15:36 svarrette>
+#
+# Zsh completion for [MkDocs](http://www.mkdocs.org/)
+#
+# Copyright (c) 2017 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+################################################################################
+# Enable this completion file by adding somewhere in your zsh configuration (most
+# probably ~/.zshrc):
+#     fpath=(/path/to/this/dir $fpath)
+# Test modification in live in your shell:
+#
+#  unfunction _mkdocs && autoload -U _mkdocs
+#
+typeset -A opt_args
+
+# Main dispatcher
+_mkdocs()
+{
+    local -a _mkdocs_cmds
+    _mkdocs_cmds=(
+        'build:Build the MkDocs documentation'
+        'gh-deploy:Deploy your documentation to GitHub Pages'
+        'json:Build the MkDocs documentation to JSON files...'
+        'new:Create a new MkDocs project'
+        'serve:Run the builtin development server'
+    )
+    local curcontext="$curcontext" state line ret=1
+    typeset -A opt_args
+    _arguments -C \
+               '(- *)'{-h,--help}'[show this help message and exit]' \
+               '(- *)'{--version,-V}"[Show the version and exit]" \
+               '(- *)'{-q,--quiet}"Silence warnings" \
+               '(- *)'{-v,--verbose}'[Enable verbose output]' \
+               ': :->command' \
+               '*:: :->options' && ret=0
+    case $state in
+        (command)
+            _describe -t commands 'mkdocs' _mkdocs_cmds && ret=0
+            ;;
+        (options)
+            curcontext=${curcontext%:*}-$line[1]:
+            case $line[1] in
+                (build) ret=0;;
+                (serve) ret=0;;
+                (new)   ret=0;;
+            esac
+            ;;
+    esac
+    return ret
+}
+
+_mkdocs "$@"
