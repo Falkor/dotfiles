@@ -27,10 +27,6 @@ export ZSH=$XDG_DATA_HOME/oh-my-zsh
 # Custom directory location
 ZSH_CUSTOM=$ZDOTDIR/custom
 
-# Check if homebrew is installed
-_homebrew-installed() {
-  type brew &> /dev/null
-}
 ################## Oh-My-ZSH (optional) customizations ########################
 #
 # === Oh-My-ZSH Prompt Theme ===
@@ -67,29 +63,20 @@ plugins=()
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
-plugins+=(rake gem)                  # Ruby stuff
+plugins+=(rvm rake gem)                  # Ruby stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
 plugins+=(colored-man-page cp marked2 taskwarrior)
 #
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #
-plugins+=(falkor)
-
-
-# Force re-completion
-autoload -U compinit && compinit
+plugins+=(falkor zsh-completions)
 
 #_______________________________________
 # [Final] Custom Oh-my-ZSH configuration
 # (for instance to change the plugins/themes set by Falkor's dotfiles)
 [[ -f $ZDOTDIR/custom.zshrc ]] && source $ZDOTDIR/custom.zshrc
 ##############################################################################
-# Add zsh completions
-if _homebrew-installed; then
-
-fi
-
 
 # Create ZSH cache directory unless it already exists
 [[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
@@ -100,6 +87,10 @@ if [ $TERM = "dumb" ]; then
    PS1="$ "
    DISABLE_AUTO_UPDATE=true
 fi
+
+typeset -U fpath
+# Force re-completion
+autoload -U compinit && compinit
 
 # Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -125,7 +116,7 @@ done
 if [ -n "${rvm_path}" -a -d "$rvm_path" ]; then
 	path+=($rvm_path/bin)
 fi
-
+typeset -U PATH
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH
 
