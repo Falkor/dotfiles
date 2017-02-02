@@ -266,7 +266,14 @@ add_or_remove_link() {
 shell_custom_enable() {
   local name=$1
   local configdir="${PREFIX_HOME}${PREFIX}/shell"
-  [ "${ACTION}" != 'install' ] && configdir=${PREFIX_HOME}${INSTALL_DIR}/shell
+  if [ "${ACTION}" == 'install' ]; then
+    if [ ! -d "${configdir}" ]; then
+      WITH_SHELL="--shell"
+      __shell
+    fi
+  else
+    configdir=${PREFIX_HOME}${INSTALL_DIR}/shell
+  fi
   local src="${configdir}/available/${name}.sh"
   local dst="${configdir}/${name}.sh"
   add_or_remove_link "available/${name}.sh" "${configdir}/${name}.sh" "${configdir}"
