@@ -127,12 +127,13 @@ if [[ -n ${ZSH_VERSION-} ]]; then
     compdef gcount=git
 fi
 alias gcl='git clone'
+alias clone='git clone'
 alias gd='git diff'
 alias dg='git diff'
 alias GD='git diff HEAD~1 HEAD'
-alias gg="git log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --max-count=20"
+alias gg="git log  --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --max-count=20"
 alias ggl="git log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias gl='git log --graph --oneline --decorate --max-count=20'
+alias gl='git log  --graph --oneline --decorate --max-count=20'
 gm() {
     git commit -s -m "$*"
 }
@@ -169,6 +170,7 @@ gsupgrade() {
 alias up='git pull'
 alias gu='git pull'
 alias gta='git tag -a -m'
+alias git-root='cd $(git rev-parse --show-cdup)'
 
 # ------------
 # Utilities
@@ -188,6 +190,7 @@ search() {
     find . -iname "*$@*" | less;
 }
 
+
 alias sshx='ssh -C -X -c blowfish'
 alias proxy='ssh -C -q -T -n -N -D 1080'
 alias rsyncfalkor='rsync -P -avzu'
@@ -196,7 +199,7 @@ alias rsyncfalkor='rsync -P -avzu'
 mkcd () {
     mkdir -p "$@" && cd "$@"
 }
-alias diff='colordiff'  # for colors
+#alias diff='colordiff'  # for colors
 alias draw='figlet -c -w 80'
 # Which directory is hiding all the bytes?
 alias dux='du -h -d 1 | sort -n'
@@ -263,9 +266,9 @@ alias zshrc="$EDITOR ${XDG_CONFIG_HOME}/zsh/zshrc" # Quick access to the .zshrc 
 alias sourcezshrc="source ${XDG_CONFIG_HOME}/zsh/zshrc"
 alias zshfalkor="$EDITOR ${XDG_CONFIG_HOME}/zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
 
-#--------------
-# Global alias
-# -------------
+#-----------------------
+# Global alias (for ZSH)
+# ----------------------
 if [[ -n ${ZSH_VERSION-} ]]; then
     alias -g L="| less" # Write L after a command to page through the output.
     alias -g H="| head -n 20" # Write L after a command to get the 20 first lines
