@@ -171,7 +171,7 @@ alias u='git pull'
 alias up='git pull'
 alias gu='git pull'
 alias gta='git tag -a -m'
-alias git-root='cd $(git rev-parse --show-cdup)'
+alias cdroot='cd $(git rev-parse --show-cdup)'
 
 #-------
 # Myrepo
