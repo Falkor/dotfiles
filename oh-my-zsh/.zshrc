@@ -96,7 +96,7 @@ plugins+=(falkor zsh-completions)
 
 typeset -U fpath
 # Force re-completion
-# autoload -U compinit && compinit
+autoload -U compinit && compinit
 
 # Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
