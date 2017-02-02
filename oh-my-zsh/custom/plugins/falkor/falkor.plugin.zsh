@@ -172,9 +172,23 @@ alias gu='git pull'
 alias gta='git tag -a -m'
 alias git-root='cd $(git rev-parse --show-cdup)'
 
+#-------
+# Myrepo
+#--------
+alias mradd='mr register'
+alias mrup='(cd ~; mr -j update)'
+
 # ------------
 # Utilities
 # ------------
+bup() {
+  echo "Updating your [Homebrew] system"
+  brew update
+  brew upgrade
+  brew cu
+  brew cleanup
+  brew cask cleanup
+}
 alias o='open'
 alias skim='open -a Skim'
 if [[ -n ${ZSH_VERSION-}  ]]; then
@@ -189,6 +203,13 @@ alias mkdir='mkdir -p'
 search() {
     find . -iname "*$@*" | less;
 }
+
+if [[ -n ${ZSH_VERSION-}  ]]; then
+  alias refresh='sourcezshrc'
+else
+  alias refresh='source ~/.profile'
+fi
+
 
 
 alias sshx='ssh -C -X -c blowfish'
@@ -265,6 +286,7 @@ alias zshenv="$EDITOR ${HOME}/.zshenv" # Quick access to the .zshenv file
 alias zshrc="$EDITOR ${XDG_CONFIG_HOME}/zsh/zshrc" # Quick access to the .zshrc file
 alias sourcezshrc="source ${XDG_CONFIG_HOME}/zsh/zshrc"
 alias zshfalkor="$EDITOR ${XDG_CONFIG_HOME}/zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
+
 
 #-----------------------
 # Global alias (for ZSH)
