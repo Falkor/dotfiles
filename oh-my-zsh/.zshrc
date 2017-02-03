@@ -94,7 +94,7 @@ plugins+=(falkor zsh-completions)
 #    DISABLE_AUTO_UPDATE=true
 # fi
 
-typeset -U fpath
+# typeset -U fpath
 
 # Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -117,9 +117,9 @@ do
 done
 
 # Force re-completion
-autoload -U compinit && compinit
+# autoload -U compinit && compinit
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-typeset -U PATH path
+# typeset -U PATH path
