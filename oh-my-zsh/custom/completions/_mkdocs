@@ -44,12 +44,31 @@ _mkdocs()
             curcontext=${curcontext%:*}-$line[1]:
             case $line[1] in
                 (build) ret=0;;
-                (serve) ret=0;;
-                (new)   ret=0;;
+                (serve) __mkdocs_serve && ret=0;;
+                (new) _arguments -C \
+                {-h,--help}'[show this help message and exit]' \
+                ":dir:_directories" && ret=0;;
             esac
             ;;
     esac
     return ret
+}
+
+## Run the builtin development server
+__mkdocs_serve() {
+  local curcontext=$curcontext state line ret=1
+  declare -A opt_args
+  _arguments -s -S \
+     {-h,--help}'[show this help message and exit]:' \
+     {-q,--quiet}"[Silence warnings]:" \
+     {-v,--verbose}'[Enable verbose output]' \
+     {-s,--strict}'[Enable strict mode. This will cause MkDocs to abort the build on any warnings.]' \
+     '--theme[The theme to use when building your documentation]:theme:(readthedocs mkdocs)' \
+     '--livereload[Enable the live reloading in the development server (this is the default)]' \
+     '--no-livereload[Disable the live reloading in the development server]' \
+     '--dirtyreload[Enable the live reloading in the development server, but only re-build files that have changed]' \
+     '--dev-addr[IP address and port to serve documentation locally]:host:(localhost\:8000 localhost\:8080)' \
+     "*::args:_nothing"
 }
 
 _mkdocs "$@"
