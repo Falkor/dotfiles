@@ -74,3 +74,5 @@
 
 [push]
     default = matching
+[gpg]
+	program = gpg

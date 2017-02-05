@@ -94,7 +94,7 @@ plugins+=(falkor zsh-completions)
 #    DISABLE_AUTO_UPDATE=true
 # fi
 
-# typeset -U fpath
+typeset -U fpath
 
 # Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
