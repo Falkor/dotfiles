@@ -46,14 +46,14 @@ Note that this hierarchy assume the availability of the `include.path` directive
 You can use the `install.sh` script featured with the [Falkor's dotfile](https://github.com/Falkor/dotfile) repository.
 
 ``` bash
-$> cd ~/.dotfiles.falkor.d
+$> cd ~/.config/dotfiles.falkor.d
 $> ./install.sh --git     # OR ./install.sh --with-git
 ```
 
 ## Uninstall
 
 ``` bash
-$> cd ~/.dotfiles.falkor.d
+$> cd ~/.config/dotfiles.falkor.d
 $> ./install.sh --delete --git
 ```
 
@@ -65,3 +65,4 @@ Consider these resources to become more familiar (if not yet) with Git:
 * [Git book](http://book.git-scm.com/index.html)
 * [Github:help](http://help.github.com/mac-set-up-git/)
 * [Git reference](http://gitref.org/)
+* [Git Cheat Sheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf) proposed on Github.
