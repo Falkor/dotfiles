@@ -89,6 +89,7 @@ cask 'the-unarchiver'
 cask 'vagrant'
 cask 'vagrant-manager'
 cask 'virtualbox'
+cask 'xquartz'
 cask 'yujitach-menumeters'
 
 # Special fonts
