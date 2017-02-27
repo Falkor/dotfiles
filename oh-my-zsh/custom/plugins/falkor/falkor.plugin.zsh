@@ -229,6 +229,15 @@ alias dux='du -h -d 1 | sort -n'
 alias pls='sudo `fc -n -l -1`'
 alias ":q"="exit"
 
+# Quick tarball backup
+backup() {
+  [[ -z "$1" ]] && return
+  local dst=$(echo $1 | sed "s/^\./dot/" )
+  local archive="backup-${dst}.tgz"
+  echo "=> creating tarball archive '${dst}' to backup '$@'"
+  tar cvzf ${archive} $@
+}
+
 # Optimize PDF/JPEG/PNG size
 optipdf () {
 	local pdf=$1
