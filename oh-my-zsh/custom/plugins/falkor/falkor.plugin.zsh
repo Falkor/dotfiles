@@ -233,8 +233,8 @@ alias ":q"="exit"
 backup() {
   [[ -z "$1" ]] && return
   local dst=$(echo $1 | sed "s/^\./dot/" )
-  local archive="backup-${dst}.tgz"
-  echo "=> creating tarball archive '${dst}' to backup '$@'"
+  local archive="backup_$(date +%F)_${dst}.tgz"
+  echo "=> creating tarball archive '${archive}' to backup '$@'"
   tar cvzf ${archive} $@
 }
 
