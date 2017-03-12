@@ -1,7 +1,7 @@
 #compdef assh
 ###############################################################################
 # -*- mode:sh; -*-
-# Time-stamp: <Sun 2017-03-12 13:28 svarrette>
+# Time-stamp: <Sun 2017-03-12 13:35 svarrette>
 #
 # Zsh completion for [assh](https://github.com/moul/advanced-ssh-config)
 #
