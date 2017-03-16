@@ -191,6 +191,7 @@ bup() {
   brew cask cleanup
 }
 alias o='open'
+alias m='make -j8'
 alias skim='open -a Skim'
 if [[ -n ${ZSH_VERSION-}  ]]; then
 	zstyle ":completion:*:*:skim:*" file-patterns "*.pdf *(-/)"
