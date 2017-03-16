@@ -1,7 +1,7 @@
 #compdef assh
 ###############################################################################
 # -*- mode:sh; -*-
-# Time-stamp: <Sun 2017-03-12 13:35 svarrette>
+# Time-stamp: <Thu 2017-03-16 15:37 svarrette>
 #
 # Zsh completion for [assh](https://github.com/moul/advanced-ssh-config)
 #
@@ -27,6 +27,7 @@ _assh()
         'config:Manage ssh and assh configuration'
         'sockets:Manage control sockets'
         'help:Shows a list of commands or help for one command'
+        'connect:Connect to host SSH socket, used by ProxyCommand'
     )
     local curcontext="$curcontext" state line ret=1
     typeset -A opt_args
@@ -47,6 +48,7 @@ _assh()
             curcontext=${curcontext%:*}-$line[1]:
             case $line[1] in
                 (config) __assh_config && ret=0;;
+                (connect) _hosts && ret=0;;
                 (info)  ret=0;;
                 (sockets) __assh_sockets && ret=0;;
                 (help)
