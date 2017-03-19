@@ -29,7 +29,7 @@ brew 'gdbm'
 brew 'git', args: [ 'without-completions']
 brew 'git-crypt'
 brew 'git-extras'
-brew 'git-flow'
+brew 'git-flow-avh'
 brew 'htop'
 brew 'imapfilter'
 brew 'imagemagick'
