@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Wed 2016-03-02 21:24 svarrette>
+# Time-stamp: <Sun 2017-03-19 11:56 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -303,9 +303,9 @@ alias zshfalkor="$EDITOR ${XDG_CONFIG_HOME}/zsh/custom/plugins/falkor/falkor.plu
 # Global alias (for ZSH)
 # ----------------------
 if [[ -n ${ZSH_VERSION-} ]]; then
-    alias -g L="| less" # Write L after a command to page through the output.
-    alias -g H="| head -n 20" # Write L after a command to get the 20 first lines
-    alias -g G='| grep --color -i' # Write G after the command to grep it
+    alias -g L="| less"             # Write L after a command to page through the output.
+    alias -g H="| head -n 20"       # Write H after a command to get the 20 first lines
+    alias -g G='| grep --color -i'  # Write G after the command to grep it
     alias -g TL='| tail -20'
     alias -g NUL="> /dev/null 2>&1" # You get the idea.
 fi
