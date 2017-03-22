@@ -140,6 +140,7 @@ gm() {
 gma() {
     git commit -s -am "$*"
 }
+alias p='git push'
 alias gp='git push'
 alias gpu='git push'
 alias gpd='git push --dry-run'
