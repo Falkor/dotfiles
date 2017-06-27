@@ -69,7 +69,8 @@ plugins=()
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
-plugins+=(rvm rake gem)                  # Ruby stuff
+plugins+=(rvm rake gem)                     # Ruby stuff
+plugins+=(pyenv)                            # Python stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
 plugins+=(colored-man-page cp marked2 taskwarrior)
