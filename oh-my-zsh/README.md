@@ -6,8 +6,8 @@
 
 So I use [Oh-My-Zsh](http://ohmyz.sh) using the excellent [powerlevel9k](https://github.com/bhilburn/powerlevel9k) prompt theme and the [Darkside iTerm Color scheme](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Darkside.itermcolors).
 
-The font I use is [Source Code Pro + Powerline Awesome Regular](../fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) at 14pt (for both Regular and Non-ASCII font)
-You can find more information on  the way I configured iTerm2 on [my blog](https://varrette.gforge.uni.lu/blog/2017/01/17/configuring-mac-os-on-your-brand-new-laptop/#iterm2-configuration)
+The font I use is [Source Code Pro + Powerline Awesome Regular](https://github.com/Falkor/dotfiles/blob/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) at 14pt (for both Regular and Non-ASCII font).
+You can find more information on  the way I configured iTerm2 on [my blog](https://varrette.gforge.uni.lu/blog/2017/01/17/configuring-mac-os-on-your-brand-new-laptop/#iterm2-configuration).
 
 ## Screenshot
 
@@ -15,9 +15,9 @@ You can find more information on  the way I configured iTerm2 on [my blog](https
 
 ## Pre-requisites
 
-### [Source Code Pro Patched fonts](https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf)
+### [Source Code Pro Patched fonts](https://github.com/Falkor/dotfiles/blob/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf)
 
-You should install the [Source Code Pro Patched fonts](https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) following [these instructions](https://github.com/bhilburn/powerlevel9k/wiki/Install-Instructions#step-2-install-powerline-fonts) yet adapted to this font.
+You should install the [Source Code Pro Patched fonts](https://github.com/Falkor/dotfiles/blob/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) following [these instructions](https://github.com/bhilburn/powerlevel9k/wiki/Install-Instructions#step-2-install-powerline-fonts) yet adapted to this font.
 
 ### [Darkside](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Darkside.itermcolors) Color Scheme
 
