@@ -1,7 +1,7 @@
 # -*- mode:sh; -*-
 ################################################################################
 #  .inputrc -- my personal Readline configuration
-#             see http://github.com/Falkor/dotfiles
+#             see https://github.com/Falkor/dotfiles
 #
 #  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 #                http://varrette.gforge.uni.lu
@@ -13,34 +13,39 @@
 #                        |_|
 ################################################################################
 # Resource
-# - http://github.com/rtomayko/dotfiles/blob/rtomayko/.inputrc
+# - https://github.com/rtomayko/dotfiles/blob/rtomayko/.inputrc
 
 # do not bell on tab-completion
 set bell-style bell
 
-set expand-tilde off
-set input-meta off
-set convert-meta on
-set output-meta off
-set horizontal-scroll-mode off
-set history-preserve-point on
-set mark-directories on
-set mark-symlinked-directories on
-set match-hidden-files off
+# set expand-tilde off
+# set input-meta off
+# set convert-meta on
+# set output-meta off
+# set horizontal-scroll-mode off
+# set history-preserve-point on
+# set mark-directories on
+# set mark-symlinked-directories on
+# set match-hidden-files off
 
-# completion settings
-set page-completions off
-set completion-query-items 2000
-set completion-ignore-case off
-set show-all-if-ambiguous on
-set show-all-if-unmodified on
-set completion-prefix-display-length 10
-set print-completions-horizontally off
+# # completion settings
+# set page-completions off
+# set completion-query-items 2000
+# set completion-ignore-case off
+# set show-all-if-ambiguous on
+# set show-all-if-unmodified on
+# set completion-prefix-display-length 10
+# set print-completions-horizontally off
 
+# mappings for Ctrl-up-arrow and Ctrl-down-arrow for word moving
+## arrow up
+#"\e[A":forward-word
+## arrow down
+#"\e[B":backward-word
 # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
-"\e[1;5C": forward-word
-"\e[1;5D": backward-word
-"\e[5C":   forward-word
-"\e[5D":   backward-word
-"\e\e[C":  forward-word
-"\e\e[D":  backward-word
+#"\e[1;5C": forward-word
+#"\e[1;5D": backward-word
+#"\e[5C":   forward-word
+#"\e[5D":   backward-word
+#"\e\e[C":  forward-word
+#"\e\e[D":  backward-word

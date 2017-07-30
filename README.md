@@ -1,6 +1,6 @@
 -*- mode: markdown; mode: visual-line; fill-column: 80 -*-
 
-[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Falkor/dotfiles issues](https://img.shields.io/github/issues/Falkor/dotfiles.svg)](https://github.com/Falkor/dotfiles/issues) ![](https://img.shields.io/github/stars/Falkor/dotfiles.svg) [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest) [![Build Status](https://travis-ci.org/Falkor/dotfiles.svg?branch=master)](https://travis-ci.org/Falkor/dotfiles)
+[![Licence](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html) ![By Falkor](https://img.shields.io/badge/by-Falkor-blue.svg)  [![Build Status](https://travis-ci.org/Falkor/dotfiles.svg?branch=master)](https://travis-ci.org/Falkor/dotfiles) [![github](https://img.shields.io/badge/git-github-lightgray.svg)](https://github.com/Falkor/dotfiles) [![Falkor/dotfiles issues](https://img.shields.io/github/issues/Falkor/dotfiles.svg)](https://github.com/Falkor/dotfiles/issues) ![](https://img.shields.io/github/stars/Falkor/dotfiles.svg) [![Documentation Status](https://readthedocs.org/projects/falkor-dotfiles/badge/?version=latest)](https://readthedocs.org/projects/falkor-dotfiles/?badge=latest)
 
         Time-stamp: <Wed 2016-03-02 00:49 svarrette>
 
@@ -40,7 +40,25 @@ these config files:
 * vim
 * screen
 
-## Installation
+On __Mac OS__, assuming you have installed [HomeBrew](http://brew.sh/) (you really should), you can use `brew/Brewfile.minimal` to install these dependencies as follows:
+
+~~~bash
+# Install brew bundle -- see https://github.com/Homebrew/homebrew-bundle
+$> brew tap Homebrew/bundle
+# Collect the Brewfile
+$> curl -o /tmp/Brewfile https://raw.githubusercontent.com/Falkor/dotfiles/master/brew/Brewfile.minimal
+# Install Falkor's dotfile dependencies
+$> brew bundle --file=/tmp/Brewfile -v
+~~~
+
+On __Linux__:
+
+~~~bash
+# Debian / Ubuntu
+$> sudo apt-get install git git-flow bash-completion screen curl subversion zsh fonts-font-awesome
+~~~
+
+## Falkor's dotfiles Installation
 
 ### All-in-one git-free install
 
@@ -95,11 +113,11 @@ Note that __by default__ (_i.e._ without option), the `install.sh` script does n
 
 Upgrading is normally as simple as:
 
-     $> make -C ~/.dotfiles.falkor.d update
+     $> make -C ~/.config/dotfiles.falkor.d update
 
 OR, if you prefer a more atomic approach:
 
-     $> cd ~/.dotfiles.falkor.d
+     $> cd ~/.config/dotfiles.falkor.d
      $> make update
 
 Note that if you wish to __upgrade__ the [Git submodules](.gitmodules) to the latest version, you should run:
@@ -167,5 +185,3 @@ I suggest you to take a look at the following places I inspired:
 * [Mathias’s dotfiles](https://github.com/mathiasbynens/dotfiles),  for featuring `~/.osx` _i.e._ sensible hacker defaults for OS X;
 * [Awesome dotfiles](https://github.com/webpro/awesome-dotfiles), a curated list of dotfiles resources. Inspired by the [awesome](https://github.com/sindresorhus/awesome) list thing.
 * [Carlo's dotfiles](https://github.com/caarlos0/dotfiles)
-
-

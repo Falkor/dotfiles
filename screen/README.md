@@ -34,7 +34,8 @@ This will setup the following files:
 ``` bash
 $> cd ~/.dotfiles.falkor.d
 $> ./install.sh --delete --screen
-~~~
+```
+
 
 ## Basic commands (cheat-sheet)
 

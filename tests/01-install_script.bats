@@ -1,7 +1,7 @@
 #! /usr/bin/env bats
 ################################################################################
 # 01-install_script.bats
-# Time-stamp: <Thu 2016-03-03 22:33 svarrette>
+# Time-stamp: <Mon 2017-01-23 01:42 svarrette>
 #
 # Bats: Bash Automated Testing System -- https://github.com/sstephenson/bats
 # Installation:
@@ -80,7 +80,7 @@ setup() {
     assert_falkor_dotfile_present "bash/.bashrc"
     assert_falkor_dotfile_present "bash/.inputrc"
     assert_falkor_dotfile_present "bash/.bash_profile"
-    assert [ -e "${TARGET}/.bash_aliases" ]
+    assert [ -e "${DOTFILES_D}/bash/custom/aliases.sh" ]
 }
 
 @test "install --bash --delete" {
@@ -89,21 +89,21 @@ setup() {
     assert_falkor_dotfile_absent "bash/.bashrc"
     assert_falkor_dotfile_absent "bash/.inputrc"
     assert_falkor_dotfile_absent "bash/.bash_profile"
-    assert [ ! -e "${TARGET}/.bash_aliases" ]
+    assert [ ! -e "${DOTFILES_D}/bash/custom/aliases.sh" ]
 }
 
 
 @test "install --vim" {
     run $DOTFILE_INSTALL --vim
     assert_success
-    assert_falkor_dotfile_present "vim/.vimrc"
+    assert [ -e "${DOTFILES_D}/vim/vimrc" ]
 }
 
-@test "install --vim --delete" {
-    run $DOTFILE_INSTALL --vim --delete
-    assert_success
-    assert_falkor_dotfile_absent "vim/.vimrc"
-}
+# @test "install --vim --delete" {
+#     run $DOTFILE_INSTALL --vim --delete
+#     assert_success
+#     assert [ ! -e "${DOTFILES_D}/vim" ]
+# }
 
 @test "install --screen" {
     run $DOTFILE_INSTALL --screen
@@ -118,35 +118,36 @@ setup() {
 }
 
 @test "install --git" {
-    [ -n "${TRAVIS_CI_RUN}" ] && skip
-    run $DOTFILE_INSTALL --git
-    assert_success
-    assert_falkor_dotfile_present "git/.gitconfig"
-    assert [ -f "${TARGET}/.gitconfig.local" ]
+  [ -n "${TRAVIS_CI_RUN}" ] && skip
+  run $DOTFILE_INSTALL --git
+  assert_success
+  assert_falkor_dotfile_present "git/config"
+  assert_falkor_dotfile_present "git/config.local"
 }
+
 
 @test "install --git --delete" {
     [ -n "${TRAVIS_CI_RUN}" ] && skip
     run $DOTFILE_INSTALL --git --delete
     assert_success
-    assert_falkor_dotfile_absent "git/.gitconfig"
-    assert [ ! -f "${TARGET}/.gitconfig.local" ]
+    assert_falkor_dotfile_absent "git/config"
+    assert_falkor_dotfile_absent "git/config.local"
 }
 
-@test "install --zsh" {
-    #[ -n "${TRAVIS_CI_RUN}" ] && skip
-    run bash -c "echo password | $DOTFILE_INSTALL --zsh"
-    assert_success
-    assert_falkor_dotfile_present "oh-my-zsh/.zshrc"
-    assert [ -h "${TARGET}/.oh-my-zsh/custom/plugins/falkor" ]
-    assert [ -h "${TARGET}/.oh-my-zsh/custom/themes/powerlevel9k" ]
-}
+# @test "install --zsh" {
+#     #[ -n "${TRAVIS_CI_RUN}" ] && skip
+#     run bash -c "echo password | $DOTFILE_INSTALL --zsh"
+#     assert_success
+#     assert_falkor_dotfile_present "oh-my-zsh/.zshrc"
+#     assert [ -h "${TARGET}/.oh-my-zsh/custom/plugins/falkor" ]
+#     assert [ -h "${TARGET}/.oh-my-zsh/custom/themes/powerlevel9k" ]
+# }
 
-@test "install --zsh --delete" {
-    #[ -n "${TRAVIS_CI_RUN}" ] && skip
-    run bash -c "echo y | $DOTFILE_INSTALL --zsh --delete"
-    assert_success
-    assert_falkor_dotfile_absent "oh-my-zsh/.zshrc"
-    assert [ ! -e "${TARGET}/.oh-my-zsh/custom/plugins/falkor" ]
-    assert [ ! -e "${TARGET}/.oh-my-zsh/custom/themes/powerlevel9k" ]
-}
+# @test "install --zsh --delete" {
+#     #[ -n "${TRAVIS_CI_RUN}" ] && skip
+#     run bash -c "echo y | $DOTFILE_INSTALL --zsh --delete"
+#     assert_success
+#     assert_falkor_dotfile_absent "oh-my-zsh/.zshrc"
+#     assert [ ! -e "${TARGET}/.oh-my-zsh/custom/plugins/falkor" ]
+#     assert [ ! -e "${TARGET}/.oh-my-zsh/custom/themes/powerlevel9k" ]
+# }

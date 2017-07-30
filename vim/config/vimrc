@@ -1,0 +1,126 @@
+" header {{{
+"
+" The MIT License (MIT)
+"
+" Copyright (c) 2010-2017 Sebastien Varrette
+" Initial code Copyright (c) from Marek Wywiał
+" see https://github.com/onjin/vim-startup
+"
+" Permission is hereby granted, free of charge, to any person obtaining a copy
+" of this software and associated documentation files (the "Software"), to deal
+" in the Software without restriction, including without limitation the rights
+" to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+" copies of the Software, and to permit persons to whom the Software is
+" furnished to do so, subject to the following conditions:
+"
+" The above copyright notice and this permission notice shall be included in all
+" copies or substantial portions of the Software.
+"
+" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+" OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+" SOFTWARE.
+"
+" header }}}
+
+if &compatible
+    set nocompatible    " Be iMproved
+endif
+
+" Sets up Vim to use directories specified by XDG environment variables as
+" defined in the specification:
+" https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+"
+" Implementation inspired by:
+" https://github.com/kaleb/vim-files/blob/master/xdg.vim
+if empty($XDG_CACHE_HOME)
+  let $XDG_CACHE_HOME = $HOME.'/.cache'
+endif
+if empty($XDG_CONFIG_HOME)
+  let $XDG_CONFIG_HOME = $HOME.'/.config'
+endif
+
+if isdirectory($XDG_CONFIG_HOME.'/vim')
+	let $VIMPATH=expand('$XDG_CONFIG_HOME/vim')
+	let $VARPATH=expand('$XDG_CACHE_HOME/vim')
+else
+	let $VIMPATH=expand('$HOME/.vim')
+	let $VARPATH=expand('$HOME/.cache/vim')
+endif
+
+
+function! s:source_file(path)
+	execute 'source' fnameescape($VIMPATH.'/config/'.a:path)
+endfunction
+
+function! s:source_home_file(path)
+	execute 'source' fnameescape($HOME.'/'.a:path)
+endfunction
+
+"=====================================================
+" Initialize base requirements, incl. NeoBundle Load
+"=====================================================
+call s:source_file('init.vim')
+
+"==================================================
+"    NeoBundle installed packages / plugins
+"==================================================
+" See https://github.com/Shougo/neobundle.vim
+" TODO: migrate to Dein
+" Required:
+let s:plugins_dir = expand('$VARPATH/plugins')
+call neobundle#begin(s:plugins_dir)
+NeoBundleFetch 'Shougo/neobundle.vim'
+"===== Define plugins to install =======
+call s:source_file('neobundle.vim')
+
+call neobundle#local(s:plugins_dir . '/awesome-vim-colorschemes', {})
+call neobundle#local(expand('$VIMPATH/dev'), {})
+
+" ===== Plugins configurations ==== "
+call s:source_file('plugins.vim')
+if filereadable(expand('$VIMPATH/custom/vimrc.bundles'))
+  source $VIMPATH/custom/vimrc.bundles
+endif
+call neobundle#end()
+" }}}
+
+" Must be after plugins
+filetype plugin indent on
+syntax enable
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+
+"==================================================
+"       Topic-based Configuration Modules
+"==================================================
+" Loading configuration modules {{{
+call s:source_file('general.vim')
+call s:source_file('theme.vim')
+call s:source_file('autocmd.vim')
+call s:source_file('keybindings.vim')
+
+"==================================================
+"       Local customizations
+"==================================================
+if filereadable(expand('$HOME/.vimrc.local'))
+	call s:source_home_file('.vimrc.local')
+endif
+if filereadable(expand('$XDG_CONFIG_HOME/vim/custom/vimrc.local'))
+	source '$XDG_CONFIG_HOME/vim/custom/vimrc.local'
+endif
+
+if has('nvim')
+	call s:source_file('neovim.vim')
+endif
+" }}}
+
+call neobundle#call_hook('on_source')
+set secure
+
+" vim: set ts=2 sw=2 tw=80 noet :

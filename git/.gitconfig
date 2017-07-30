@@ -20,18 +20,19 @@
 # As introduced in Git >= 1.7.10 (see http://git-scm.com/docs/git-config#_includes)
 [include]
     # For username / credentials / private business etc.
-    path = .gitconfig.local
+    path = config.local
 
 [alias]
-    up = pull origin
-    pu = push origin
-    st = status
-    df = diff
-    ci = commit -s
-    br = branch
-    w  = whatchanged --abbrev-commit
-    ls = ls-files
-    gr = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    up  = pull origin
+    pu  = push origin
+    st  = status
+    df  = diff
+    ci  = commit -s
+    br  = branch
+    w   = whatchanged --abbrev-commit
+    ls  = ls-files
+    gr  = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    grd = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit
     # From http://progit.org/book/ch2-11.html
     unstage = reset HEAD --
     last = log -1 HEAD
@@ -44,6 +45,8 @@
     diff   = auto
     status = auto
     branch = auto
+    ui = auto
+    ui = true
 
 [color "branch"]
     current = yellow reverse
@@ -63,6 +66,7 @@
 
 [core]
     autocrlf = input
+    safecrlf = warn
     pager = less -FRSX
     editor = vim
     #editor = /Users/svarrette/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -t
@@ -70,3 +74,5 @@
 
 [push]
     default = matching
+[gpg]
+	program = gpg

@@ -1,10 +1,10 @@
 #! /bin/bash
 ################################################################################
 #  .bashrc -- my personal Bourne-Again shell (aka bash) configuration
-#             see http://github.com/Falkor/dotfiles
+#             see https://github.com/Falkor/dotfiles
 #
-#  Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
-#                http://varrette.gforge.uni.lu
+#  Copyright (c) 2010-2017 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+#                https://varrette.gforge.uni.lu
 #                   _               _
 #                  | |__   __ _ ___| |__  _ __ ___
 #                  | '_ \ / _` / __| '_ \| '__/ __|
@@ -29,12 +29,23 @@
 ################################################################################
 # Resources:
 #  - http://bitbucket.org/dmpayton/dotfiles/src/tip/.bashrc
-#  - http://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc
+#  - https://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+    *) return;;
+esac
 
 # Basic variables
 : ${HOME=~}
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
+# See https://specifications.freedesktop.org/basedir-spec/latest/
+: ${XDG_CONFIG_HOME=$HOME/.config}
+: ${XDG_DATA_HOME=$HOME/.local/share}
+: ${XDG_CACHE_HOME=$HOME/.cache}
+export XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
 
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
@@ -42,13 +53,18 @@
 # readline config
 : ${INPUTRC=~/.inputrc}
 
-# Get ride of mail notification
+# Get rid of mail notification
 unset MAILCHECK
+
+# Local configuration
+BASH_CUSTOM_CONFIG_DIR=$XDG_CONFIG_HOME/bash/custom
+COMMON_CONFIG_DIR=$XDG_CONFIG_HOME/shell
+COMMON_CUSTOM_CONFIG_DIR=$COMMON_CONFIG_DIR/custom
+
 
 # ----------------------------------------------------------------------
 #  SHELL OPTIONS
 # ----------------------------------------------------------------------
-
 # bring in system bashrc
 test -r /etc/bashrc &&
     . /etc/bashrc
@@ -66,62 +82,36 @@ shopt -u mailwarn                >/dev/null 2>&1
 umask 0022
 
 # ----------------------------------------------------------------------
-# LS AND DIRCOLORS
+# LS WITH COLORS
 # ----------------------------------------------------------------------
-# Colored output from ls is nice
+#for *BSD/darwin
 export CLICOLOR=1
 
 # we always pass these to ls(1)
 LS_COMMON="-hB"
 
-# if the dircolors utility is available, set that up to
-dircolors="$(type -P gdircolors dircolors | head -1)"
-test -n "$dircolors" && {
-    COLORS=/etc/DIR_COLORS
-    test -e "/etc/DIR_COLORS.$TERM"   && COLORS="/etc/DIR_COLORS.$TERM"
-    test -e "$HOME/.dircolors"        && COLORS="$HOME/.dircolors"
-    test ! -e "$COLORS"               && COLORS=
-    eval `$dircolors --sh $COLORS`
-}
-unset dircolors
+ls --color=auto &> /dev/null && LS_COMMON="${LS_COMMON} --color=auto" || true
 
-if [ "$UNAME" = Darwin ]; then
-    # check if you're using gnu core-utils then use --color
-    test "`which ls`" = "/opt/local/bin/ls" && {
-        LS_COMMON="$LS_COMMON --color"
-    } || {
-        LS_COMMON="$LS_COMMON -G"
-    }
-elif [ "$UNAME" = Linux ]; then
-    LS_COMMON="$LS_COMMON --color"
-fi
-
-# setup the main ls alias if we've established common args
-test -n "$LS_COMMON" &&
-    alias ls="command ls $LS_COMMON"
-
-# these use the ls aliases above
-alias ll="ls -l"
-alias la="ll -a"
-alias l.="ls -d .*"
+alias ls="command ls ${LS_COMMON}"
 
 # ----------------------------------------------------------------------
 #  ALIASES
 # ----------------------------------------------------------------------
+# these use the ls aliases above
+alias ll="ls -l"
+alias la="ll -a"
+alias l.="ls -d .*"
 # Mandatory aliases to confirm destructive operations
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -i'
 
 alias ..='cd ..'
+
 # Color aliases
 alias grep='grep --color=auto'
 #alias fgrep='fgrep --color=auto'
 #alias egrep='egrep --color=auto'
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
 
 # ----------------------------------------------------------------------
 # ENVIRONMENT CONFIGURATION
@@ -138,112 +128,56 @@ case "$0" in
     *)  unset LOGIN ;;
 esac
 
-# enable en_US locale w/ ISO-8859-15 encodings if not already configured
-# : ${LANG:="en_US.ISO-8859-15"}
-# : ${LANGUAGE:="en"}
-# : ${LC_CTYPE:="en_US.ISO-8859-15"}
-# : ${LC_ALL:="en_US.ISO-8859-15"}
-# export LANG LANGUAGE LC_CTYPE LC_ALL
+# enable en_US locale w/ UTF-8 encodings if not already configured
+: ${LANG:="en_US.UTF-8"}
+: ${LANGUAGE:="en"}
+: ${LC_ALL:="en_US.UTF-8"}
+export LANG LANGUAGE LC_ALL
 
 # ----------------------------------------------------------------------
 # PATH
 # ----------------------------------------------------------------------
-# we want the various sbins on the path along with /usr/local/bin
-PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
-PATH="/usr/local/bin:$PATH"
+pathadd() {
+    if [ -d "$1" ] && ! echo $PATH | grep -E -q "(^|:)$1($|:)" ; then
+        [ "$2" = "after" ] && PATH="$PATH:${1%/}" || PATH="${1%/}:$PATH"
+    fi
+}
+pathrm() {
+    PATH="$(echo $PATH | sed -e "s;\(^\|:\)${1%/}\(:\|\$\);\1\2;g" -e 's;^:\|:$;;g' -e 's;::;:;g')"
+}
+# Complete default PATH eventually
+for bindir in /usr/local/bin $HOME/bin; do
+    pathadd ${bindir}
+done
+pathadd $HOME/.rvm/bin after
 
-# put ~/bin on PATH if you have it
-if [ -d "$HOME/bin" ]; then
-    PATH="$PATH:$HOME/bin:."
-fi
-MANPATH="/usr/share/man:/usr/local/share/man:$MANPATH"
+manpathadd() {
+    if [ -d "$1" ] && ! echo $MANPATH | grep -E -q "(^|:)$1($|:)" ; then
+        [ "$2" = "after" ] && MANPATH="$MANPATH:${1%/}" || MANPATH="${1%/}:$MANPATH"
+    fi
+}
+# Complete default MANPATH eventually
+# for mandir in /usr/local/share/man $HOME/share/man; do
+#     manpathadd ${mandir}
+# done
 
-# Old version of PATH:
-#PATH=/sw/bin:/sw/sbin:/Applications/Tools/Emacs.app/Contents/MacOS:/bin:/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/usr/local/teTeX/bin/powerpc-apple-darwin-current:/usr/X11R6/bin:/usr/local/mysql/bin:$HOME/bin:/opt/local/bin:.
-
-# === Programming stuff ===
-# pkg-config settings
-PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
-
-# C/C++ include
-C_INCLUDE_PATH=/usr/local/include
-CPLUS_INCLUDE_PATH=${C_INCLUDE_PATH}
-LIBRARY_PATH=/usr/lib:/usr/local/lib
-DYLD_FALLBACK_LIBRARY_PATH=${LIBRARY_PATH}
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 # ----------------------------------------------------------------------
 # MACOS X / DARWIN SPECIFIC
 # ----------------------------------------------------------------------
-if [ "$UNAME" = Darwin ]; then
-    # Fink paths (see http://www.finkproject.org/), may be set via /sw/bin/pathsetup.sh
-    # after install
-    test -x /sw -a ! -L /sw && {
-        FINK=/sw
-    }
-    test -x /opt/sw -a ! -L /opt/sw && {
-        FINK=/opt/sw
-    }
-    if [ -n "${FINK}" ]; then
-        # adapt the various PATHs
-        PATH="$FINK/bin:$FINK/sbin:$PATH"
-        MANPATH="$FINK/share/man:$MANPATH"
-        PKG_CONFIG_PATH="${FINK}/lib/pkgconfig:$PKG_CONFIG_PATH"
-        C_INCLUDE_PATH=${FINK}/include:${C_INCLUDE_PATH}
-        LIBRARY_PATH=${FINK}/lib:${LIBRARY_PATH}
-    fi
-
-    # MacPorts paths
-    test -x /opt/local -a ! -L /opt/local && {
-        PORTS=/opt/local
-
-        # adapt the various PATHs
-        PATH="${PORTS}/bin:${PORTS}/sbin:$PATH"
-        MANPATH="${PORTS}/share/man:$MANPATH"
-        PKG_CONFIG_PATH="${PORTS}/lib/pkgconfig:$PKG_CONFIG_PATH"
-        C_INCLUDE_PATH=${PORTS}/include:${C_INCLUDE_PATH}
-        LIBRARY_PATH=:${PORTS}/lib:${LIBRARY_PATH}
-
-        # nice little port alias
-        #alias port="sudo nice -n +18 ${PORTS}/bin/port"
-        #alias git-svn='git svn'
-    }
-
-    # You probably want to install OpenTerminal (see
-    # http://homepage.mac.com/thomasw/OpenTerminal/)
-    # Just adapt the path to the OpenTerminal.app here
-    OPENTERMINAL="/Applications/Utilities/OpenTerminal.app"
-    if [ -d "$OPENTERMINAL" ]; then
-        # Nice alias to go to the current folder browsed in Finder
-        alias cdf='eval `osascript ${OPENTERMINAL}/Contents/Resources/Scripts/OpenTerminal.scpt `'
-    fi
-
-    # setup java environment. puke.
-    JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
-    ANT_HOME="/Developer/Java/Ant"
-    export ANT_HOME JAVA_HOME
-
-    # Alias so as to be able to call easily emacs etc. from terminal
-    alias emacs='open -a Emacs.app'
-    alias skim='open -a Skim.app'
-
-    # Finalize the Paths
-    CPLUS_INCLUDE_PATH=${C_INCLUDE_PATH}
-    DYLD_FALLBACK_LIBRARY_PATH=${LIBRARY_PATH}
-fi
-
-# RVM specific (see http://beginrescueend.com/)
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-
-
+# if [ "${UNAME}" = "Darwin" ]; then
+#     test -x "/usr/libexec/java_home" &&
+#         export JAVE_HOME=$(/usr/libexec/java_home)
+# fi
 
 # ----------------------------------------------------------------------
 # PAGER / EDITOR
 # ----------------------------------------------------------------------
-
 # Default editor
 test -n "$(command -v vim)" && EDITOR=vim || EDITOR=nano
 export EDITOR
-
 # Default pager ('less' is so much better than 'more'...)
 if test -n "$(command -v less)" ; then
     PAGER="less -FirSwX"
@@ -257,28 +191,61 @@ export PAGER MANPAGER
 # ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+    test -n "$(command -v brew)" && BREW_BASH_COMPLETION="$(brew --prefix)/etc/bash_completion" ||  BREW_BASH_COMPLETION=""
+    for f in /usr/share/bash-completion/bash_completion \
+                 /etc/bash_completion ${BREW_BASH_COMPLETION} \
+                 /opt/local/etc/bash_completion
+    do
+        if [ -r "$f" ]; then
+            . $f
+            break
+        fi
+    done
+fi
 
-#test -z "$BASH_COMPLETION" && {
-bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-test -n "$PS1" && test $bmajor -gt 1 && {
-        # search for a bash_completion file to source
-        for f in /usr/local/etc/bash_completion \
-                     /opt/local/etc/bash_completion \
-                     /etc/bash_completion
-        do
-            test -f $f && {
-                . $f
-                break
-            }
-        done
-    }
-unset bash bmajor bminor
-#}
+# ----------------------------------------------------------------------
+# OAR Batch scheduler
+# ----------------------------------------------------------------------
+# Resources:
+# - http://wiki-oar.imag.fr/index.php/Customization_tips
+# - http://wiki-oar.imag.fr/index.php/Oarsh_and_bash_completion
+
+# oarsh completion
+function _oarsh_complete_()
+{
+    local word=${COMP_WORDS[COMP_CWORD]}
+    local list
+    list=$(uniq "$OAR_NODEFILE" | tr '\n' ' ')
+    COMPREPLY=($(compgen -W "$list" -- "${word}"))
+}
+complete -F _oarsh_complete_ oarsh
+
+# Job + Remaining time
+__oar_ps1_remaining_time(){
+    if [ -n "$OAR_JOB_WALLTIME_SECONDS" -a -n "$OAR_NODE_FILE" -a -r "$OAR_NODE_FILE" ]; then
+        DATE_NOW=$(date +%s)
+        DATE_JOB_START=$(stat -c %Y "$OAR_NODE_FILE")
+        DATE_TMP=$OAR_JOB_WALLTIME_SECONDS
+        ((DATE_TMP = (DATE_TMP - DATE_NOW + DATE_JOB_START) / 60))
+        echo -n "[OAR$OAR_JOB_ID->$DATE_TMP]"
+    fi
+}
+
+# OAR motd
+test -n "$INTERACTIVE" && test -n "$OAR_NODE_FILE" && (
+        echo "[OAR] OAR_JOB_ID=$OAR_JOB_ID"
+        echo "[OAR] Your nodes are:"
+        sort "$OAR_NODE_FILE" | uniq -c | awk '{printf("      %s*%d\n",$2,$1)}END{printf("\n")}' | sed -e 's/,$//'
+    )
+
 
 # ----------------------------------------------------------------------
 # BASH HISTORY
 # ----------------------------------------------------------------------
-
 # Increase the history size
 HISTSIZE=10000
 HISTFILESIZE=20000
@@ -295,15 +262,80 @@ export CVS_RSH='ssh'
 # === SVN ===
 export SVN_EDITOR=$EDITOR
 
+# Some code from https://github.com/nojhan/liquidprompt
+_LP_OPEN_ESC="\["
+_LP_CLOSE_ESC="\]"
+ti_sgr0="$( { tput sgr0 || tput me ; } 2>/dev/null )"
+LP_COLOR_UP=${LP_COLOR_UP:-$GREEN}
+LP_COLOR_CHANGES=${LP_COLOR_CHANGES:-$RED}
+LP_COLOR_DIFF=${LP_COLOR_DIFF:-$PURPLE}
+NO_COL="${_LP_OPEN_ESC}${ti_sgr0}${_LP_CLOSE_ESC}"
+
+# Escape the given strings
+# Must be used for all strings injected in PS1 that may comes from remote sources,
+# like $PWD, VCS branch names...
+_lp_escape() {
+    echo -nE "${1//\\/\\\\}"
+}
+# Get the branch name of the current directory
+# For the first level of the repository, gives the repository name
+_lp_svn_branch()
+{
+    local root=
+    local url=
+    eval "$(LANG=C LC_ALL=C svn info 2>/dev/null | sed -n 's/^URL: \(.*\)/url="\1"/p;s/^Repository Root: \(.*\)/root="\1"/p' )"
+    [[ -z "${root-}" ]] && return
+
+    # Make url relative to root
+    url="${url:${#root}}"
+    if [[ "$url" == */trunk* ]]; then
+        echo -n trunk
+    elif [[ "$url" == */branches/?* ]]; then
+        url="${url##*/branches/}"
+        _lp_escape "${url%/*}"
+    elif [[ "$url" == */tags/?* ]]; then
+        url="${url##*/tags/}"
+        _lp_escape "${url%/*}"
+    else
+        _lp_escape "${root##*/}"
+    fi
+}
+# Set a color depending on the branch state:
+# - green if the repository is clean
+#   (use $LP_SVN_STATUS_OPTIONS to define what that means with
+#    the --depth option of 'svn status')
+# - red if there is changes to commit
+# Note that, due to subversion way of managing changes,
+# informations are only displayed for the CURRENT directory.
+_lp_svn_branch_color()
+{
+    (( LP_ENABLE_SVN )) || return
+
+    local branch
+    branch="$(_lp_svn_branch)"
+    if [[ -n "$branch" ]]; then
+        local changes
+        changes=$(( $(svn status | \grep -c -v "?") ))
+        if (( changes == 0 )); then
+            echo -nE "${LP_COLOR_UP}${branch}${NO_COL}"
+        else
+            echo -nE "${LP_COLOR_CHANGES}${branch}${NO_COL}(${LP_COLOR_DIFF}$changes${NO_COL})" # changes to commit
+        fi
+    fi
+}
 
 ## display the current subversion revision (to be used later in the prompt)
 __svn_ps1() {
-    local svnversion=`svnversion | sed -e "s/[:M]//g"`
-    # Continue if $svnversion is numerical
-    if let $svnversion 2>/dev/null
-    then
-        printf " (svn:%s)" `svnversion`
-    fi
+    (
+        local svnversion
+        svnversion=$(svnversion | sed -e "s/[:M]//g")
+        # Continue if $svnversion is numerical
+        let $svnversion
+        if [[ "$?" -eq "0" ]]
+        then
+            printf " (%s:%s)" "$(_lp_svn_branch_color)" "$(svnversion)"
+        fi
+    ) 2>/dev/null
 }
 
 # === GIT ===
@@ -312,16 +344,33 @@ __svn_ps1() {
 # see https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh for
 # configuration info of the GIT_PS1* variables
 #
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWSTASHSTATE=1
-export GIT_PS1_SHOWUNTRACKEDFILES=1
-#export GIT_PS1_SHOWUPSTREAM="auto legacy"
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWSTASHSTATE=true
+export GIT_PS1_SHOWUNTRACKEDFILES=true
+#export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_DESCRIBE_STYLE='branch'
+#export GIT_PS1_SHOWCOLORHINTS=true
 
+function_exists() {
+    declare -f -F $1 > /dev/null
+    return $?
+}
 # GIT bash completion and access to __git_ps1 is set in
-# /opt/local/etc/bash_completion: see the BASH COMPLETION section of this file.
-#if [ -f /opt/local/etc/bash_completion ]; then
-#    . /opt/local/etc/bash_completion
-#fi
+if ! type __git_ps1 &>/dev/null
+then
+    # Try to load separately the file git-prompt
+    for f in \
+        /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh \
+            /etc/bash-completion.d/git-prompt \
+            /usr/share/git/completion/git-prompt.sh \
+            /usr/lib/git-core/git-sh-prompt
+    do
+        if [ -r "$f" ]; then
+            . $f
+            break
+        fi
+    done
+fi
 
 # ----------------------------------------------------------------------
 # PROMPT
@@ -355,11 +404,16 @@ else
 fi
 
 # Configure a set of useful variables for the prompt
-DOMAIN=`hostname -f | cut -d '.' -f 2`
+if [[ "$(echo $UNAME | grep -c -i -e '^.*bsd$')" == "1" ]] ; then
+    DOMAIN=$(hostname | cut -d '.' -f 2)
+else
+    DOMAIN=$(hostname -f | cut -d '.' -f 2)
+fi
+
 # get virtualization information
 XENTYPE=""
 if [ -f "/sys/hypervisor/uuid" ]; then
-    if [ $(</sys/hypervisor/uuid) == "00000000-0000-0000-0000-000000000000" ]; then
+    if [ "$(</sys/hypervisor/uuid)" == "00000000-0000-0000-0000-000000000000" ]; then
         XENTYPE=",Dom0"
     else
         XENTYPE=",DomU"
@@ -371,7 +425,7 @@ if [ -z "${PS1_EXTRA}" -a -f "/proc/cmdline" ]; then
     # been set via kernel comment
     kernel_ps1_extra="$(grep PS1_EXTRA /proc/cmdline)"
     if [ -n "${kernel_ps1_extra}" ]; then
-        PS1_EXTRA=` sed -e "s/.*PS1_EXTRA=\"\?\([^ ^\t^\"]\+\)\"\?.*/\1/g" /proc/cmdline `
+        PS1_EXTRA=$( sed -e "s/.*PS1_EXTRA=\"\?\([^ ^\t^\"]\+\)\"\?.*/\1/g" /proc/cmdline )
     fi
 fi
 PS1_EXTRAINFO="${BOLD_COLOR}${DOMAIN}${XENTYPE}${RESET_COLOR}"
@@ -385,27 +439,15 @@ fi
 # test -r ~/.dotfiles.github.d/bash/preexec.bash &&
 # . ~/.dotfiles.github.d/bash/preexec.bash
 
-# set_xterm_title () {
-#     local title="$1"
-#     echo -ne "\e]0;$title\007"
-# }
-
-# precmd () {
-#     set_xterm_title "${TERM} - ${USER}@${HOSTNAME} `dirs -0` $PROMPTCHAR"
-# }
-
-# preexec () {
-#     set_xterm_title "${TERM} - $1 {`dirs -0`} (${USER}@${HOSTNAME})"
-# }
 
 # This function is called from a subshell in $PS1, to provide the colorized
 # exit status of the last run command.
 # Exit status 130 is also considered as good as it corresponds to a CTRL-D
 __colorized_exit_status() {
-    printf -- "\`status=\$? ; if [[ \$status = 0 || \$status = 130  ]]; then \
-                                echo -e '\[\e[01;32m\]'\$status;             \
-                              else                                           \
-                                echo -e '\[\e[01;31m\]'\$status; fi\`"
+    printf -- "\$(status=\$? ; if [[ \$status = 0 || \$status = 130  ]]; then \
+                                echo -e '\[\e[01;32m\]'\$status;              \
+                              else                                            \
+                                echo -e '\[\e[01;31m\]'\$status; fi)"
 }
 
 # Simple (basic) prompt
@@ -468,58 +510,6 @@ __set_my_prompt() {
 # #fi
 
 
-# --------------------------------------------------------------------
-# PATH MANIPULATION FUNCTIONS (thanks rtomayko ;) )
-# --------------------------------------------------------------------
-# ######
-# # List path entries of PATH or environment variable <var>.
-# # Usage: pls [<var>]
-# ###
-# pls () { eval echo \$${1:-PATH} |tr : '\n'; }
-
-# ######
-# # Shift <num> entries off the front of PATH or environment var <var>.
-# # with the <var> option.
-# # Usage:  pshift [-n <num>] [<var>]
-# # Useful: pshift $(pwd)
-# ####
-# pshift () {
-#     local n=1
-#     [ "$1" = "-n" ] && { n=$(( $2 + 1 )); shift 2; }
-#     eval "${1:-PATH}='$(pls |tail -n +$n |tr '\n' :)'"
-# }
-
-# ######
-# # Pop <num> entries off the end of PATH or environment variable <var>.
-# # Usage: ppop [-n <num>] [<var>]
-# ####
-# ppop () {
-#     local n=1 i=0
-#     [ "$1" = "-n" ] && { n=$2; shift 2; }
-#     while [ $i -lt $n ]
-#     do eval "${1:-PATH}='\${${1:-PATH}%:*}'"
-#        i=$(( i + 1 ))
-#     done
-# }
-
-# ######
-# # Remove <path> from PATH or environment variable <var>.
-# # Usage: prm <path> [<var>]
-# ####
-# prm () { eval "${2:-PATH}='$(pls $2 |grep -v "^$1\$" |tr '\n' :)'"; }
-
-# ######
-# # Shift <path> onto the beginning of PATH or environment variable <var>.
-# # Usage: punshift <path> [<var>]
-# #####
-# punshift () { eval "${2:-PATH}='$1:$(eval echo \$${2:-PATH})'"; }
-
-# #######
-# # push <path>
-# # Usage: ppush <path> [<var>]
-# ####
-# ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
-
 ######
 # Remove duplicate entries from a PATH style value while retaining
 # the original order. Use PATH if no <path> is given.
@@ -537,12 +527,6 @@ puniq () {
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
-# condense PATH entries
-PATH=$(puniq $PATH)
-MANPATH=$(puniq $MANPATH)
-
-# CDPATH settings
-#export CDPATH=.:~/svn/gforge.uni.lu
 
 # Set the color prompt by default when interactive
 if [ -n "$PS1" ]; then
@@ -556,19 +540,50 @@ test -n "$INTERACTIVE" -a -n "$LOGIN" && {
     uptime
 }
 
-export PKG_CONFIG_PATH
-export C_INCLUDE_PATH   CPLUS_INCLUDE_PATH   LIBRARY_PATH   DYLD_FALLBACK_LIBRARY_PATH
 
-# Eventually load you custom aliases
-test -f $HOME/.bash_aliases &&
-    source $HOME/.bash_aliases
+# Customizations
+for f in \
+    ~/.bash_aliases \
+    ~/.bash_private
+do
+    if [ -r "$f" ]; then
+        . $f
+    fi
+done
 
-# Eventually load you private settings (not exposed here)
-test -f $HOME/.bash_private &&
-    source $HOME/.bash_private
+#______________________________________________
+# Load Eventually [custom] local configs either
+# - common to all shells (from ~/.config/shell/[custom/]*.sh typically)
+# - specific to bash (from ~/.config/bash/custom/*.sh typically)
+for d in \
+${COMMON_CONFIG_DIR} \
+${COMMON_CUSTOM_CONFIG_DIR} \
+${BASH_CUSTOM_CONFIG_DIR}
+do
+  if [ -d "${d}" ]; then
+    for f in ${d}/*.sh; do
+      [[ -r "$f" ]] && source $f
+    done
+    for f in ${d}/*.bash; do
+      [[ -r "$f" ]] && source $f
+    done
+  fi
+done
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+if [ -d "$HOME/.rvm" ]; then
+  export PATH="$PATH:$HOME/.rvm/bin"
+  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+  [[ -r "${rvm_path}/scripts/completion" ]] && . ${rvm_path}/scripts/completion
+fi
+
+#______________________
+# condense PATH entries
+PATH="$(puniq "$PATH")"
+MANPATH="$(puniq "$MANPATH")"
+PKG_CONFIG_PATH="$(puniq "$PKG_CONFIG_PATH")"
+LD_LIBRARY_PATH="$(puniq "$LD_LIBRARY_PATH")"
+export PATH MANPATH PKG_CONFIG_PATH LD_LIBRARY_PATH
 
 # I hate this ring
 #set bell-style visible
-
-PATH=$PATH:$HOME/bin:$HOME/.rvm/bin # Add RVM to PATH for scripting
-export PATH=`puniq $PATH`

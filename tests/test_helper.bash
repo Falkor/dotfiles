@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 ################################################################################
 # test_helper.bash -
-# Time-stamp: <Thu 2016-03-03 14:54 svarrette>
+# Time-stamp: <Mon 2017-01-23 01:34 svarrette>
 #
 # Copyright (c) 2016 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 #
@@ -12,7 +12,8 @@ COLOR_RED="\033[0;31m"
 COLOR_BACK="\033[0m"
 
 # Constant
-DOTFILES_D=${DOTFILES_D:=$HOME/.dotfiles.falkor.d}
+#DOTFILES_D=${DOTFILES_D:=$HOME/.config/dotfiles.falkor.d}
+DOTFILES_D=${DOTFILES_D:=$HOME/.config}
 TARGET=${TARGET:=$HOME}
 
 
@@ -29,13 +30,14 @@ print_error_and_exit() {
 assert_falkor_dotfile_present() {
     local filename=$(basename $1)
     local falkor_dotfile=${DOTFILES_D}/$1
+    local relative_target=${falkor_dotfile/#$HOME\//}
     local dotfile=${TARGET}/$filename
     if [[ ! -e "${dotfile}" ]]; then
         flunk "the dotfile '${dotfile}' does not exists"
     else
         if [[ -h "${dotfile}" ]]; then
-            if [ "$(readlink $dotfile)" != "${falkor_dotfile}" ]; then
-                flunk "the dotfile '$dotfile' is a symlink yet it does not point to '${falkor_dotfile}' (but to '$(readlink $dotfile)')"
+            if [ "$(readlink $dotfile)" != "${relative_target}" ]; then
+                flunk "the dotfile '$dotfile' is a symlink yet it does not point to '${relative_target}' (but to '$(readlink $dotfile)')"
             fi
         elif [[ -f "${dotfile}" ]]; then
             local checksum_src=`shasum $dotfile        | cut -d ' ' -f 1`

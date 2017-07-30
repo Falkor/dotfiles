@@ -14,6 +14,7 @@ This dotfile repository is organized as follows:
 ├── bin/            # some bin scripts
 ├── docs/           # [Read the Docs](readthedocs.org) main directory
 ├── emacs           # [My emacs configuration](https://github.com/Falkor/emacs-config2/)
+├── fonts/          # Exported fonts
 ├── git/            # My git configuration
 ├── install.sh      # Installation script
 ├── mkdocs.yml      # [Read the Docs](readthedocs.org) configuration

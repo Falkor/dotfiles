@@ -33,11 +33,11 @@ Use [git-for-windows](https://git-for-windows.github.io/), which includes Git Ba
 
 The way I organize my git configurations is as follows:
 
-| File                 | Visibility | Description                                        |
-|----------------------|------------|----------------------------------------------------|
-| `~/.gitconfig`       | Public     | general aliases and core/colors configurations     |
-| `~/.gitconfig.local` | Private    | username / credentials / private business etc. |
-|                      |            |                                                    |
+| File                         | Alternative          | Visibility | Description                                    |
+|------------------------------|----------------------|------------|------------------------------------------------|
+| `~/.config/git/config`       | `~/.gitconfig`       | Public     | general aliases and core/colors configurations |
+| `~/.config/git/config.local` | `~/.gitconfig.local` | Private    | username / credentials / private business etc. |
+|                              |                      |            |                                                |
 
 Note that this hierarchy assume the availability of the `include.path` directive within Git which was introduced in __Git >= 1.7.10__ (see <http://git-scm.com/docs/git-config#_includes>)
 
@@ -46,14 +46,14 @@ Note that this hierarchy assume the availability of the `include.path` directive
 You can use the `install.sh` script featured with the [Falkor's dotfile](https://github.com/Falkor/dotfile) repository.
 
 ``` bash
-$> cd ~/.dotfiles.falkor.d
+$> cd ~/.config/dotfiles.falkor.d
 $> ./install.sh --git     # OR ./install.sh --with-git
 ```
 
 ## Uninstall
 
 ``` bash
-$> cd ~/.dotfiles.falkor.d
+$> cd ~/.config/dotfiles.falkor.d
 $> ./install.sh --delete --git
 ```
 
@@ -65,3 +65,4 @@ Consider these resources to become more familiar (if not yet) with Git:
 * [Git book](http://book.git-scm.com/index.html)
 * [Github:help](http://help.github.com/mac-set-up-git/)
 * [Git reference](http://gitref.org/)
+* [Git Cheat Sheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf) proposed on Github.

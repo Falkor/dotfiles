@@ -25,3 +25,6 @@ script:
 notifications:
   email:
     on_success: never
+  slack:
+    secure: NBN4QhHuaXpwZIxUOzZi29Z4iW0EK/d2ID7zZqz+1RDO/9BD7QqX5unM/SFP46oTbhEqNH/vMLLMFQ9i9l7Z1i6Z6nCNRiLRIjgPSL+3GMamPQm1Pj4JaLkwLHogxHdRvozfU3tdSG9uGmK++Aak/NLC/i5TASGrBMgKrmXLXEk=
+

@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Wed 2016-03-02 21:24 svarrette>
+# Time-stamp: <Sun 2017-03-19 11:56 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -21,14 +21,14 @@
 #
 ### Organization
 #
-# ~/.oh-my-zsh/
+# ~/.config/zsh/custom
 #   ├── plugins
 #       └── falkor
 #           └── falkor.plugin.zsh
 #
 ### Usage:
 #
-# In your ~/.zshrc,  add the following
+# In your .zshrc,  add the following
 #
 #    [...]
 #    plugins=(...) # Whatever default plugins you wish to use
@@ -36,6 +36,7 @@
 #    plugins+=(falkor)
 
 #####################################################################################
+
 
 # =========================================
 # ================ Color theme ============
@@ -46,38 +47,53 @@
 # To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
 # Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
 #
-POWERLEVEL9K_MODE='awesome-patched'
+# Eventually adapt (in custom.zshrc) the below POWERLEVEL9K_MODE to match
+# your font installation.
+#POWERLEVEL9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
 
 # Disable dir/git icons
 POWERLEVEL9K_HOME_ICON=''
 POWERLEVEL9K_HOME_SUB_ICON=''
 POWERLEVEL9K_FOLDER_ICON=''
 
+POWERLEVEL9K_APPLE_ICON='\uE26E'
+POWERLEVEL9K_LINUX_ICON='\uE271'
+POWERLEVEL9K_RUBY_ICON='\uE847 '
+
+POWERLEVEL9K_BACKGROUND_JOBS_ICON='\uE82F '
 DISABLE_AUTO_TITLE="true"
 
 POWERLEVEL9K_VCS_GIT_ICON=''
+POWERLEVEL9K_VCS_TAG_ICON='\uE817 '
 POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
+POWERLEVEL9K_VCS_STASH_ICON='\uE133 '
 POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
 POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
 POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
 POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-
+#
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
 POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
 #POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
-
+#
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs virtualenv rbenv rvm time)
 
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
-
+#
 POWERLEVEL9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
-
-#POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='orange'
+#
+# #POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='orange'
 POWERLEVEL9K_STATUS_VERBOSE=false
 export DEFAULT_USER="$USER"
 
+
+# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status rbenv)
+# POWERLEVEL9K_STATUS_VERBOSE=false
+# POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
+# POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 
 # ===================================================================
 # ================== Falkor's Command Aliases =======================
@@ -96,7 +112,7 @@ alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
 alias ll='ls -l'      #long list
 
 # -------------------------------------------------------------------
-# Git
+# Git -- most comes from the git plugin
 # -------------------------------------------------------------------
 alias g='git'
 alias ga='git add'
@@ -111,18 +127,20 @@ if [[ -n ${ZSH_VERSION-} ]]; then
     compdef gcount=git
 fi
 alias gcl='git clone'
+alias clone='git clone'
 alias gd='git diff'
 alias dg='git diff'
 alias GD='git diff HEAD~1 HEAD'
-alias gg="git log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --max-count=20"
+alias gg="git log  --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --max-count=20"
 alias ggl="git log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias gl='git log --graph --oneline --decorate --max-count=20'
+alias gl='git log  --graph --oneline --decorate --max-count=20'
 gm() {
     git commit -s -m "$*"
 }
 gma() {
     git commit -s -am "$*"
 }
+alias p='git push'
 alias gp='git push'
 alias gpu='git push'
 alias gpd='git push --dry-run'
@@ -138,6 +156,7 @@ alias gss='git status --short'
 function gsa() {
     local url=$1
     local dir=`basename $url .git`
+	[ -d ".submodules" ] && dir=".submodules/$dir"
     [ $# -eq 2 ] && dir=$2
     echo "=> adding git submodule from '$url' in '$dir'"
     git submodule add $url $dir
@@ -149,33 +168,100 @@ alias gsu='git submodule update'
 gsupgrade() {
     git submodule foreach 'git fetch origin; git checkout $(git rev-parse --abbrev-ref HEAD); git reset --hard origin/$(git rev-parse --abbrev-ref HEAD); git submodule update --recursive; git clean -dfx'
 }
+alias u='git pull'
 alias up='git pull'
 alias gu='git pull'
 alias gta='git tag -a -m'
+alias cdroot='cd $(git rev-parse --show-cdup)'
+
+#-------
+# Myrepo
+#--------
+alias mradd='mr register'
+alias mrup='(cd ~; mr -j update)'
 
 # ------------
 # Utilities
 # ------------
+bup() {
+  echo "Updating your [Homebrew] system"
+  brew update
+  brew upgrade
+  brew cu
+  brew cleanup
+  brew cask cleanup
+}
 alias o='open'
+alias m='make -j8'
+alias skim='open -a Skim'
+if [[ -n ${ZSH_VERSION-}  ]]; then
+	zstyle ":completion:*:*:skim:*" file-patterns "*.pdf *(-/)"
+  zcompclean() {
+    rm -rf ${XDG_CONFIG_HOME}/zsh/.zcompdump*
+    autoload -U compinit && compinit
+  }
+fi
 alias mkdir='mkdir -p'
 # Search for files and page it
 search() {
     find . -iname "*$@*" | less;
 }
 
+if [[ -n ${ZSH_VERSION-}  ]]; then
+  alias refresh='sourcezshrc'
+else
+  alias refresh='source ~/.profile'
+fi
+
+
+
 alias sshx='ssh -C -X -c blowfish'
 alias proxy='ssh -C -q -T -n -N -D 1080'
+alias rsyncfalkor='rsync -P -avzu'
+
 
 mkcd () {
     mkdir -p "$@" && cd "$@"
 }
-alias diff='colordiff'  # for colors
+#alias diff='colordiff'  # for colors
 alias draw='figlet -c -w 80'
 # Which directory is hiding all the bytes?
 alias dux='du -h -d 1 | sort -n'
 # Ask more gently to run the last command ;)
 alias pls='sudo `fc -n -l -1`'
 alias ":q"="exit"
+
+# Quick tarball backup
+backup() {
+  [[ -z "$1" ]] && return
+  local dst=$(echo $1 | sed "s/^\./dot/" )
+  local archive="backup_$(date +%F)_${dst}.tgz"
+  echo "=> creating tarball archive '${archive}' to backup '$@'"
+  tar cvzf ${archive} $@
+}
+
+# Optimize PDF/JPEG/PNG size
+optipdf () {
+	local pdf=$1
+	local res=`basename $pdf .pdf`-optimized.pdf
+	noglob gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress -sOutputFile=$res $pdf
+	local opti_size=`du -k $res | cut -f1`
+	local size=`du -k $pdf | cut -f1`
+	if [[ "$opti_size" -lt "$size"  ]]; then
+		echo " => optimized PDF of smaller size ($opti_size vs. $size) thus overwrite $pdf"
+		mv $res $pdf
+		git commit -s -m "reduce size of PDF '$pdf'" $pdf
+	else
+		echo " => already optimized PDF thus discarded"
+		rm -f $res
+	fi
+}
+alias reducepdf='optipdf'
+if [[ -n ${ZSH_VERSION-}   ]]; then
+	compdef '_files -g "*.pdf"' optipdf
+fi
+alias optipng='optipng -o9 -zm1-9 -strip all'
+alias optijpg='jpegoptim'
 
 # ---------------------------------------------
 # United Colors of Benetton: Colors everywhere
@@ -201,25 +287,26 @@ alias t='task'
 # ---------------
 # Emacs business
 # ---------------
-
-alias emacs="$HOME/Applications/Emacs.app/Contents/MacOS/Emacs"
-alias es="emacs --daemon"
-alias em="emacsclient -nw --alternate-editor='vim'"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
+#alias es="emacs --daemon"
+#alias em="emacsclient -nw --alternate-editor='vim'"
 
 # ---------------
 # ZSH management
 # ---------------
-alias zshrc="$EDITOR ~/.zshrc" # Quick access to the ~/.zshrc file
-alias sourcezshrc="source ~/.zshrc"
-alias zshfalkor="$EDITOR ~/.oh-my-zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
+alias zshenv="$EDITOR ${HOME}/.zshenv" # Quick access to the .zshenv file
+alias zshrc="$EDITOR ${XDG_CONFIG_HOME}/zsh/zshrc" # Quick access to the .zshrc file
+alias sourcezshrc="source ${XDG_CONFIG_HOME}/zsh/zshrc"
+alias zshfalkor="$EDITOR ${XDG_CONFIG_HOME}/zsh/custom/plugins/falkor/falkor.plugin.zsh" # Quick access to this file
 
-#--------------
-# Global alias
-# -------------
+
+#-----------------------
+# Global alias (for ZSH)
+# ----------------------
 if [[ -n ${ZSH_VERSION-} ]]; then
-    alias -g L="| less" # Write L after a command to page through the output.
-    alias -g H="| head -n 20" # Write L after a command to get the 20 first lines
-    alias -g G='| grep --color -i' # Write G after the command to grep it
+    alias -g L="| less"             # Write L after a command to page through the output.
+    alias -g H="| head -n 20"       # Write H after a command to get the 20 first lines
+    alias -g G='| grep --color -i'  # Write G after the command to grep it
     alias -g TL='| tail -20'
     alias -g NUL="> /dev/null 2>&1" # You get the idea.
 fi

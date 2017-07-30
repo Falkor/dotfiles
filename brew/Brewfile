@@ -1,0 +1,109 @@
+# -*- mode: ruby -*-
+# Minimal Brewfile
+#
+# Pre-configuration for brew sources
+tap 'buo/cask-upgrade'
+tap 'caskroom/cask'
+tap 'caskroom/fonts'
+tap 'homebrew/bundle'
+tap 'homebrew/completions'
+tap 'homebrew/core'
+tap 'homebrew/dupes'
+tap 'homebrew/services'
+tap 'homebrew/versions'
+tap 'railwaycat/emacsmacport'
+
+# Couple of mandatory applications
+brew 'autoconf'
+brew 'autojump'
+brew 'readline'
+brew 'bash'
+brew 'boost', args: ['with-mpi', 'without-single']
+brew 'cmake'
+brew 'coreutils'
+brew 'ctags-exuberant'
+brew 'chromaprint'
+brew 'dsh'
+brew 'figlet'
+brew 'gdbm'
+brew 'git', args: [ 'without-completions']
+brew 'git-crypt'
+brew 'git-extras'
+brew 'git-flow-avh'
+brew 'gnuplot', args: ['with-pdflib-lite' ]
+brew 'htop'
+brew 'imapfilter'
+brew 'imagemagick'
+brew 'ipcalc'
+brew 'jpegoptim'
+brew 'libyaml'
+brew 'lua'
+brew 'mas'
+brew 'mkdocs'
+brew 'mr'
+brew 'ninja'
+brew 'nmap'
+brew 'offlineimap'
+brew 'optipng'
+brew 'openssl'
+brew 'perl'
+brew 'pow'
+brew 'sqlite'
+brew 'packer'
+brew 'pandoc'
+brew 'parallel'
+brew 'python'
+brew 'homebrew/science/r'   # R statistical
+brew 'ruby'
+brew 'stow'
+brew 'subversion'
+brew 'task'
+brew 'tree'
+brew 'terminal-notifier'
+brew 'tig'
+brew 'vim'
+brew 'watch'
+brew 'wget'
+# more recent rsync
+brew 'homebrew/dupes/rsync'
+
+# completions
+brew 'bash-completion'
+brew 'brew-cask-completion'
+brew 'zsh-completions'
+
+# Mac GUIs Apps
+cask '1password'
+cask 'alfred'
+cask 'atom'
+cask 'calibre'
+cask 'emacs-mac'
+cask 'dropbox'
+cask 'gpgtools'
+cask 'google-chrome'
+cask 'gpgtools'
+cask 'mactex'
+cask 'marked'
+cask 'omnigraffle'
+cask 'rowanj-gitx'
+cask 'rstudio'
+cask 'skim'
+cask 'skype'
+cask 'spamsieve'
+cask 'the-unarchiver'
+cask 'vagrant'
+cask 'vagrant-manager'
+cask 'virtualbox'
+cask 'xquartz'
+cask 'yujitach-menumeters'
+
+# Special fonts
+cask 'font-source-code-pro-for-powerline'
+cask 'font-hack-nerd-font'
+
+# Mac Store Apps
+mas 'Numbers', id: 409203825
+mas 'Keynote', id: 409183694
+mas 'Slack', id: 803453959
+mas 'Pages', id: 409201541
+mas 'Tweetbot', id: 557168941
