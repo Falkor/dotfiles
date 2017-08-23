@@ -88,4 +88,6 @@ export HISTFILE=$ZSH_CACHE_DIR/zhistory
 # $HOME, sweet $HOME
 export PATH
 
+export TERM="xterm-256color"
+
 # === Now ${ZDOTDIR}/.zshrc will be loaded.... ===
