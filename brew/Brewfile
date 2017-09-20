@@ -30,7 +30,7 @@ brew 'git', args: [ 'without-completions']
 brew 'git-crypt'
 brew 'git-extras'
 brew 'git-flow-avh'
-brew 'gnuplot', args: ['with-pdflib-lite' ]
+brew 'gnuplot', args: ['with-pdflib-lite', 'with-cairo' ]
 brew 'htop'
 brew 'imapfilter'
 brew 'imagemagick'
