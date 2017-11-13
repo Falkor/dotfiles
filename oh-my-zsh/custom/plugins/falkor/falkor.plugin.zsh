@@ -192,6 +192,7 @@ bup() {
   brew cask cleanup
 }
 alias o='open'
+alias of='lsof -nP +c 15 | grep LISTEN'
 alias m='make -j8'
 alias skim='open -a Skim'
 if [[ -n ${ZSH_VERSION-}  ]]; then
