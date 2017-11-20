@@ -71,6 +71,7 @@ plugins=()
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
 plugins+=(rvm rake gem)                     # Ruby stuff
 plugins+=(pyenv)                            # Python stuff
+plugins+=(docker docker-compose)            # Docker stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
 plugins+=(colored-man-page cp marked2 taskwarrior)
