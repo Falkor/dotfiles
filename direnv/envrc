@@ -1,11 +1,18 @@
 # -*- mode: sh; -*-
 # (rootdir)/.envrc : direnv configuration file
 # see https://direnv.net/
-pyversion=$(head .python-version)
-pvenv=$(head     .python-virtualenv)
-
+if [ -f ".python-version" ]; then
+    pyversion=$(head .python-version)
+else
+    pyversion=2.7.14
+fi
 use python ${pyversion}
-# Create the virtualenv if not yet done
-layout virtualenv ${pyversion} ${pvenv}
-# activate it
-layout activate ${pvenv}-${pyversion}
+
+if [ -f ".python-virtualenv" ]; then
+    pvenv=$(head .python-virtualenv)
+
+    # Create the virtualenv if not yet done
+    layout virtualenv ${pyversion} ${pvenv}
+    # activate it
+    layout activate ${pvenv}-${pyversion}
+fi
