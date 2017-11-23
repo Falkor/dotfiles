@@ -27,6 +27,6 @@ layout_activate() {
         local pyenvprefix=$(pyenv prefix)
         local pyversion=$(pyenv version-name)
         local pvenv="$1"
-        source ${pyenvprefix}/envs/${pvenv}/bin/activate
+        source ${pyenvprefix}/envs/${pvenv}-${pyversion}/bin/activate
     fi
 }

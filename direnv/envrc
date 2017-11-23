@@ -14,5 +14,5 @@ if [ -f ".python-virtualenv" ]; then
     # Create the virtualenv if not yet done
     layout virtualenv ${pyversion} ${pvenv}
     # activate it
-    layout activate ${pvenv}-${pyversion}
+    layout activate ${pvenv}      #-${pyversion}
 fi
