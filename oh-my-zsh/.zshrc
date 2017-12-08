@@ -70,7 +70,7 @@ plugins=()
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 plugins+=(git-flow git-extras git-remote-branch hub)  # Git
 plugins+=(rvm rake gem)                     # Ruby stuff
-plugins+=(pyenv)                            # Python stuff
+plugins+=(pip pyenv)                            # Python stuff
 plugins+=(docker docker-compose)            # Docker stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
