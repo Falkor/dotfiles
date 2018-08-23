@@ -28,18 +28,146 @@
     st  = status
     df  = diff
     ci  = commit -s
-    br  = branch
     w   = whatchanged --abbrev-commit
     ls  = ls-files
     gr  = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     grd = log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit
     # From http://progit.org/book/ch2-11.html
+    unadd = reset HEAD
     unstage = reset HEAD --
     last = log -1 HEAD
     amend = commit --amend
     # From http://j.shirley.im/tech/git-flow/
     feature-start = flow feature start
     feature-finish = ! git flow feature finish
+    
+    # From https://github.com/tgamblin/dotfiles/blob/master/home/.gitconfig
+    br = branch --sort=-committerdate \
+        --format '%(HEAD) %(color:yellow)%(objectname:short)%(color:reset)  %(if)%(HEAD)%(then)%(color:green)%(refname:short)%(color:reset)%(else)%(refname:short)%(end) - %(color:cyan)(%(committerdate:relative))%(color:reset)'
+
+    bv = branch --sort=-committerdate \
+        --format '%(HEAD) %(color:yellow)%(objectname:short)%(color:reset)  %(if)%(HEAD)%(then)%(color:green)%(refname:short)%(color:reset)%(else)%(refname:short)%(end) - %(color:cyan)(%(committerdate:relative))%(color:reset)%(if)%(upstream)%(then) -> %(color:magenta)%(upstream:short) %(color:white)%(upstream:track)%(color:reset)%(end)'
+
+    #
+    # `git b` with no arguments shows branches ordered by commit date
+    # (most recent first)
+    #
+    # With arguments, it behaves like `git branch`
+    #
+    b = !"f() { \
+            if [ $# -ne 0 ]; then \
+                git branch \"$@\"; \
+            else \
+                git for-each-ref --sort=-committerdate refs/heads/ \
+                --format='%(HEAD) %(color:yellow)%(objectname:short)%(color:reset)  %(if)%(HEAD)%(then)%(color:green)%(refname:short)%(color:reset)%(else)%(refname:short)%(end) - %(color:cyan)(%(committerdate:relative))%(color:reset)'; \
+            fi; \
+        }; f"
+    #
+    # Make tarball out of the current head.  Tarball and the contained
+    # directory will be named by the date and current HEADs SHA.
+    #
+    tarball = !"f() { \
+        filename=\"$1\"; \
+        if [ \"x$filename\" = x ]; then \
+            name=\"$(basename $(git rev-parse --show-toplevel))\" && \
+            head=$(git log -1 --format=\"%h\" HEAD) && \
+            dstamp=$(git log -1 --format=\"%ci\" HEAD | awk '{print $1}') && \
+            filename=\"${name}-${dstamp}-${head}\"; \
+        fi; \
+        git archive --format=tar.gz --prefix=\"${filename}/\" HEAD -o ${filename}.tar.gz; \
+    }; f"
+    #
+    # Git Statistics
+    #
+    # - ghstats
+    #     Show same statistics that GitHub's contributors page does:
+    #     commits, insertions, & deletions, over the current branch.
+    #
+    # - lcontrib:
+    #     Use `git blame` to sum up lines contributed by all users
+    #     that are still in the current HEAD. This differs from
+    #     ghstats becausae it shows only lines in the current
+    #     snapshot, NOT insertions and deletions from all commits.
+    #
+    # - scontrib:
+    #     Show raw #commits made by users in current branch.
+    #
+    # All of the above aliases can take paths as arguments, e.g., if
+    # your repo has a subdirectory called "lib", you could do:
+    #
+    #   git ghstats lib
+    #
+    # You can provide relative or absolute paths. You can also exclude
+    # paths from the statistics using git pathspecs, e.g. if you
+    # wanted to exclude contributions made in a directory containing
+    # external dependencies:
+    #
+    #   # In the repository root
+    #   git ghstats . ":(exclude)lib/external"
+    #
+    # NOTE: You cannot currently use relative paths with exclude.
+    #       ONLY do this one in the repository root.
+    #
+    scontrib = !"f() {\
+        printf '%7s %-30s %s\n' COMMITS NAME EMAIL && \
+        git log --branches --pretty=format:'%<(30)%aN %aE' HEAD -- $( \
+            for d in \"$@\"; do echo \"${GIT_PREFIX:-${d}}\"; done \
+        )| sort | uniq -c | sort -nr; \
+    }; f"
+
+    lcontrib = "!f() { \
+        for file in $( \
+            git ls-tree --name-only -r HEAD -- $( \
+                for d in \"$@\"; do echo \"${GIT_PREFIX:-${d}}\"; done \
+            ) \
+        ); do \
+            git blame -w --line-porcelain $file | \
+                perl -ne '\
+                    if (/^[0-9a-f]{40} / .. /^filename /) { \
+                        $author = $_ if (s/^author //); \
+                    } else { \
+                        print $author unless /^\\s*(\\#.*)?$/; \
+                    }'; \
+        done | sort | uniq -c | sort -nr; \
+    }; f"
+
+    ghstats = "!f() { \
+        printf \"%-8s%-9s%-9s%-9s%s\\n\" '#' COMMITS INSERTED DELETED AUTHOR; \
+        git log --use-mailmap --shortstat HEAD -- $( \
+            for d in \"$@\"; do \
+                echo \"${GIT_PREFIX:-${d}}\"; \
+            done \
+        ) | perl -e ' \
+            while (<>) { \
+                if (/^Author: (.*)$/) { \
+                    $a = $1; \
+                    $c{$a} = 0 unless defined $c{$a}; \
+                    $i{$a}=0 unless defined $i{$a}; \
+                    $d{$a}=0 unless defined $d{$a}; \
+                } \
+                if (/^ (\\d+) files? changed(?:, (\\d+) insertions?\\(\\+\\))?(?:, (\\d+) deletions?\\(\\-\\))?/) { \
+                    $c{$a} += 1; \
+                    $i{$a} += $2; \
+                    $d{$a} += $3; \
+                } \
+            }; \
+            printf(\"%-9d%-9d%-9d%s\\n\", $c{$_}, $i{$_}, $d{$_}, $_) for (keys %i);' \
+        | sort -nr | nl -n ln -w 5; \
+    }; f"
+
+    closed = "!for br in $(git branch); do if git is-merged $br &>/dev/null; then echo $br; fi; done"
+
+    # get the github name of this repository by looking at all the github
+    # remotes and picking the most popular name there.
+    ghname = "!f() {\
+        git remote -v |\
+            perl -ne '\
+                if (s/.*github.com[:\\/]([^\\/]*)\\/([^.\\s]*).*/\\2/) { print; }'|\
+            sort |\
+            uniq |\
+            head -1;\
+        }; f"
+
 
 [color]
     diff   = auto
