@@ -196,7 +196,6 @@ bup() {
   brew upgrade
   brew cu
   brew cleanup
-  brew cask cleanup
 }
 alias o='open'
 alias of='lsof -nP +c 15 | grep LISTEN'
