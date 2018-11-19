@@ -1,6 +1,9 @@
 # -*- mode: sh; -*-
 # (rootdir)/.envrc : direnv configuration file
 # see https://direnv.net/
+# Grab the latest version of this file from 
+#      https://github.com/Falkor/dotfiles/blob/master/direnv/envrc
+#
 if [ -f ".python-version" ]; then
     pyversion=$(head .python-version)
 else
