@@ -9,6 +9,8 @@ So I use [Oh-My-Zsh](http://ohmyz.sh) using the excellent [powerlevel9k](https:/
 The font I use is [Source Code Pro + Powerline Awesome Regular](https://github.com/Falkor/dotfiles/blob/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) at 14pt (for both Regular and Non-ASCII font).
 You can find more information on  the way I configured iTerm2 on [my blog](https://varrette.gforge.uni.lu/blog/2017/01/17/configuring-mac-os-on-your-brand-new-laptop/#iterm2-configuration).
 
+__UPDATE__: I recently swith to [Nerd font](https://github.com/ryanoasis/nerd-fonts#font-installation), which happened to be easier to configure on Mac OS. 
+
 ## Screenshot
 
 ![](https://raw.githubusercontent.com/Falkor/dotfiles/master/screenshots/screenshot_falkor_iterm.png)

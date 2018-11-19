@@ -18,6 +18,11 @@
 #
 # Personal Custom plugin for Oh My Zsh, mainly designed to host my favorite
 # aliases and my theme specialization
+# Install nerd-font (see https://github.com/ryanoasis/nerd-fonts#font-installation)
+# On Mac OS X: 
+#     brew tap caskroom/fonts
+#     brew cask install font-hack-nerd-font
+# Then in iTerm2, change the font for non-ASCII Font to 14pt Hack Regular Nerd Font Complete
 #
 ### Organization
 #
@@ -47,61 +52,69 @@
 # To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
 # Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
 #
-# Eventually adapt (in custom.zshrc) the below POWERLEVEL9K_MODE to match
+# Eventually adapt (in custom.zshrc) the below P9K_MODE to match
 # your font installation.
-#POWERLEVEL9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
-
+#P9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
+P9K_MODE='nerdfont-complete'
+#P9K_MODE='awesome-patched'
 # Disable dir/git icons
-POWERLEVEL9K_HOME_ICON=''
-POWERLEVEL9K_HOME_SUB_ICON=''
-POWERLEVEL9K_FOLDER_ICON=''
+P9K_DIR_HOME_ICON=''
+P9K_DIR_HOME_SUBFOLDER_ICON=''
+P9K_DIR_DEFAULT_ICON=''
 
-POWERLEVEL9K_APPLE_ICON='\uE26E'
-POWERLEVEL9K_LINUX_ICON='\uE271'
-POWERLEVEL9K_RUBY_ICON='\uE847 '
-POWERLEVEL9K_PYTHON_ICON='\U1F40D '
+#P9K_APPLE_ICON='\uE26E'
+#P9K_LINUX_ICON='\uE271'
+#P9K_RVM_ICON='\uE847 '
+#P9K_PYENV_ICON='\U1F40D '
 
-POWERLEVEL9K_BACKGROUND_JOBS_ICON='\uE82F '
+#P9K_BACKGROUND_JOBS_ICON='\uE82F '
 DISABLE_AUTO_TITLE="true"
 
-POWERLEVEL9K_VCS_GIT_ICON=''
-POWERLEVEL9K_VCS_TAG_ICON='\uE817 '
-POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_STASH_ICON='\uE133 '
-POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
+P9K_VCS_GIT_ICON=''
+#P9K_VCS_GIT_GITHUB_ICON=''
+#P9K_VCS_GIT_BITBUCKET_ICON=''
+#P9K_VCS_GIT_GITLAB_ICON=''
+#P9K_VCS_TAG_ICON='\uE817 '
+#P9K_VCS_STAGED_ICON='\u00b1'
+#P9K_VCS_STASH_ICON='\uE133 '
+P9K_VCS_UNTRACKED_ICON='\u25CF'
+P9K_VCS_UNSTAGED_ICON='\u00b1'
+P9K_VCS_INCOMING_CHANGES_ICON='\u2193'
+P9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
 #
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
-#POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
+P9K_VCS_MODIFIED_BACKGROUND='yellow'
+P9K_VCS_UNTRACKED_BACKGROUND='yellow'
+#P9K_VCS_UNTRACKED_ICON='?'
 #
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-#POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
-# POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%F{249}%}\u2517%{%F{default}%}❯ "
+P9K_PROMPT_ON_NEWLINE=true
+#P9K_RPROMPT_ON_NEWLINE=false
+#P9K_MULTILINE_FIRST_PROMPT_PREFIX_ICON="%F{blue}\u256D\u2500%f"
+# P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
+#P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%{%F{249}%}\u2517%{%F{default}%}❯ "
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs virtualenv rbenv rvm time)
+P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
+P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs virtualenv rbenv rvm time)
 
-#POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
-POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
+P9K_COMMAND_EXECUTION_TIME_THRESHOLD=1
+
+#P9K_SHORTEN_STRATEGY="truncate_middle"
+P9K_DIR_SHORTEN_LENGTH=3
+P9K_DIR_SHORTEN_STRATEGY=truncate_folders
 #
-POWERLEVEL9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
+#P9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
+#P9K_TIME_FORMAT="%D{%H:%M \uF073  %d.%m.%y}"
+P9K_TIME_FORMAT="%D{%H:%M-%d.%m.%y}"
 #
-# #POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='orange'
-POWERLEVEL9K_STATUS_VERBOSE=false
+# #P9K_VCS_MODIFIED_BACKGROUND='orange'
+P9K_STATUS_VERBOSE=false
 export DEFAULT_USER="$USER"
 
 
-# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
-# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status rbenv)
-# POWERLEVEL9K_STATUS_VERBOSE=false
-# POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
-# POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
+# P9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
+# P9K_RIGHT_PROMPT_ELEMENTS=(status rbenv)
+# P9K_STATUS_VERBOSE=false
+# P9K_SHORTEN_STRATEGY="truncate_middle"
+# P9K_SHORTEN_DIR_LENGTH=3
 
 # ===================================================================
 # ================== Falkor's Command Aliases =======================
