@@ -105,7 +105,7 @@ P9K_DIR_SHORTEN_STRATEGY=truncate_folders
 #
 #P9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
 #P9K_TIME_FORMAT="%D{%H:%M \uF073  %d.%m.%y}"
-P9K_TIME_FORMAT="%D{%H:%M-%d.%m.%y}"
+P9K_TIME_FORMAT="%D{%H:%M  %d.%m.%y}"
 #
 # #P9K_VCS_MODIFIED_BACKGROUND='orange'
 P9K_STATUS_VERBOSE=false
