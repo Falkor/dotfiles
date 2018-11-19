@@ -94,10 +94,10 @@ P9K_PROMPT_ON_NEWLINE=true
 #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570'$'\U2500 ❯ '
 P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570❯ '
 
-P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
+P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs vagrant docker_machine kubecontext)
 P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs virtualenv rbenv rvm time)
 
-P9K_COMMAND_EXECUTION_TIME_THRESHOLD=1
+P9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 
 #P9K_SHORTEN_STRATEGY="truncate_middle"
 P9K_DIR_SHORTEN_LENGTH=3
