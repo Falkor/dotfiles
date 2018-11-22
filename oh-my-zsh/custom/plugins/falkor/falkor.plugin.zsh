@@ -19,7 +19,7 @@
 # Personal Custom plugin for Oh My Zsh, mainly designed to host my favorite
 # aliases and my theme specialization
 # Install nerd-font (see https://github.com/ryanoasis/nerd-fonts#font-installation)
-# On Mac OS X: 
+# On Mac OS X:
 #     brew tap caskroom/fonts
 #     brew cask install font-hack-nerd-font
 # Then in iTerm2, change the font for non-ASCII Font to 14pt Hack Regular Nerd Font Complete
@@ -87,6 +87,7 @@ P9K_VCS_UNTRACKED_BACKGROUND='yellow'
 #P9K_VCS_UNTRACKED_ICON='?'
 #
 P9K_PROMPT_ON_NEWLINE=true
+P9K_PROMPT_ADD_NEWLINE=true
 #P9K_RPROMPT_ON_NEWLINE=false
 #P9K_MULTILINE_FIRST_PROMPT_PREFIX_ICON='%F{blue}\u256D\u2500%f'
 # P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
