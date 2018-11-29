@@ -95,7 +95,7 @@ P9K_PROMPT_ADD_NEWLINE=true
 #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570'$'\U2500 ❯ '
 P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570❯ '
 
-P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs vagrant docker_machine kubecontext)
+P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs docker_machine kubecontext)
 P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs virtualenv rbenv rvm time)
 
 P9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
@@ -314,6 +314,25 @@ alias t='task'
 alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
 #alias es="emacs --daemon"
 #alias em="emacsclient -nw --alternate-editor='vim'"
+
+# ---------------
+# iTerm2 business
+# ---------------
+
+# Setup tab and window title functions for iterm2
+# iterm behaviour: until window name is explicitly set, it'll always track tab title.
+# So, to have different window and tab titles, iterm_window() must be called
+# first. iterm_both() resets this behaviour and has window track tab title again).
+# Source: http://superuser.com/a/344397
+set_iterm_name() {
+  mode=$1; shift
+  echo -ne "\033]$mode;$@\007"
+}
+iterm_both()   { set_iterm_name 0 $@; }
+iterm_tab()    { set_iterm_name 1 $@; }
+title()        { iterm_both $@;       }
+iterm_window() { set_iterm_name 2 $@; }
+
 
 # ---------------
 # ZSH management
