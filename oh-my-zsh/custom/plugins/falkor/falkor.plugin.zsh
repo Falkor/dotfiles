@@ -95,8 +95,8 @@ P9K_PROMPT_ADD_NEWLINE=true
 #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570'$'\U2500 ❯ '
 P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570❯ '
 
-P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs docker_machine kubecontext)
-P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs virtualenv rbenv rvm time)
+P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs virtualenv rbenv rvm docker_machine kubecontext)
+P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs time)
 
 P9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 
@@ -141,6 +141,8 @@ alias ll='ls -l'      #long list
 alias g='git'
 alias ga='git add'
 alias gb='git branch -a'
+# age of each branch
+alias gbage='for k in `git branch -a | perl -pe '\''s/^..(.*?)( ->.*)?$/\1/'\''`; do echo -e `git show --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $k -- | head -n 1`\\t$k; done | sort -r'
 # stop bother me with merge messages
 gbnoedit() {
     git config branch.$(git rev-parse --abbrev-ref HEAD).mergeoptions --no-edit
