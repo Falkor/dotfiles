@@ -58,6 +58,7 @@ WITH_SCREEN=""
 WITH_BREW=""
 WITH_CURL=""
 WITH_RVM=""
+WITH_DIRENV=""
 
 # Default action
 ACTION="install"
@@ -133,6 +134,8 @@ OPTIONS
         Falkor's Bourne-Again shell (Bash) configuration ~/.bashrc
     --brew --with-brew
         Install with brew bundle
+    --direnv --with-direnv
+        Install direnv confirguration (see https://github.com/direnv/direnv)
     --zsh --with-zsh
         Falkor's ZSH / Oh-My-ZSH configuration
     --emacs --with-emacs
@@ -637,6 +640,13 @@ __curl() {
   shell_custom_enable 'curl'
   clean_configdir 'curl'
 }
+# Direnv -- see http://direnv.net
+__direnv(){
+  [ -z "${WITH_DIRENV}" ] && return
+  info "${ACTION} Falkor's direnv configuration ~/.config/direnv/direnvrc"
+  setup_configdir 'direnv'
+  clean_configdir 'direnv'
+}
 ## RVM -- see https://rvm.io/rvm/install
 __rvm(){
   [ -z "${WITH_RVM}" ]  && return
@@ -682,6 +692,7 @@ while [ $# -ge 1 ]; do
         # --dotfiledir) shift;     DOTFILES_DIR=$1;;
         --prefix)  shift;        PREFIX=$1;;
         --with-bash  | --bash)   TARGETS+='--bash';;
+        --with-direnv| --direnv) TARGETS+='--direnv';;
         --with-zsh   | --zsh)    TARGETS+='--zsh';;
         --with-shell | --shell)  TARGETS+='--shell';;
         --with-emacs | --emacs)  TARGETS+='--emacs';;
@@ -730,14 +741,15 @@ fi
 for target in ${TARGETS}; do
     case $target in
       *bash*)   WITH_SHELL='--shell'; WITH_BASH="$target"; __bash;;
-      *zsh*)    WITH_SHELL='--shell'; WITH_ZSH="$target";  __zsh;;
-      *shell*)  WITH_SHELL="$target";  __shell;;
-      *emacs*)  WITH_EMACS="$target";  __emacs;;
-      *vim*)    WITH_VIM="$target";    __vim;;
-      *git*)    WITH_GIT="$target";    __git;;
-      *screen*) WITH_SCREEN="$target"; __screen;;
       *brew*)   WITH_BREW="$target";   __brew;;
       *curl*)   WITH_CURL="$target";   __curl;;
+      *direnv*) WITH_DIRENV="$target"; __direnv;;
+      *emacs*)  WITH_EMACS="$target";  __emacs;;
+      *git*)    WITH_GIT="$target";    __git;;
       *rvm*)    WITH_RVM="$target";    __rvm;;
+      *screen*) WITH_SCREEN="$target"; __screen;;
+      *shell*)  WITH_SHELL="$target";  __shell;;
+      *vim*)    WITH_VIM="$target";    __vim;;
+      *zsh*)    WITH_SHELL='--shell'; WITH_ZSH="$target";  __zsh;;
     esac
 done

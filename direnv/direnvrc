@@ -1,0 +1,32 @@
+# -*- mode: sh; -*-
+# Global configuration for direnv to make it compliant with pyenv
+# See https://direnv.net/
+#
+# Adapted from
+#  - https://github.com/direnv/direnv/wiki/Python#-pyenv and
+#  - https://github.com/direnv/direnv/wiki/Python#-virtualenvwrapper
+
+# use a certain pyenv version
+use_python() {
+    if [ -n "$(which pyenv)" ]; then
+        local pyversion=$1
+        pyenv local ${pyversion}
+    fi
+}
+
+layout_virtualenv() {
+    local pyversion=$1
+    local pvenv=$2
+    if [ -n "$(which pyenv-virtualenv)" ]; then
+        pyenv virtualenv --force --quiet ${pyversion} ${pvenv}-${pyversion}
+    fi
+}
+
+layout_activate() {
+    if [ -n "$(which pyenv)" ]; then
+        local pyenvprefix=$(pyenv prefix)
+        local pyversion=$(pyenv version-name)
+        local pvenv="$1"
+        source ${pyenvprefix}/envs/${pvenv}-${pyversion}/bin/activate
+    fi
+}
