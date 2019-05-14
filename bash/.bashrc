@@ -180,8 +180,9 @@ test -n "$(command -v vim)" && EDITOR=vim || EDITOR=nano
 export EDITOR
 # Default pager ('less' is so much better than 'more'...)
 if test -n "$(command -v less)" ; then
-    PAGER="less -FirSwX"
-    MANPAGER="less -FiRswX"
+    #PAGER="less -FirSwX"
+    PAGER="less"
+    MANPAGER="$PAGER"
 else
     PAGER=more
     MANPAGER="$PAGER"
