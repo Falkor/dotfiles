@@ -1,21 +1,22 @@
 # -*- mode: sh; -*-
-# (rootdir)/.envrc : direnv configuration file
-# see https://direnv.net/
-# Grab the latest version of this file from 
-#      https://github.com/Falkor/dotfiles/blob/master/direnv/envrc
+# (rootdir)/.envrc : local direnv configuration file
+# Assumes the presence of '~/.config/direnv/direnvrc' from  
+#    https://github.com/Falkor/dotfiles/blob/master/direnv/direnvrc
 #
-if [ -f ".python-version" ]; then
-    pyversion=$(head .python-version)
-else
-    pyversion=2.7.14
-fi
+# Grab the latest version of this file from
+#      https://github.com/Falkor/dotfiles/blob/master/direnv/envrc
+#  
+# Quick installation of this file for your project:
+#    cd /path/to/projectdir
+#    curl -o .envrc https://raw.githubusercontent.com/Falkor/dotfiles/master/direnv/envrc
+
+
+# Default python version and virtualenv (basename of the root project directory)
+[ -f ".python-version" ]    && pyversion=$(head .python-version) || pyversion=2.7.16
+[ -f ".python-virtualenv" ] && pvenv=$(head  .python-virtualenv) || pvenv=$(basename $PWD)
+
 use python ${pyversion}
-
-if [ -f ".python-virtualenv" ]; then
-    pvenv=$(head .python-virtualenv)
-
-    # Create the virtualenv if not yet done
-    layout virtualenv ${pyversion} ${pvenv}
-    # activate it
-    layout activate ${pvenv}      #-${pyversion}
-fi
+# Create the virtualenv if not yet done
+layout virtualenv ${pyversion} ${pvenv}
+# activate it
+layout activate ${pvenv} 
