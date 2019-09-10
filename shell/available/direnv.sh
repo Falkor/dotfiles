@@ -2,6 +2,6 @@
 # See https://direnv.net/
 
 if [ -n "$(which direnv)" ]; then
-  shell=$(echo $(basename $SHELL))
-  eval "$(direnv hook $shell)"
+  eval "$(direnv hook $(basename $SHELL))"
+  # export DIRENV_WARN_TIMEOUT=100s
 fi
