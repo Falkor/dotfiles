@@ -68,14 +68,14 @@ plugins=()
 #___________________
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
-plugins+=(git-flow git-extras git-remote-branch hub)  # Git
+plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(rake gem)                     # Ruby stuff
 plugins+=(pyenv pip)                    # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
-plugins+=(colored-man-page cp marked2 taskwarrior)
+plugins+=(cp marked2 taskwarrior)
 #__________________
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #

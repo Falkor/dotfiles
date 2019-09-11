@@ -135,6 +135,9 @@ alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
 alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
 alias ll='ls -l'      #long list
 
+# fuzzy typing
+alias car='cat'
+
 # -------------------------------------------------------------------
 # Git -- most comes from the git plugin
 # -------------------------------------------------------------------
@@ -245,6 +248,14 @@ alias sshx='ssh -C -X -c blowfish'
 alias proxy='ssh -C -q -T -n -N -D 1080'
 alias rsyncfalkor='rsync -P -avzu'
 
+alias nothankyouadobe="sudo -H killall ACCFinderSync \"Core Sync\" AdobeCRDaemon \"Adobe Creative\" AdobeIPCBroker node \"Adobe Desktop Service\" \"Adobe Crash Reporter\";sudo -H rm -rf \"/Library/LaunchAgents/com.adobe.AAM.Updater-1.0.plist\" \"/Library/LaunchAgents/com.adobe.AdobeCreativeCloud.plist\" \"/Library/LaunchDaemons/com.adobe.*.plist\""
+topgrep() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: topgrep <expression>"
+  else
+    top -pid $(pgrep $1)
+  fi
+}
 
 mkcd () {
     mkdir -p "$@" && cd "$@"
