@@ -2,7 +2,7 @@
 # - pyenv: https://github.com/pyenv/pyenv
 # - pyenv-virtualenv: https://github.com/pyenv/pyenv-virtualenv
 
-if [ -n "$(which pyenv)" ]; then
+if [ -n "$(which pyenv 2>/dev/null)" ]; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 
