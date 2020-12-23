@@ -139,6 +139,16 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 typeset -U PATH path
 
+# Bindkeys - use sudo showkey -a to get sequences 
+# Shift-Left / Shift-Right
+bindkey "^[[1;2D" backward-word
+bindkey "^[[1;2C" forward-word
+# Shift-Up / Shift-Down
+bindkey "^[[1;2A" beginning-of-line
+bindkey "^[[1;2B" end-of-line
+
+
+
 # rm -rf ${XDG_CONFIG_HOME}/zsh/.zcompdump*
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
