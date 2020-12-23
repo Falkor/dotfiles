@@ -214,7 +214,8 @@
   typeset -g POWERLEVEL9K_DIR_FOREGROUND=254
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
-  typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_first_and_last
+  typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders 
+  #to_first_and_last
   # Replace removed segment suffixes with this symbol.
   #typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   # Color of the shortened directory segments.
