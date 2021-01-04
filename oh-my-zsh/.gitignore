@@ -1,3 +1,4 @@
 .zcompdump*
 /custom.zshenv
 /custom.zshrc
+.zsh_history
