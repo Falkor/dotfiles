@@ -40,7 +40,7 @@
     # From http://j.shirley.im/tech/git-flow/
     feature-start = flow feature start
     feature-finish = ! git flow feature finish
-    
+
     # From https://github.com/tgamblin/dotfiles/blob/master/home/.gitconfig
     br = branch --sort=-committerdate \
         --format '%(HEAD) %(color:yellow)%(objectname:short)%(color:reset)  %(if)%(HEAD)%(then)%(color:green)%(refname:short)%(color:reset)%(else)%(refname:short)%(end) - %(color:cyan)(%(committerdate:relative))%(color:reset)'
@@ -197,11 +197,15 @@
     safecrlf = warn
     pager = less -FRSX
     editor = vim
-    #editor = /Users/svarrette/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -t
     mergeoptions = --no-edit
+
+[pull]
+    #rebase = false
+    rebase = true
 
 [push]
     default = matching
+
 [gpg]
 	program = gpg
 [filter "lfs"]
@@ -209,3 +213,7 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[merge]
+	tool = meld
+[diff]
+	guitool = meld
