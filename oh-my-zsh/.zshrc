@@ -47,7 +47,7 @@ update-zsh-config() {
 # - Custom themes: '$ZSH_CUSTOM/themes/*' i.e. ~/config/zsh/custom/themes/*
 
 # Specific to powerlevel9k
-#ZSH_THEME="powerlevel9k/powerlevel9k"
+# ZSH_THEME="powerlevel9k/powerlevel9k"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 # Customization of powerlevel9k: see custom falkor plugin below
 # OR overwrite these settings in $ZDOTDIR/custom.zshrc i.e. ~/config/zsh/custom.zshrc
@@ -76,6 +76,8 @@ plugins=()
 #___________________
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
+
+# plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
 plugins+=(rake gem)                     # Ruby stuff
 plugins+=(pyenv pip)                    # Python stuff
@@ -147,12 +149,7 @@ bindkey "^[[1;2C" forward-word
 bindkey "^[[1;2A" beginning-of-line
 bindkey "^[[1;2B" end-of-line
 
-
-
 # rm -rf ${XDG_CONFIG_HOME}/zsh/.zcompdump*
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-
-# To customize prompt, run `p10k configure` or edit ~/git/github/Falkor/dotfiles/oh-my-zsh/.p10k.zsh.
-[[ ! -f ~/git/github/Falkor/dotfiles/oh-my-zsh/.p10k.zsh ]] || source ~/git/github/Falkor/dotfiles/oh-my-zsh/.p10k.zsh
