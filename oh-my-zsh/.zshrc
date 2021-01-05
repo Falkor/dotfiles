@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # -*- mode:sh; -*-
 ###############################################################################
 #              __ ___  _           __  __      __ _________  _   _
@@ -40,7 +47,8 @@ update-zsh-config() {
 # - Custom themes: '$ZSH_CUSTOM/themes/*' i.e. ~/config/zsh/custom/themes/*
 
 # Specific to powerlevel9k
-ZSH_THEME="powerlevel9k/powerlevel9k"
+# ZSH_THEME="powerlevel9k/powerlevel9k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 # Customization of powerlevel9k: see custom falkor plugin below
 # OR overwrite these settings in $ZDOTDIR/custom.zshrc i.e. ~/config/zsh/custom.zshrc
 
@@ -68,14 +76,16 @@ plugins=()
 #___________________
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
-plugins+=(git-flow git-extras git-remote-branch hub)  # Git
+
+# plugins+=(git-flow git-extras git-remote-branch)  # Git
+plugins+=(git-flow git-extras)  # Git
 plugins+=(rake gem)                     # Ruby stuff
 plugins+=(pyenv pip)                    # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
 # Misc
-plugins+=(colored-man-page cp marked2 taskwarrior)
+plugins+=(cp marked2 taskwarrior)
 #__________________
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #
@@ -131,4 +141,15 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 typeset -U PATH path
 
+# Bindkeys - use sudo showkey -a to get sequences 
+# Shift-Left / Shift-Right
+bindkey "^[[1;2D" backward-word
+bindkey "^[[1;2C" forward-word
+# Shift-Up / Shift-Down
+bindkey "^[[1;2A" beginning-of-line
+bindkey "^[[1;2B" end-of-line
+
 # rm -rf ${XDG_CONFIG_HOME}/zsh/.zcompdump*
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh

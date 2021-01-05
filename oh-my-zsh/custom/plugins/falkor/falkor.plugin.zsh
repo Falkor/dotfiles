@@ -46,70 +46,70 @@
 # =========================================
 # ================ Color theme ============
 # =========================================
+# #
+# # Customization of the https://github.com/bhilburn/powerlevel9k
+# #
+# # To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
+# # Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
+# #
+# # Eventually adapt (in custom.zshrc) the below P9K_MODE to match
+# # your font installation.
+# #P9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
+# P9K_MODE='nerdfont-complete'
+# #P9K_MODE='awesome-patched'
+# # Disable dir/git icons
+# P9K_DIR_HOME_ICON=''
+# P9K_DIR_HOME_SUBFOLDER_ICON=''
+# P9K_DIR_DEFAULT_ICON=''
 #
-# Customization of the https://github.com/bhilburn/powerlevel9k
+# #P9K_APPLE_ICON='\uE26E'
+# #P9K_LINUX_ICON='\uE271'
+# #P9K_RVM_ICON='\uE847 '
+# #P9K_PYENV_ICON='\U1F40D '
 #
-# To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
-# Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
+# #P9K_BACKGROUND_JOBS_ICON='\uE82F '
+# DISABLE_AUTO_TITLE="true"
 #
-# Eventually adapt (in custom.zshrc) the below P9K_MODE to match
-# your font installation.
-#P9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
-P9K_MODE='nerdfont-complete'
-#P9K_MODE='awesome-patched'
-# Disable dir/git icons
-P9K_DIR_HOME_ICON=''
-P9K_DIR_HOME_SUBFOLDER_ICON=''
-P9K_DIR_DEFAULT_ICON=''
-
-#P9K_APPLE_ICON='\uE26E'
-#P9K_LINUX_ICON='\uE271'
-#P9K_RVM_ICON='\uE847 '
-#P9K_PYENV_ICON='\U1F40D '
-
-#P9K_BACKGROUND_JOBS_ICON='\uE82F '
-DISABLE_AUTO_TITLE="true"
-
-P9K_VCS_GIT_ICON=''
-#P9K_VCS_GIT_GITHUB_ICON=''
-#P9K_VCS_GIT_BITBUCKET_ICON=''
-#P9K_VCS_GIT_GITLAB_ICON=''
-#P9K_VCS_TAG_ICON='\uE817 '
-P9K_VCS_STAGED_ICON='\u00b1'
-#P9K_VCS_STASH_ICON='\uE133 '
-P9K_VCS_UNTRACKED_ICON='\u25CF'
-P9K_VCS_UNSTAGED_ICON='\u00b1'
-P9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-P9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
+# P9K_VCS_GIT_ICON=''
+# #P9K_VCS_GIT_GITHUB_ICON=''
+# #P9K_VCS_GIT_BITBUCKET_ICON=''
+# #P9K_VCS_GIT_GITLAB_ICON=''
+# #P9K_VCS_TAG_ICON='\uE817 '
+# P9K_VCS_STAGED_ICON='\u00b1'
+# #P9K_VCS_STASH_ICON='\uE133 '
+# P9K_VCS_UNTRACKED_ICON='\u25CF'
+# P9K_VCS_UNSTAGED_ICON='\u00b1'
+# P9K_VCS_INCOMING_CHANGES_ICON='\u2193'
+# P9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
+# #
+# P9K_VCS_MODIFIED_BACKGROUND='yellow'
+# P9K_VCS_UNTRACKED_BACKGROUND='yellow'
+# #P9K_VCS_UNTRACKED_ICON='?'
+# #
+# P9K_PROMPT_ON_NEWLINE=true
+# P9K_PROMPT_ADD_NEWLINE=true
+# #P9K_RPROMPT_ON_NEWLINE=false
+# #P9K_MULTILINE_FIRST_PROMPT_PREFIX_ICON='%F{blue}\u256D\u2500%f'
+# # P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
+# #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%{%F{249}%}\u2517%{%F{default}%}❯ "
+# #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570'$'\U2500 ❯ '
+# P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570❯ '
 #
-P9K_VCS_MODIFIED_BACKGROUND='yellow'
-P9K_VCS_UNTRACKED_BACKGROUND='yellow'
-#P9K_VCS_UNTRACKED_ICON='?'
+# P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs virtualenv rbenv rvm docker_machine kubecontext)
+# P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs time)
 #
-P9K_PROMPT_ON_NEWLINE=true
-P9K_PROMPT_ADD_NEWLINE=true
-#P9K_RPROMPT_ON_NEWLINE=false
-#P9K_MULTILINE_FIRST_PROMPT_PREFIX_ICON='%F{blue}\u256D\u2500%f'
-# P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-#P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%{%F{249}%}\u2517%{%F{default}%}❯ "
-#P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570'$'\U2500 ❯ '
-P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570❯ '
-
-P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs virtualenv rbenv rvm docker_machine kubecontext)
-P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs time)
-
-P9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
-
-#P9K_SHORTEN_STRATEGY="truncate_middle"
-P9K_DIR_SHORTEN_LENGTH=3
-P9K_DIR_SHORTEN_STRATEGY=truncate_folders
+# P9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 #
-#P9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
-#P9K_TIME_FORMAT="%D{%H:%M \uF073  %d.%m.%y}"
-P9K_TIME_FORMAT="%D{%H:%M  %d.%m.%y}"
-#
-# #P9K_VCS_MODIFIED_BACKGROUND='orange'
-P9K_STATUS_VERBOSE=false
+# #P9K_SHORTEN_STRATEGY="truncate_middle"
+# P9K_DIR_SHORTEN_LENGTH=3
+# P9K_DIR_SHORTEN_STRATEGY=truncate_folders
+# #
+# #P9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
+# #P9K_TIME_FORMAT="%D{%H:%M \uF073  %d.%m.%y}"
+# P9K_TIME_FORMAT="%D{%H:%M  %d.%m.%y}"
+# #
+# # #P9K_VCS_MODIFIED_BACKGROUND='orange'
+# P9K_STATUS_VERBOSE=false
 export DEFAULT_USER="$USER"
 
 
@@ -135,6 +135,9 @@ alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
 alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
 alias ll='ls -l'      #long list
 
+# fuzzy typing
+alias car='cat'
+
 # -------------------------------------------------------------------
 # Git -- most comes from the git plugin
 # -------------------------------------------------------------------
@@ -157,6 +160,8 @@ alias clone='git clone'
 alias gd='git diff'
 alias dg='git diff'
 alias GD='git diff HEAD~1 HEAD'
+alias gf='git fetch -va'
+alias gfp='git fetch -va --prune'
 alias gg="git log  --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --max-count=20"
 alias ggl="git log --graph --pretty=format:'%C(auto)%h -%d %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gl='git log  --graph --oneline --decorate --max-count=20'
@@ -245,6 +250,14 @@ alias sshx='ssh -C -X -c blowfish'
 alias proxy='ssh -C -q -T -n -N -D 1080'
 alias rsyncfalkor='rsync -P -avzu'
 
+alias nothankyouadobe="sudo -H killall ACCFinderSync \"Core Sync\" AdobeCRDaemon \"Adobe Creative\" AdobeIPCBroker node \"Adobe Desktop Service\" \"Adobe Crash Reporter\";sudo -H rm -rf \"/Library/LaunchAgents/com.adobe.AAM.Updater-1.0.plist\" \"/Library/LaunchAgents/com.adobe.AdobeCreativeCloud.plist\" \"/Library/LaunchDaemons/com.adobe.*.plist\""
+topgrep() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: topgrep <expression>"
+  else
+    top -pid $(pgrep $1)
+  fi
+}
 
 mkcd () {
     mkdir -p "$@" && cd "$@"
@@ -313,7 +326,6 @@ alias t='task'
 # ---------------
 # Emacs business
 # ---------------
-alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
 #alias es="emacs --daemon"
 #alias em="emacsclient -nw --alternate-editor='vim'"
 
