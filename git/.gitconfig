@@ -217,3 +217,5 @@
 	tool = meld
 [diff]
 	guitool = meld
+[init]
+	defaultBranch = devel
