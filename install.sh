@@ -37,7 +37,7 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOTFILES_DIR=dotfiles.falkor.d
 [ -n "${XDG_CONFIG_HOME}" ] && PREFIX="${XDG_CONFIG_HOME}" || PREFIX="$HOME/.config"
 [ -n "${XDG_DATA_HOME}" ]   && DATADIR="${XDG_DATA_HOME}"  || DATADIR="$HOME/.local/share"
-[ "$COMMAND" == 'bash' ] && COMMAND="${PREFIX}/${DOTFILES_DIR}/install.sh"
+[ "$COMMAND" == 'bash' ]    && COMMAND="${PREFIX}/${DOTFILES_DIR}/install.sh"
 
 # List of available dotfiles -- now get by __set_falkor_dotfiles_available(<path>)
 #AVAILABLE_DOTFILES=$(find ${SCRIPTDIR}/ -mindepth 1 -maxdepth 1 -type d \( ! -iname '.*' \) -exec basename {} \; | grep -Ev '(bin|docs|screenshots|tests)' | xargs echo rvm )
@@ -236,7 +236,11 @@ add_or_remove_link() {
     local dst=$2
     # prefix for the source
     local prefix=$3
+    # debug "source=$source"
+    # debug "dst=$dst"
+    # debug "prefix=$prefix"
     [ -n "${prefix}" ] && src="${prefix}/${source}" || src="${source}"
+    # debug "src=$src"
     if [ "${MODE}" == "--delete" ]; then
         debug "removing dst='$dst' (if symlink pointing to src='$source' =? $(readlink "$dst"))"
         if [[ -h "${dst}" && "$(readlink "${dst}")" == "${source}" ]]; then
@@ -250,8 +254,10 @@ add_or_remove_link() {
         fi
     else
         # get rid of ../ in the path upon checking
-        real_srcpath=$(python -c "import os,sys; print os.path.abspath(sys.argv[1])" "${src}")
+        # real_srcpath=$(python -c "import os,sys; print os.path.abspath(sys.argv[1])" "${src}")
+        real_srcpath=$(realpath ${src})
         [ ! -e "${real_srcpath}" ] && print_error_and_exit "Unable to find the dotfile '${src}'\n(interpreted path: '${real_srcpath}')"
+        #[ ! -e "${src}" ] && print_error_and_exit "Unable to find the dotfile '${src}'\n(interpreted path: '${real_srcpath}')"
         debug "attempt to add '$dst' symlink (pointing to '$source') if needed"
         # return if the symlink already exists
         [[ -h "${dst}" && "$(readlink "${dst}")" == "${source}" ]] && return
@@ -547,13 +553,14 @@ __zsh(){
   setup_configdir 'oh-my-zsh'
   # specific Oh-my-zsh config dirs
   local omzsh_dir="${DATADIR}/oh-my-zsh"
-  local omzsh_custom_dir="${omzsh_dir}/custom"
-  local omzsh_custom_theme_dir="${omzsh_custom_dir}/themes"
+  local configdir="${PREFIX}/zsh"
+  
+  local omzsh_custom_dir="${configdir}/custom"
+  local omzsh_custom_theme_dir="${configdir}/themes"
   # falkor's dotfiles config dirs for ZSH
   local zsh_dir="${PREFIX_HOME}${PREFIX}/zsh"
   local zsh_custom_dir="${zsh_dir}/custom"
   local zsh_custom_theme_dir="${zsh_custom_dir}/themes"
-  powerlevel9k_themedir="${zsh_custom_theme_dir}/powerlevel9k"
   powerlevel10k_themedir="${zsh_custom_theme_dir}/powerlevel10k"
 
   # Let's go
@@ -563,16 +570,13 @@ __zsh(){
       check_bin git
       execute "git clone ${OH_MY_ZSH_REPO} ${omzsh_dir}" || print_error_and_exit "Unable to install oh-my-zsh/. Check your network connection"
     fi
-    if [ ! -d "${powerlevel9k_themedir}" ]; then
-      info "Installing Powerlevel9k custom theme for ZSH"
-      execute "git clone ${ZSH_THEME_POWERLEVEL9K_REPO} ${powerlevel9k_themedir}"
-    else
-      # it might still be an (empty) git submodule
-      if [ ! -d "${powerlevel9k_themedir}/.git" ]; then
-        info "updating (expected) git submodule for powerlevel9k theme"
+    # Powerlevel10k should be a submodule of the dotfile
+    if [ ! -f "${powerlevel10k_themedir}/.git" ]; then
+        echo "=> '${powerlevel10k_themedir}/.git'"
+        echo $(test -d "${powerlevel10k_themedir}/.git")
+        info "updating (expected) git submodule for powerlevel10k theme"
         execute "cd ${PREFIX_HOME}${INSTALL_DIR} && git submodule init"
         execute "cd ${PREFIX_HOME}${INSTALL_DIR} && git submodule update"
-      fi
     fi
     __change_user_shell 'zsh'
   else
