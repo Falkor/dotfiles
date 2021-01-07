@@ -46,6 +46,7 @@ AVAILABLE_DOTFILES=
 # GIT URLs
 OH_MY_ZSH_REPO="https://github.com/robbyrussell/oh-my-zsh.git"
 ZSH_THEME_POWERLEVEL9K_REPO="https://github.com/bhilburn/powerlevel9k.git"
+ZSH_THEME_POWERLEVEL10K_REPO="https://github.com/romkatv/powerlevel10k.git"
 
 # What to take care of (default is empty)
 WITH_SHELL=""     # Common shell stuff
@@ -553,6 +554,7 @@ __zsh(){
   local zsh_custom_dir="${zsh_dir}/custom"
   local zsh_custom_theme_dir="${zsh_custom_dir}/themes"
   powerlevel9k_themedir="${zsh_custom_theme_dir}/powerlevel9k"
+  powerlevel10k_themedir="${zsh_custom_theme_dir}/powerlevel10k"
 
   # Let's go
   add_or_remove_link "${PREFIX}/zsh/.zshenv"      ~/.zshenv           "${PREFIX_HOME}"
