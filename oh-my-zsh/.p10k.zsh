@@ -369,6 +369,7 @@
   typeset -g POWERLEVEL9K_VCS_STAGED_ICON='±'
   typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON='!'
   typeset -g POWERLEVEL9K_VCS_STASH_ICON='≡'
+  typeset -g POWERLEVEL9K_VCS_TAG_ICON=' \uF02B'
 # Below icons are not used any more
   # typeset -g POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
   # typeset -g POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
@@ -397,7 +398,8 @@
     local      clean='%0F' # black foreground
     local   modified='%0F' # black foreground
     local  untracked='%88F' # black red foreground
-    local conflicted='%1F' # red foreground
+    local conflicted='%1F'  # red foreground
+    local     tagged='%242F' # light gray foreground
 
     local res
 
@@ -413,14 +415,14 @@
     if [[ -n $VCS_STATUS_TAG
           # Show tag only if not on a branch.
           # Tip: To always show tag, delete the next line.
-          && -z $VCS_STATUS_LOCAL_BRANCH  # <-- this line
+          # && -z $VCS_STATUS_LOCAL_BRANCH  # <-- this line
         ]]; then
       local tag=${(V)VCS_STATUS_TAG}
       # If tag name is at most 32 characters long, show it in full.
       # Otherwise show the first 12 … the last 12.
       # Tip: To always show tag name in full without truncation, delete the next line.
       (( $#tag > 32 )) && tag[13,-13]="…"  # <-- this line
-      res+="${meta}#${clean}${tag//\%/%%}"
+      res+="${tagged}${(g::)POWERLEVEL9K_VCS_TAG_ICON}${tag//\%/%%}"
     fi
 
     # Display the current Git commit if there is no branch and no tag.
