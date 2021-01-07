@@ -103,6 +103,7 @@ cask 'yujitach-menumeters'
 # Special fonts
 cask 'font-source-code-pro-for-powerline'
 cask 'font-hack-nerd-font'
+cask 'font-lato'
 
 # Mac Store Apps
 mas 'Numbers', id: 409203825
@@ -110,3 +111,4 @@ mas 'Keynote', id: 409183694
 mas 'Slack', id: 803453959
 mas 'Pages', id: 409201541
 mas 'Tweetbot', id: 557168941
+mas "Xcode", id: 497799835
