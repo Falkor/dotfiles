@@ -13,11 +13,6 @@ BATS=$(shell which bats 2>/dev/null)
 
 .PHONY: tests
 
-doc:
-	@if [ -n "`which mkdocs`" ]; then \
-		mkdocs serve; \
-	fi
-
 install: setup
 	$(INSTALL_SCRIPT) --all --dry-run
 
