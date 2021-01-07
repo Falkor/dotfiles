@@ -9,8 +9,8 @@
 # 4. `$ZDOTDIR/.zlogin`:   Run for login shells (**after** .zshrc)
 
 
-check_task=$( which task 2>/dev/null )
-if [ -n "${check_task}" ]; then
-	task
-fi
+# check_task=$( which task 2>/dev/null )
+# if [ -n "${check_task}" ]; then
+# 	task
+# fi
 

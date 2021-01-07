@@ -4,12 +4,10 @@
 
 > [Oh-My-Zsh](http://ohmyz.sh) is an open source, community-driven framework for managing your ZSH configuration. It comes bundled with a ton of helpful functions, helpers, plugins, themes, and a few things that make you shout...
 
-So I use [Oh-My-Zsh](http://ohmyz.sh) using the excellent [powerlevel9k](https://github.com/bhilburn/powerlevel9k) prompt theme and the [Darkside iTerm Color scheme](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Darkside.itermcolors).
+So I use [Oh-My-Zsh](http://ohmyz.sh) using the excellent [powerlevel10k](https://github.com/romkatv/powerlevel10k) prompt theme and the [Darkside iTerm Color scheme](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Darkside.itermcolors).
 
-The font I use is [Source Code Pro + Powerline Awesome Regular](https://github.com/Falkor/dotfiles/raw/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) at 14pt (for both Regular and Non-ASCII font).
+The font I use is [Meslo Nerd Font patched for Powerlevel10k](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k) at 15pt (for both Regular and Non-ASCII font).
 You can find more information on  the way I configured iTerm2 on [my blog](https://varrette.gforge.uni.lu/blog/2017/01/17/configuring-mac-os-on-your-brand-new-laptop/#iterm2-configuration).
-
-__UPDATE__: I recently swithed to [Nerd font](https://github.com/ryanoasis/nerd-fonts#font-installation), which happened to be easier to configure on Mac OS. 
 
 ## Screenshot
 
@@ -17,7 +15,11 @@ __UPDATE__: I recently swithed to [Nerd font](https://github.com/ryanoasis/nerd-
 
 ## Pre-requisites
 
-### [Source Code Pro Patched fonts](https://github.com/Falkor/dotfiles/blob/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf)
+### Meslo Nerd Font patched for Powerlevel10k
+
+See [instructions from powerlevel10k](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k): if you are using iTerm2 or Termux, `p10k configure` can install the recommended font for you. Simply answer Yes when asked whether to install Meslo Nerd Font.
+
+### Alternative: [Source Code Pro Patched fonts](https://github.com/Falkor/dotfiles/blob/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf)
 
 You should install the [Source Code Pro Patched fonts](https://github.com/Falkor/dotfiles/raw/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf) following [these instructions](https://github.com/bhilburn/powerlevel9k/wiki/Install-Instructions#step-2-install-powerline-fonts) yet adapted to this font.
 

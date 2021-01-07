@@ -231,6 +231,12 @@ if [[ -n ${ZSH_VERSION-}  ]]; then
     rm -rf ${XDG_CONFIG_HOME}/zsh/.zcompdump*
     autoload -U compinit && compinit
   }
+  # https://stackoverflow.com/questions/59940971/zsh-autocomplete-slow-for-ssh/64147638#64147638
+  # FIX for slow SSH completion
+  refresh_ssh_autocomplete () {
+    host_list=($(cat ~/.ssh/config | grep 'Host '  | awk '{s = s $2 " "} END {print s}'))
+    zstyle ':completion:*:(ssh|scp|sftp):*' hosts $host_list
+  }
 fi
 alias mkdir='mkdir -p'
 # Search for files and page it
