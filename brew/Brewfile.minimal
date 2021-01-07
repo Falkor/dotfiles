@@ -3,13 +3,15 @@
 # see https://github.com/Falkor/dotfiles
 
 # Pre-configuration for brew sources
-tap 'buo/cask-upgrade'
-tap 'caskroom/cask'
-tap 'caskroom/fonts'
-tap 'homebrew/bundle'
-tap 'homebrew/completions'
-tap 'homebrew/core'
-tap 'railwaycat/emacsmacport'
+tap "buo/cask-upgrade"
+tap "d12frosted/emacs-plus"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "romkatv/powerlevel10k"
 
 # Couple of mandatory applications
 brew 'readline'
@@ -18,13 +20,16 @@ brew 'bash-completion'
 brew 'coreutils'
 brew 'curl'
 brew 'git'
-brew 'git-flow'
+brew "git-extras"
+brew "git-flow-avh"
 brew 'mas'
+brew "romkatv/powerlevel10k/powerlevel10k"
 brew 'subversion'
 brew 'terminal-notifier'
 brew 'tig'
 brew 'vim'
 brew 'wget'
+
 
 # completions
 brew 'bash-completion'
@@ -33,8 +38,12 @@ brew 'zsh-completions'
 
 # Mac GUIs Apps
 cask 'atom'
-cask 'emacs-mac'
-cask 'macvim'
+brew "d12frosted/emacs-plus/emacs-plus@27", args: ["with-spacemacs-icon"]
+cask "iterm2"
+cask "sublime-text"
+
+
+mac "Xcode", id: 497799835
 
 # Special fonts
 cask 'font-source-code-pro-for-powerline'
