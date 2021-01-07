@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Fri 2018-11-30 00:30 svarrette>
+# Time-stamp: <Wed 2020-05-06 10:26 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -19,6 +19,10 @@ UNAME = $(shell uname)
 
 # Some directories
 SUPER_DIR   = $(shell basename `pwd`)
+
+XDG_CACHE_HOME  ?= $(HOME)/.cache
+XDG_CONFIG_HOME ?= $(HOME)/.config
+XDG_DATA_HOME   ?= $(HOME)/.local/share
 
 # Git stuff management
 HAS_GITFLOW      = $(shell git flow version 2>/dev/null || [ $$? -eq 0 ])
@@ -73,9 +77,25 @@ NEXT_MAJOR_VERSION = $(shell expr $(MAJOR) + 1).0.0
 NEXT_MINOR_VERSION = $(MAJOR).$(shell expr $(MINOR) + 1).0
 NEXT_PATCH_VERSION = $(MAJOR).$(MINOR).$(shell expr $(PATCH) + 1)
 endif
-# Default targets
-TARGETS =
 
+# Python stuff
+# See https://pip.pypa.io/en/stable/user_guide/#requirements-files
+PIP_REQUIREMENTS_FILE = requirements.txt
+
+##################### Main targets #####################
+# Default targets - append your own with TARGETS += <xXx>
+TARGETS =
+# Default targets for 'make [dist]clean' - append your own with [DIST]CLEAN_TARGETS += [dist]clean-<xXx>
+CLEAN_TARGETS = clean-gitstats
+DISTCLEAN_TARGETS =
+# Default targets for 'make setup' - append your own with SETUP_TARGETS += setup-<xXx>
+SETUP_TARGETS = setup-git setup-gitflow setup-submodules setup-subtrees setup-githooks
+# Default targets for 'make git-clone'. To append your own:
+#   Define
+GIT_CLONE_TARGETS =
+
+
+################### Custom Makefile  ###################
 # Local configuration - Kept for compatibity reason
 LOCAL_MAKEFILE = .Makefile.local
 
@@ -84,7 +104,7 @@ MAKEFILE_BEFORE = .Makefile.before
 MAKEFILE_AFTER  = .Makefile.after
 
 ### Main variables
-.PHONY: all archive clean fetch help release setup setup_git_hooks start_bump_major start_bump_minor start_bump_patch subtree_setup subtree_up subtree_diff test upgrade versioninfo doc
+.PHONY: all info archive clean help release start_bump_major start_bump_minor start_bump_patch subtree_setup subtree_up subtree_diff  upgrade versioninfo doc
 
 ############################### Now starting rules ################################
 # Load local settings, if existing (to override variable eventually)
@@ -95,6 +115,16 @@ ifneq (,$(wildcard $(MAKEFILE_BEFORE)))
 include $(MAKEFILE_BEFORE)
 endif
 
+### Below default could be set in .Makefile.{local,before}
+# Default python virtualenv - by default under venv/$(basename <dir>)
+PYTHON_VENV_DIR ?= venv
+PYTHON_VENV     ?= $(SUPER_DIR)
+# Default Git clone parameters (url, target path for the working directory)
+PYENV_GIT_REPO_URL            ?= https://github.com/pyenv/pyenv.git
+PYENV_GIT_REPO                ?= $(XDG_DATA_HOME)/pyenv
+PYENV_VIRTUALENV_GIT_REPO_URL ?= https://github.com/pyenv/pyenv-virtualenv.git
+PYENV_VIRTUALENV_GIT_REPO     ?= $(XDG_DATA_HOME)/pyenv/plugins/pyenv-virtualenv
+
 # Required rule : what's to be done each time
 all: $(TARGETS)
 
@@ -103,7 +133,10 @@ info:
 	@echo "--- Compilation commands --- "
 	@echo "HAS_GITFLOW      -> '$(HAS_GITFLOW)'"
 	@echo "--- Directories --- "
-	@echo "SUPER_DIR    -> '$(SUPER_DIR)'"
+	@echo "SUPER_DIR       -> '$(SUPER_DIR)'"
+	@echo "XDG_CONFIG_HOME -> '$(XDG_CONFIG_HOME)'"
+	@echo "XDG_CACHE_HOME  -> '$(XDG_CACHE_HOME)'"
+	@echo "XDG_DATA_HOME   -> '$(XDG_DATA_HOME)'"
 	@echo "--- Git stuff ---"
 	@echo "GIT_ROOTDIR            -> '$(GIT_ROOTDIR)'"
 	@echo "GITFLOW                -> '$(GITFLOW)'"
@@ -119,6 +152,13 @@ info:
 	@echo "SRC_HOOKSDIR           -> '$(SRC_HOOKSDIR)'"
 	@echo "SRC_HOOKSDIR_TO_ROOTDIR-> '$(SRC_HOOKSDIR_TO_ROOTDIR)'"
 	@echo "SRC_PRECOMMIT_HOOK     -> '$(SRC_PRECOMMIT_HOOK)'"
+	@echo "--- Python stuff ---"
+	@echo "PYTHON_VENV_DIR        -> '${PYTHON_VENV_DIR}'"
+	@echo "PYTHON_VENV            -> '${PYTHON_VENV}'"
+	@echo "PYENV_GIT_REPO_URL     -> '${PYENV_GIT_REPO_URL}'"
+	@echo "PYENV_GIT_REPO         -> '${PYENV_GIT_REPO}'"
+	@echo "PYENV_VIRTUALENV_GIT_REPO_URL -> '${PYENV_VIRTUALENV_GIT_REPO_URL}'"
+	@echo "PYENV_VIRTUALENV_GIT_REPO     -> '${PYENV_VIRTUALENV_GIT_REPO}'"
 	@echo ""
 	@echo "Consider running 'make versioninfo' to get info on git versionning variables"
 
@@ -127,9 +167,25 @@ archive: clean
 	tar -C ../ -cvzf ../$(SUPER_DIR)-$(VERSION).tar.gz --exclude ".svn" --exclude ".git"  --exclude "*~" --exclude ".DS_Store" $(SUPER_DIR)/
 
 ############################### Git Bootstrapping rules ################################
-setup:
+.PHONE: setup setup-git setup-gitflow setup-xdg setup-git-lfs
+setup: $(SETUP_TARGETS)
+	@if [ -d "$(GIT_ROOTDIR)/$(SRC_HOOKSDIR)" ]; then \
+		echo "=> setup local git hooks"; \
+		$(MAKE) setup_git_hooks; \
+	fi
+	@if [ -f .gitattributes ] && [ -n "$(shell grep '=lfs' .gitattributes)" ]; then \
+		echo "=> setup git-lfs"; \
+		$(MAKE) setup-git-lfs; \
+	fi
+	@if [ -f .envrc ]; then \
+		$(MAKE) setup-direnv; \
+	fi
+
+setup-git:
 	-git fetch origin
 	-git branch --track $(GITFLOW_BR_MASTER) origin/$(GITFLOW_BR_MASTER)
+
+setup-gitflow:
 	git config gitflow.branch.master     $(GITFLOW_BR_MASTER)
 	git config gitflow.branch.develop    $(GITFLOW_BR_DEVELOP)
 	git config gitflow.prefix.feature    feature/
@@ -137,20 +193,124 @@ setup:
 	git config gitflow.prefix.hotfix     hotfix/
 	git config gitflow.prefix.support    support/
 	git config gitflow.prefix.versiontag $(TAG_PREFIX)
+
+setup-submodules:
 	-$(MAKE) update
+
+setup-subtrees:
 	$(if $(GIT_SUBTREE_REPOS), $(MAKE) subtree_setup)
+
+setup-githooks:
 	@if [ -d "$(GIT_ROOTDIR)/$(SRC_HOOKSDIR)" ]; then \
 		echo "=> setup local git hooks"; \
-		$(MAKE) setup_git_hooks; \
+		$(MAKE) _setup_git_hooks; \
 	fi
 
-setup_git_hooks:
+_setup_git_hooks:
 	@if [ -n "$(SRC_PRECOMMIT_HOOK)" ]; then \
 		if [ -f "$(GIT_ROOTDIR)/$(SRC_PRECOMMIT_HOOK)" ] && [ ! -f "$(GIT_ROOTDIR)/$(GIT_HOOKSDIR)/pre-commit" ]; then \
 			echo "=> setup Git pre-commit hook"; \
 			ln -s ../../$(SRC_PRECOMMIT_HOOK) $(GIT_ROOTDIR)/$(GIT_HOOKSDIR)/pre-commit; \
 		fi ; \
 	fi
+
+ifneq (,$(shell which git-lfs 2>/dev/null))
+setup-git-lfs:
+	git-lfs pull
+else
+setup-git-lfs:
+	@echo "*** ERROR *** git-lfs extension not found on your system"
+	@echo "              install it (see https://git-lfs.github.com/) and run "
+	@echo "        make $@"
+endif
+
+setup-xdg:
+	@echo "=> setup XDG Base Directories"
+	mkdir -p $(XDG_CONFIG_HOME)
+	mkdir -p $(XDG_DATA_HOME)
+	mkdir -p $(XDG_CACHE_HOME)
+
+define __SHELL_PROFILE_SOURCE_IF_PRESENT
+
+# Add the following to your favorite shell config (~/.bashrc or ~/.zshrc etc.)
+if [ -f "$1" ]; then
+	. $1
+fi
+
+endef
+.PHONY: setup-shell-direnv setup-shell-pyenv
+setup-shell-direnv:
+	$(info $(call __SHELL_PROFILE_SOURCE_IF_PRESENT,$(XDG_CONFIG_HOME)/direnv/init.sh))
+setup-shell-pyenv:
+	$(info $(call __SHELL_PROFILE_SOURCE_IF_PRESENT,$(XDG_CONFIG_HOME)/pyenv/init.sh))
+
+
+# --- Direnv
+.PHONY: setup-direnv setup-pyenv setup-venv setup-python
+setup-direnv: setup-xdg
+	@echo "=> setup direnv -- see https://varrette.gforge.uni.lu/tutorials/pyenv.html"
+	mkdir -p $(XDG_CONFIG_HOME)/direnv
+	@if [ ! -f "$(XDG_CONFIG_HOME)/direnv/init.sh" ]; then \
+		echo " - creating $(XDG_CONFIG_HOME)/direnv/init.sh"; \
+		curl -o $(XDG_CONFIG_HOME)/direnv/init.sh https://raw.githubusercontent.com/Falkor/dotfiles/master/shell/available/direnv.sh; \
+	fi
+	@echo " - sample override of direnv-stdlib in $(XDG_CONFIG_HOME)/direnv/direnvrc"
+	@if [ ! -f "$(XDG_CONFIG_HOME)/direnv/direnvrc" ]; then \
+		curl -o $(XDG_CONFIG_HOME)/direnv/direnvrc https://raw.githubusercontent.com/Falkor/dotfiles/master/direnv/direnvrc; \
+	fi
+	@echo " - sample '.envrc' for your projects in  $(XDG_CONFIG_HOME)/direnv/envrc"
+	@if [ ! -f "$(XDG_CONFIG_HOME)/direnv/envrc" ]; then \
+		curl -o $(XDG_CONFIG_HOME)/direnv/envrc https://raw.githubusercontent.com/Falkor/dotfiles/master/direnv/envrc; \
+	fi
+	@$(MAKE) setup-shell-direnv
+
+# --- pyenv
+setup-pyenv: setup-xdg git-clone-pyenv git-clone-pyenv-virtualenv
+	@echo "=> setup pyenv -- see https://varrette.gforge.uni.lu/tutorials/pyenv.html"
+	mkdir -p $(XDG_CONFIG_HOME)/pyenv
+	@if [ ! -f "$(XDG_CONFIG_HOME)/pyenv/init.sh" ]; then \
+		echo " - creating $(XDG_CONFIG_HOME)/pyenv/init.sh"; \
+		curl -o $(XDG_CONFIG_HOME)/pyenv/init.sh https://raw.githubusercontent.com/Falkor/dotfiles/master/shell/available/pyenv.sh; \
+	fi
+	@$(MAKE) setup-shell-pyenv
+
+# --- venv
+setup-venv:
+	python3 -m venv $(PYTHON_VENV_DIR)/$(PYTHON_VENV)
+
+# --- python
+ifneq (,$(wildcard ./$(PIP_REQUIREMENTS_FILE)))
+setup-python:
+	@echo "=> updating pip version"
+	pip install --upgrade pip
+	@echo "=> installing Python dependencies from Requirements files '$(PIP_REQUIREMENTS_FILE)'"
+	pip install -r $(PIP_REQUIREMENTS_FILE)
+else
+setup-python:
+	@echo "=> updating pip version"
+	pip install --upgrade pip
+endif
+
+
+
+### Git clone
+#######
+# Usage: $(eval $(call __GIT_CLONE,<suffix>,<path>,<url>))
+##
+define __GIT_CLONE
+.PHONY: git-clone-$1
+git-clone-$1:
+	@if [ ! -d "$2" ]; then \
+		mkdir -p $(shell dirname $2); \
+		echo "=> cloning '$3' into $2"; \
+		git clone $3 $2; \
+	else \
+		echo "... existing directory '$2', thus exiting"; \
+	fi
+GIT_CLONE_TARGETS += git-clone-$1
+endef
+$(eval $(call __GIT_CLONE,pyenv,$(PYENV_GIT_REPO),$(PYENV_GIT_REPO_URL)))
+$(eval $(call __GIT_CLONE,pyenv-virtualenv,$(PYENV_VIRTUALENV_GIT_REPO),$(PYENV_VIRTUALENV_GIT_REPO_URL)))
 
 fetch:
 	git fetch --all -v
@@ -164,7 +324,7 @@ versioninfo:
 	@echo "next minor version: $(NEXT_MINOR_VERSION)"
 	@echo "next patch version: $(NEXT_PATCH_VERSION)"
 
-### Git flow management - this should be factorized
+### Git flow management
 ifeq ($(HAS_GITFLOW),)
 start_bump_patch start_bump_minor start_bump_major release:
 	@echo "Unable to find git-flow on your system. "
@@ -270,14 +430,15 @@ subtree_up:
 endif
 
 
-# Clean option
-clean:
+### [Dist]Clean option
+clean: $(CLEAN_TARGETS)
+distclean: $(DISTCLEAN_TARGETS)
+
+clean-gitstats:
 	@if [ -d "$(GITSTATS_DIR)" ]; then \
 		echo "==> removing '$(GITSTATS_DIR)' directory"; \
 		rm -rf $(GITSTATS_DIR); \
 	fi
-	@echo nothing to be cleaned for the moment
-
 
 # Perform various git statistics
 stats:
