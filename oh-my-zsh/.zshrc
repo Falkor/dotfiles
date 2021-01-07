@@ -37,7 +37,13 @@ ZSH_CUSTOM=$ZDOTDIR/custom
 ## Update / check ZSH config
 # Courtesy https://github.com/smaximov/zsh-config/blob/master/lib/functions.zsh
 update-zsh-config() {
-	upgrade_oh_my_zsh
+	omz update
+  if [ -d "$XDG_CONFIG_HOME/dotfiles.falkor.d/.git" ]; then
+    echo
+    echo "=> Updating Falkor's dotfiles to the latest version"
+    echo
+    git -C $XDG_CONFIG_HOME/dotfiles.falkor.d pull --rebase origin
+  fi
 }
 
 ################## Oh-My-ZSH (optional) customizations ########################
@@ -76,7 +82,7 @@ plugins=()
 #___________________
 # - Default plugins: '$ZSH/plugins/*' i.e. ~/.local/share/oh-my-zsh/plugins/*
 #   See https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
-
+plugins+=(zsh-syntax-highlighting)
 # plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
 plugins+=(rake gem)                     # Ruby stuff
@@ -141,7 +147,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 typeset -U PATH path
 
-# Bindkeys - use sudo showkey -a to get sequences 
+# Bindkeys - use sudo showkey -a to get sequences
 # Shift-Left / Shift-Right
 bindkey "^[[1;2D" backward-word
 bindkey "^[[1;2C" forward-word
