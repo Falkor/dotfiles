@@ -41,51 +41,30 @@ See [`falkor.plugin.zsh`](custom/plugins/falkor/falkor.plugin.zsh) for more deta
 
 ## Installation, the lazy way
 
-Nothing special here once you fullfilled the pre-requisite: just install [Falkor's dotfile](https://github.com/Falkor/dotfile) as suggested, _i.e._
+* [Install zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
+* [Install Oh-My-ZSH](http://ohmyz.sh/)
+
+        $> sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+* Clone [Falkor's dotfile](https://github.com/Falkor/dotfile) as suggested, _i.e._
+
+        $> git clone https://github.com/Falkor/dotfiles.git ~/.config/dotfiles.falkor.d
+
+Now run: 
 
 ``` bash
-$> cd ~/.dotfiles.falkor.d
-$> ./install.sh --zsh     # OR ./install.sh --with-zsh
+$> cd ~/.config/dotfiles.falkor.d
+$> ./install.sh -n --zsh     # DRY_RUN - OR ./install.sh -n --with-zsh
+$> ./install.sh --zsh        # OR ./install.sh --with-zsh
 ```
 
 This will configure the following components:
 
-* `~/.zshrc`
-* `~/oh-my-zsh/`
+* `~/.zshenv`
+* `~/.config/zsh`
+* `~/.local/share/oh-my-zsh` (Oh-My-ZSH) 
+* `$ZSH_CUSTOM`, pointing to `~/.config/zsh/custom`
 
-For details, see below.
-
-## Installation, the manual way
-
-* [Install zsh](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
-* [Install Oh-My-ZSH](http://ohmyz.sh/)
-
-        $> sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-* Clone [Falkor's dotfile](https://github.com/Falkor/dotfiles) somewhere
-* Add the [Falkor custom plugin for Oh-my-zsh](https://github.com/Falkor/dotfiles/tree/master/oh-my-zsh/custom/plugins/falkor) as follows:
-
-        $> cd ~/.oh-my-zsh/custom/plugins/
-        $> ln -s </path/to/falkor/dotfiles>/oh-my-zsh/custom/plugins/falkor .
-
-* Install the [Powerlevel9k](https://github.com/bhilburn/powerlevel9k) prompt theme under `~/.oh-my-zsh/custom/themes/powerlevel9k` -- I personally use the `next` branch to track the latest developments
-
-        $> git clone --branch next https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-
-  - _Note_: if you install everything in a bundle manner using my `install.sh` script, the [powerlevel9k](https://github.com/bhilburn/powerlevel9k) prompt theme comes as a git submodule from my own fork.
-
-* Edit `~/.zshrc` to include the newly added custom plugin.
-
-``` zsh
-        [...]
-        ZSH_THEME="powerlevel9k/powerlevel9k"
-        [...]
-        # official Oh-My-Zsh plugins
-        plugins=(git-flow ...)
-        # Custom plugins
-        plugins+=(falkor)
-
-```
 
 ## Uninstall
 
@@ -101,49 +80,14 @@ you can define your own aliases under `~/.oh-my-zsh/custom/private_aliases.zsh` 
 
 Follow also [this guide from Oh-My-ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization) for more details.
 
-## Note on [Powerlevel9k](https://github.com/bhilburn/powerlevel9k) theme configuration
+## Note on [Powerlevel10k](https://github.com/romkatv/powerlevel10k) theme configuration
 
-You might wish to reproduce my configuration of [Powerlevel9k](https://github.com/bhilburn/powerlevel9k) as depicted in the above screenshot yet without installing my dotfiles.
-Assuming you followed the above mentioned pre-requisites, you should simply customize the `POWERLEVEL9K_*` variables (probably in your `~/.zhsrc`) as follows:
+You might wish to reproduce my configuration of [Powerlevel10k](https://github.com/romkatv/powerlevel10k) as depicted in the above screenshot yet without installing my dotfiles.
 
-~~~zsh
-ZSH_THEME="powerlevel9k/powerlevel9k"
-
-# Customization of the https://github.com/bhilburn/powerlevel9k
-#
-# To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
-# Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
-#
-POWERLEVEL9K_MODE='awesome-patched'
-
-# Disable dir/git icons
-POWERLEVEL9K_HOME_ICON=''
-POWERLEVEL9K_HOME_SUB_ICON=''
-POWERLEVEL9K_FOLDER_ICON=''
-
-DISABLE_AUTO_TITLE="true"
-
-POWERLEVEL9K_VCS_GIT_ICON=''
-POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
-#POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
-
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs virtualenv rbenv rvm time)
-
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
-
-POWERLEVEL9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
-
-POWERLEVEL9K_STATUS_VERBOSE=false
-export DEFAULT_USER="$USER"
-~~~
+* Install the [recommended fonts](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k)
+* Install [Powerlevel10k for your plugin manager](https://github.com/romkatv/powerlevel10k#get-started)
+    - Set `ZSH_THEME="powerlevel10k/powerlevel10k`
+* Copy [`p10k-falkor.zsh`](.p10k.zsh) into `$ZSH/.p10k.zsh`
+* Restart zsh 
 
 See also [the official prompt customization guide](https://github.com/bhilburn/powerlevel9k#prompt-customization) for alternative segments you might wish to integrate.
