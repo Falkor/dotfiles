@@ -80,6 +80,9 @@ export ZSH_CACHE_DIR=$XDG_CACHE_HOME/zsh
 # This works by symlinking ~/.zshenv to ~/.config/zsh/.zshenv (this file).
 export HISTFILE=$ZSH_CACHE_DIR/zhistory
 
+# Bugfix titles in tabs under iTerm2 - see https://gitlab.com/gnachman/iterm2/-/issues/8145
+export DISABLE_AUTO_TITLE="true"
+
 #================================================================
 # [Final] Custom ZSH enviroment variables
 [[ -f $ZDOTDIR/custom.zshenv ]] && source $ZDOTDIR/custom.zshenv
