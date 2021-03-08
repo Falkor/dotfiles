@@ -43,7 +43,7 @@ cask "iterm2"
 cask "sublime-text"
 
 
-mac "Xcode", id: 497799835
+mas "Xcode", id: 497799835
 
 # Special fonts
 cask 'font-source-code-pro-for-powerline'
