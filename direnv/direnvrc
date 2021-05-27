@@ -46,7 +46,7 @@
 use_python() {
     if has pyenv; then
         local pyversion=$1
-        eval "$(pyenv init -)"
+        eval "$(pyenv init --path -)"
         pyenv local ${pyversion} || log_error "Could not find pyenv version '${pyversion}'. Consider running 'pyenv install ${pyversion}'"
     fi
 }
