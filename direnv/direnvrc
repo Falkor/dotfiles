@@ -46,7 +46,8 @@
 use_python() {
     if has pyenv; then
         local pyversion=$1
-        eval "$(pyenv init --path -)"
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
         pyenv local ${pyversion} || log_error "Could not find pyenv version '${pyversion}'. Consider running 'pyenv install ${pyversion}'"
     fi
 }
@@ -94,7 +95,6 @@ layout_virtualenv() {
     else
         log_error "pyenv or python3 venv not found."
     fi
-
 }
 
 # === Activate a virtualenv ===
