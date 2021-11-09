@@ -86,7 +86,7 @@ plugins+=(zsh-syntax-highlighting)
 # plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
 plugins+=(rake gem)                     # Ruby stuff
-plugins+=(pyenv pip)                    # Python stuff
+plugins+=(pip)                    # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
 [[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
