@@ -195,9 +195,18 @@
 [core]
     autocrlf = input
     safecrlf = warn
-    pager = less -FRSX
+    # pager = less -FRSX
+    # Switch to Delta - https://github.com/dandavison/delta
+    pager = delta
     editor = vim
     mergeoptions = --no-edit
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    side-by-side = true
 
 [pull]
     #rebase = false
@@ -214,8 +223,10 @@
 	process = git-lfs filter-process
 	required = true
 [merge]
-	tool = meld
+  tool = meld
+  conflictstyle = diff3
 [diff]
-	guitool = meld
+  guitool = meld
+  colorMoved = default
 [init]
 	defaultBranch = devel
