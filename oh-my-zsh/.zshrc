@@ -89,7 +89,7 @@ plugins+=(rake gem)                     # Ruby stuff
 plugins+=(pip)                    # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
-[[ "$(uname)" == "Darwin" ]] && plugins+=(osx)        # Mac OS
+[[ "$(uname)" == "Darwin" ]] && plugins+=(macos)        # Mac OS
 # Misc
 plugins+=(cp marked2 taskwarrior)
 #__________________
