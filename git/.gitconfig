@@ -206,7 +206,7 @@
 
 [delta]
     navigate = true  # use n and N to move between diff sections
-    side-by-side = true
+    #side-by-side = true
 
 [pull]
     #rebase = false
