@@ -197,10 +197,13 @@ execute() {
 ##
 really_continue() {
     [ -n "${FORCE}" ] && return || true
-    echo -e -n "[${COLOR_VIOLET}WARNING${COLOR_BACK}] $1 Are you sure you want to continue? [Y|n] "
-    read ans
+    warning "$1 Are you sure you want to continue? [Y|n] "
+    read -n 1 ans
+    [ ${#ans} -eq 0 ] && ans="Y";
     case $ans in
-        n*|N*) exit 1;;
+        n|N) verbose "Stopping as requested." &&  exit 1;;
+        y|Y) verbose "Continuing as requested." && return || true;;
+        *)   warning "Your answer '${ans}' was not understood. Let us try again." && really_continue "$1";;
     esac
 }
 
