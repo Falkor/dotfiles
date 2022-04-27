@@ -141,6 +141,11 @@ autoload -U compinit && compinit
 if [ -d "$HOME/bin" ]; then
   export PATH="$PATH:$HOME/bin"
 fi
+if [ -d "$HOME/Library/Python/3.9/bin" ]; then
+  export PATH="$PATH:$HOME/Library/Python/3.9/bin"
+fi
+
+
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
