@@ -591,7 +591,7 @@ __emacs(){
   [ -z "${WITH_EMACS}" ] && return
   info "${ACTION} Falkor's Emacs configuration"
   warning "For performance reason, make this installation independently following instructions on"
-  warning "    https://github.com/Falkor/emacs-config2 "
+  warning "    https://github.com/Falkor/spacemacs "
   # add_or_remove_link   $INSTALL_DIR/emacs     ~/.emacs.d
   # add_or_remove_link   ~/.emacs.d/.emacs   ~/.emacs
 }
