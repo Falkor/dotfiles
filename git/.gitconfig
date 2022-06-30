@@ -229,4 +229,4 @@
   guitool = meld
   colorMoved = default
 [init]
-	defaultBranch = devel
+	defaultBranch = master
