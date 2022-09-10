@@ -313,16 +313,16 @@ endif
 
 "}}}
 
-if neobundle#tap('UltiSnips') "{{{
-	let g:UltiSnipsExpandTrigger="<tab>"
-	let g:UltiSnipsJumpForwardTrigger="<tab>"
-	let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-	let g:UltiSnipsEditSplit="vertical"
-
-	call neobundle#untap()
-endif
-
-"}}}
+"  if neobundle#tap('UltiSnips') "{{{
+"  	let g:UltiSnipsExpandTrigger="<tab>"
+"  	let g:UltiSnipsJumpForwardTrigger="<tab>"
+"  	let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+"  	let g:UltiSnipsEditSplit="vertical"
+"
+"  	call neobundle#untap()
+"  endif
+"
+" "}}}
 
 if neobundle#tap('tagbar') "{{{
 	let g:tagbar_autofocus = 1
