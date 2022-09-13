@@ -89,9 +89,11 @@ plugins+=(rake gem)                     # Ruby stuff
 plugins+=(pip)                    # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
-[[ "$(uname)" == "Darwin" ]] && plugins+=(macos)        # Mac OS
+if [[ "$(uname)" == "Darwin" ]]; then
+  plugins+=(macos marked2)        # Mac OS
+fi
 # Misc
-plugins+=(cp marked2 taskwarrior)
+plugins+=(cp taskwarrior)
 #__________________
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #
@@ -144,8 +146,6 @@ fi
 if [ -d "$HOME/Library/Python/3.9/bin" ]; then
   export PATH="$PATH:$HOME/Library/Python/3.9/bin"
 fi
-
-
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
