@@ -116,6 +116,7 @@ plugins+=(falkor zsh-completions)
 # fi
 
 typeset -U fpath
+fpath=(~/git/github.com/Falkor/falkorlib/completion $fpath)
 
 # Load Oh-my-zsh
 source $ZSH/oh-my-zsh.sh
