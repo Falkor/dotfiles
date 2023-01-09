@@ -1,5 +1,5 @@
 # Wrapper for Advanced-SSH
-# See
+# See https://github.com/moul/assh
 #
 if [ -n "$(which assh)" ]; then
   alias ssh="assh wrapper ssh --"

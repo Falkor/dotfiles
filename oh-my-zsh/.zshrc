@@ -85,8 +85,8 @@ plugins=()
 plugins+=(zsh-syntax-highlighting)
 # plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
-plugins+=(rake gem)                     # Ruby stuff
-plugins+=(pip)                    # Python stuff
+plugins+=(rake gem rvm)         # Ruby stuff
+plugins+=(pip)                  # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -148,9 +148,6 @@ if [ -d "$HOME/Library/Python/3.9/bin" ]; then
   export PATH="$PATH:$HOME/Library/Python/3.9/bin"
 fi
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
 typeset -U PATH path
 
 # Bindkeys - use sudo showkey -a to get sequences
@@ -165,3 +162,7 @@ bindkey "^[[1;2B" end-of-line
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
