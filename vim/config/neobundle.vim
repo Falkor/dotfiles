@@ -20,14 +20,14 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'jiangmiao/auto-pairs'
 NeoBundle 'majutsushi/tagbar'          " displays tags in a window, ordered by scope, require 'brew install ctags-exuberant'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' :  'make -f make_cygwin.mak',
-\     'mac' :     'make -f make_mac.mak',
-\     'unix' :    'make -f make_unix.mak',
-\    },
-\ }
+" NeoBundle 'Shougo/vimproc.vim', {
+" \ 'build' : {
+" \     'windows' : 'tools\\update-dll-mingw',
+" \     'cygwin' :  'make -f make_cygwin.mak',
+" \     'mac' :     'make -f make_mac.mak',
+" \     'unix' :    'make -f make_unix.mak',
+" \    },
+" \ }
 if v:version > 702
   NeoBundle 'Shougo/vimshell.vim'
 endif
