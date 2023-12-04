@@ -71,7 +71,7 @@ export PAGER MANPAGER
 export VISUAL=$EDITOR
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 # ====== ZSH Specific variables =========
 export ZDOTDIR=$XDG_CONFIG_HOME/zsh

@@ -3,6 +3,9 @@
 "---------------------------------------------------------
 
 if neobundle#tap('nerdtree') "{{{
+	nnoremap <leader>n :NERDTreeFocus<CR>
+  nnoremap <leader>t :NERDTreeToggle<CR>
+  " nnoremap <C-f> :NERDTreeFind<CR>
 	" nice arrow
 	let g:NERDTreeDirArrows = 1
 	" not so much cruft
@@ -176,10 +179,13 @@ endif
 
 "}}}
 
+" See https://github.com/preservim/vim-markdown
 if neobundle#tap('vim-markdown') "{{{
 	let g:vim_markdown_initial_foldlevel = 5
 	let g:vim_markdown_frontmatter = 1
 	let g:vim_markdown_conceal = 0
+  let g:vim_markdown_folding_disabled = 1
+  let g:vim_markdown_conceal_code_blocks = 0
 
 	call neobundle#untap()
 endif

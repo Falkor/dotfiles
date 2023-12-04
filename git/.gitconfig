@@ -206,7 +206,7 @@
 
 [delta]
     navigate = true  # use n and N to move between diff sections
-    #side-by-side = true
+    side-by-side = true
 
 [pull]
     #rebase = false
@@ -215,8 +215,6 @@
 [push]
     default = matching
 
-[gpg]
-	program = gpg
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -228,5 +226,3 @@
 [diff]
   guitool = meld
   colorMoved = default
-[init]
-	defaultBranch = master
