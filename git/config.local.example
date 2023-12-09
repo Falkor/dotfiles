@@ -1,0 +1,17 @@
+# ~/.config/git/config.local
+# Local [private] Git configuration
+
+[user]
+    name = "Firsname Lastname"
+    email = "firsname.lastname@domain.org"
+		# signingKey = ~/.ssh/id_ed25519-sk
+		# signingKey = <GPG KEY ID>
+
+# [init]
+# 	defaultBranch = master
+
+# In case you want to use your SSH key for commit signs
+#[gpg]
+#	  format = ssh
+#[gpg "ssh"]
+#	  allowedSignersFile = ~/.ssh/allowed_signers

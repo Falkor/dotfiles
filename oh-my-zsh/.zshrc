@@ -142,7 +142,7 @@ done
 autoload -U compinit && compinit
 
 if [ -d "$HOME/bin" ]; then
-  export PATH="$PATH:$HOME/bin"
+  export PATH="$HOME/bin:$PATH"
 fi
 if [ -d "$HOME/Library/Python/3.9/bin" ]; then
   export PATH="$PATH:$HOME/Library/Python/3.9/bin"
