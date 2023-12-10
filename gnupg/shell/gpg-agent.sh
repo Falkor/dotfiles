@@ -1,0 +1,1 @@
+../../shell/available/gpg-agent.sh

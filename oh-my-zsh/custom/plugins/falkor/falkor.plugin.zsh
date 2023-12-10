@@ -353,6 +353,24 @@ iterm_tab()    { set_iterm_name 1 $@; }
 title()        { iterm_both $@;       }
 iterm_window() { set_iterm_name 2 $@; }
 
+# GPG management
+gpg-update-tty() {
+  export GPG_TTY=$(tty)
+  gpg-connect-agent "updatestartuptty" /bye >/dev/null
+}
+
+# -------------------
+# Yubikey management
+# -------------------
+# https://github.com/drduh/YubiKey-Guide#switching-between-two-or-more-yubikeys
+yubi-switch() {
+  echo '=> switch Yubikey'
+  gpg-connect-agent "scd serialno" "learn --force" /bye
+  echo '=> reset GPG_TTY'
+  export GPG_TTY=$(tty)
+  echo '=> force pinentry reset'
+  gpg-connect-agent "updatestartuptty" /bye >/dev/null
+}
 
 # ---------------
 # ZSH management
