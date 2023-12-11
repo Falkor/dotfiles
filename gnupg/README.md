@@ -415,11 +415,9 @@ gpg --armor --detach-sign <file>  # Generate signature file <file>.asc
 * Linux / Mac OS: `~/.gnupg/`
 * Windows:   `C:\\Documents and Settings\<LOGIN>\Application Data\gnupg\`
 
-## Keyring (Linux)
+More genrally, you can manage your secret data with a [system keyring](https://dev.to/setevoy/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-4kgd), i.e. [Kwallet](https://utils.kde.org/projects/kwalletmanager/) or [`gnome-keyring`](https://wiki.gnome.org/Projects/GnomeKeyring) etc. 
 
-Eventually: you can configure your favorite [keyring (understand differences between the concepts)](https://dev.to/setevoy/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-4kgd), i.e. [Kwallet](https://utils.kde.org/projects/kwalletmanager/) or [`gnome-keyring`](https://wiki.gnome.org/Projects/GnomeKeyring) etc. 
-
-For instance, to install `gnome-keyring` (even on KDE Plasma as it's way better supported than Kwallet -- see [blog](https://www.jwillikers.com/gnome-keyring-in-kde-plasma))
+For instance, to install `gnome-keyring` (on Debian systems (even when relying on KDE Plasma as it's way better supported than Kwallet -- see [blog](https://www.jwillikers.com/gnome-keyring-in-kde-plasma))
 
 ```bash
 $ sudo apt install gnome-keyring seahorse
@@ -428,7 +426,6 @@ $ sudo apt install gnome-keyring seahorse
 cp /etc/xdg/autostart/{gnome-keyring-secrets.desktop,gnome-keyring-ssh.desktop} ~/.config/autostart/
 sed -i '/^OnlyShowIn.*$/d' ~/.config/autostart/gnome-keyring-secrets.desktop
 sed -i '/^OnlyShowIn.*$/d' ~/.config/autostart/gnome-keyring-ssh.desktop
-
 ```
 
 ## Using GPG within git
@@ -706,7 +703,7 @@ $ pass git push                    # Push your changes
 _Notes_: Git commit is done automatically by the `pass` utility.
 If you need to add comments in addition to the password, use the `-m` option to insert extra lines.
 
-### Extra `pass` Utiliti Using GPG within es / commodities
+### Extra `pass` Utilities / commodities
 
 * Zsh/Bash completions: <http://git.zx2c4.com/password-store/tree/contrib>
 * Env sourcing (in your .zshrc):

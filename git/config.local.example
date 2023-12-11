@@ -4,14 +4,22 @@
 [user]
     name = "Firsname Lastname"
     email = "firsname.lastname@domain.org"
-		# signingKey = ~/.ssh/id_ed25519-sk
-		# signingKey = <GPG KEY ID>
+    # signingKey = <GPG KEY ID>
+    # signingKey = ~/.ssh/id_ed25519-sk
+
+### In case you want to use your SSH key for commit signs
+#[gpg]
+#   format = ssh
+#[gpg "ssh"]
+#   allowedSignersFile = ~/.ssh/allowed_signers
+
+
+### uncomment to automatically sign each commit/tag
+# [commit]
+#     gpgsign = true
+# [tag]
+#     gpgsign = true
+
 
 # [init]
-# 	defaultBranch = master
-
-# In case you want to use your SSH key for commit signs
-#[gpg]
-#	  format = ssh
-#[gpg "ssh"]
-#	  allowedSignersFile = ~/.ssh/allowed_signers
+#   defaultBranch = master
