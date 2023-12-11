@@ -14,7 +14,9 @@
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/PGP_diagram.svg/575px-PGP_diagram.svg.png)
 
-## Installation 
+[TOC]
+
+## Installation
 
 Apart from the below (preferred) solutions per OS, a cross-platform approach relies on Thunderbird and the [Enigmail](https://enigmail.wiki/) extension.
 
@@ -317,7 +319,7 @@ ssb   rsa4096/0x68E5153F63FA7B79 <date> [A] [expires: <date>]   # <-- Subkey we'
 Normally the `sshcontrol` file was already populated. othewise create it as follows: 
 
 ```bash
-# /!\ ADAPT Keygrip accordingly
+# /!\ ADAPT Keygrip accordingly - pay attention (again) to select your 'A' subkey 
 echo "<keygrip-subkey-A>" > ~/.gnupg/sshcontrol
 ```
 
@@ -436,13 +438,19 @@ sed -i '/^OnlyShowIn.*$/d' ~/.config/autostart/gnome-keyring-ssh.desktop
     - GPG sign commit with `-S`: `git commit -s -S [...]`
     - tag sign: `git tag -s <name>`
 * Assumes that you have configured git with your GPG signing key ID (typically into `~/.config/git/config.local`). 
-    Example below -- see also [my personal configuration](https://github.com/Falkor/dotfiles/tree/master/git)
+    Example below -- see also [my personal configuration](https://github.com/Falkor/dotfiles/blob/master/git/config.local.example)
 
 ~~~ini
 [user]
     name = Firstname Lastname
     email = firstname.lastname@domain.com
-    signingkey = 0x<GPG-Key-ID
+    signingkey = 0x<GPG-Key-ID>
+
+[commit]
+	gpgsign = true
+
+[tag]
+	gpgsign = true
 ~~~
 
 ## (old notes) Using GPG within Keybase.io
