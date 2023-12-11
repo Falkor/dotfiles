@@ -1,0 +1,242 @@
+#! /bin/bash
+# Time-stamp: <Sat 2023-12-09 13:17 svarrette>
+############################################################################################
+#    ____ ____   ____   _  __             ____                           _   _
+#   / ___|  _ \ / ___| | |/ /___ _   _   / ___| ___ _ __   ___ _ __ __ _| |_(_) ___  _ __
+#  | |  _| |_) | |  _  | ' // _ \ | | | | |  _ / _ \ '_ \ / _ \ '__/ _` | __| |/ _ \| '_ \ .
+#  | |_| |  __/| |_| | | . \  __/ |_| | | |_| |  __/ | | |  __/ | | (_| | |_| | (_) | | | |
+#   \____|_|    \____| |_|\_\___|\__, |  \____|\___|_| |_|\___|_|  \__,_|\__|_|\___/|_| |_|
+#                                |___/
+#
+#                       copyright (c) S. Varrette
+#
+# Creates a new GPG keypair following recommended [ULHPC]/LAM best practices
+#
+# Usage: see generate-gpg-key -h
+############################################################################################
+# set -o errexit -o pipefail  # FIXME breaks script at subkey_entry
+
+# cosmetics
+COLOR_BOLD="\033[1m"
+COLOR_VIOLET="\033[0;35m"
+COLOR_RESET="\033[0m"
+
+# Local variables
+# SCRIPTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#TOP_DIR="$(  cd "$( dirname "${BASH_SOURCE[0]}" )" && git rev-parse --show-toplevel)"
+CMD_PREFIX=
+# OPTS=
+
+GIT_AUTHOR_NAME="$(git config --get user.name)"
+GIT_AUTHOR_EMAIL="$(git config --get user.email)"
+
+# Default GPG algo
+GPG_ALGO=rsa4096
+
+################################################################################
+info()    { echo -e "${COLOR_BOLD}$*${COLOR_RESET}"; }
+error()   { echo -e "${COLOR_BOLD}*** ERROR *** $*${COLOR_RESET}"; }
+warning() { echo -e "${COLOR_VIOLET}/!\\ WARNING:${COLOR_RESET} $*"; }
+print_error_and_exit() { error "$*"; exit 1; }
+usage() {
+    cat <<EOF
+$(basename "$0"): create a new GPG key pair withing a temporary directory
+following recommended [ULHPC]/LAM best practices, i.e.:
+- A single master key used for certification only (i.e. generating subkeys) (no
+  expiration)
+- A dedicated subkey per usage ('sign', encrypt' and 'auth') (1y expiration)
+- revocation certificates
+- An (armored) backup of all keys
+
+In addition, to prepare for an eventual SSH usage via the GPG subkey with 'A'
+usage, a sshcontrol file is setup (matching the appropriate Keygrip).
+
+/!\\ IMPORTANT: These keys are generated in a batch (unattended) way and assumes
+you have properly set your git configuration to extract your git user name and
+email with the following commands:
+     git config --get user.{name,email}
+
+So ensure this works on your machine.
+At the end, you should get a GPG key pair with the following characteristics:
+
+   $ gpg -K \$(git config --get user.email) --keyid-format 0xlong
+   sec   rsa4096/<KeyID> $(date +%F) [C]    # Master key
+         <Long-KeyID>
+   uid                   [ultimate] <firstname> <name> <email>
+   ssb   rsa4096/<subkey-S-ID> $(date +%F) [S] [expires: <date>]
+   ssb   rsa4096/<subkey-E-ID> $(date +%F) [E] [expires: <date>]
+   ssb   rsa4096/<subkey-A-ID> $(date +%F) [A] [expires: <date>]
+
+USAGE
+  $(basename "$0") [-d /path/to/tmpdir]
+
+OPTIONS:
+  -n --dry-run      Dry run mode: (tries to) echo the commands to be run
+  -a --algo ALGO    Set sub key algorithm (Ex: rsa4086, ed25519). Default: ${GPG_ALGO}.
+                    See supported algorithms with 'gpg --with-colons --list-config curve'
+  -d --dir DIR      Set working directory (Default: random temporary directory)
+
+EXAMPLE
+  $(basename "$0")
+  $(basename "$0") -d ~/.gnupg
+
+You're free afterwards to import the GPG keys to your Yubikeys following for
+instance the following guide:
+           https://github.com/drduh/YubiKey-Guide
+EOF
+}
+
+####
+# ask to continue. exit 1 if the answer is no (actually starts with n|N*)
+##
+really_continue() {
+    echo -e -n "${COLOR_VIOLET}/!\\ WARNING:${COLOR_RESET} Are you sure you want to continue? [Y|n] "
+    read -r ans
+    case $ans in
+        n*|N*) exit 1;;
+    esac
+}
+
+print_current_gpg_key() {
+    info  "=== Current GPG key status ==="
+    ${CMD_PREFIX} gpg -K --keyid-format 0xlong
+}
+
+################################################################################
+# Check for options
+while [ $# -ge 1 ]; do
+    case $1 in
+        -h | --help)    usage; exit 0;;
+        -n | --dry-run) CMD_PREFIX="echo";;
+        -a | --algo)    shift; GPG_ALGO="$1";;
+        -d | --prefix | --*dir)  shift; WORKDIR="$1";;
+        *) # OPTS="$*";
+            break;;
+    esac
+    shift
+done
+
+# Safeguards
+[ -z "$(which gpg)" ] && print_error_and_exit "Unable to find gpg"
+[ -z "${GIT_AUTHOR_NAME}" ]  && print_error_and_exit "Unable to get GIT_AUTHOR_NAME variable (from git config --get user.name)"
+[ -z "${GIT_AUTHOR_EMAIL}" ] && print_error_and_exit "Unable to get GIT_AUTHOR_EMAIL variable (from git config --get user.email)"
+
+
+[ -z "${WORKDIR}" ] && GNUPGHOME="$(mktemp -d)" || GNUPGHOME="${WORKDIR}"
+export GNUPGHOME
+info "Working directory: GNUPGHOME = ${GNUPGHOME}"
+
+### Generating Master key
+MASTER_KEY_BATCH=${GNUPGHOME}/generate-master-key.batch
+
+if [ ! -f "${MASTER_KEY_BATCH}" ]; then
+    info "=> generating batch file for the master key ${MASTER_KEY_BATCH}"
+    cat > "${MASTER_KEY_BATCH}" << EOF
+%echo === Generating your GPG key ===
+%echo -> Generating master key (for certification only)
+Key-Type: RSA
+Key-Length: 4096
+# Key generated is a master key ("certificate")
+Key-Usage: cert
+
+# select a name and email address
+Name-Real:  ${GIT_AUTHOR_NAME}
+Name-Email: ${GIT_AUTHOR_EMAIL}
+
+# Do not set the key to expire
+Expire-Date: 0
+
+# Do a commit here, so that we can later print "done" :-)
+%commit
+%echo done
+EOF
+fi
+
+if [ ! -f "${GNUPGHOME}/pubring.kbx" ]; then
+    info "=> generating master key"
+    ${CMD_PREFIX} gpg --generate-key --batch "${MASTER_KEY_BATCH}"
+fi
+print_current_gpg_key
+
+
+### Generatind dedicated subkeys (one per usage)
+info "=> collecting generated Key ID"
+KEYID=$(gpg --list-options show-only-fpr-mbox --list-secret-keys "${GIT_AUTHOR_EMAIL}" | awk '{print $1}' | head -n1)
+# Alternative way:
+# KEYID=$(gpg --keyid-format long  --with-colons --fingerprint "${GIT_AUTHOR_EMAIL}" | grep pub | cut -d ':' -f 5 | head -n1)
+[ -z "${KEYID}" ] && print_error_and_exit "No KeyID collected... exiting"
+echo "   Master Key ID for ${GIT_AUTHOR_EMAIL}: ${KEYID}"
+
+for type in sign encrypt auth; do
+    subtype=${type:0:1}
+    # echo "   - checking '${type}' subkey (ssb format: '${subtype}')"
+    subkey_entry="$(gpg --keyid-format long  --with-colons -K  "${GIT_AUTHOR_EMAIL}" | grep ssb | cut -d ':' -f 5,12 | grep -E ":${subtype}" | head -n1)"
+    if [ -z "${subkey_entry}" ]; then
+        info "=> Generating subkey for '${type}' usage"
+        ${CMD_PREFIX} gpg --batch --quick-add-key "${KEYID}" "${GPG_ALGO}" "${type}" 1y
+    else
+        echo "   ... found existing ${type} subkey (with ID: $(echo "${subkey_entry}" | cut -d':' -f1))"
+    fi
+done
+print_current_gpg_key
+
+### Backup your GPG keys
+GPG_EXPORT_DIR=${GNUPGHOME}/backup.d/${GIT_AUTHOR_EMAIL}
+GPG_PUBLIC_KEY=${GPG_EXPORT_DIR}/$(whoami).asc
+GPG_PRIVATE_KEY=${GPG_EXPORT_DIR}/private-key-$(whoami).asc
+GPG_PRIVATE_SUBKEY=${GPG_EXPORT_DIR}/private-subkeys-$(whoami).asc
+GPG_TRUSTDB=${GPG_EXPORT_DIR}/trustdb.txt
+GPG_REVOKE=${GNUPGHOME}/openpgp-revocs.d/${KEYID}.rev
+
+${CMD_PREFIX} mkdir -p ${GPG_EXPORT_DIR}
+if [ ! -f "${GPG_PUBLIC_KEY}" ]; then
+    info "=> exports/backup your public key"
+    ${CMD_PREFIX} gpg --armor --export ${KEYID}  > ${GPG_PUBLIC_KEY}
+fi
+if [ ! -f "${GPG_PRIVATE_KEY}" ]; then
+    info "=> exports/backup your **private** master key"
+    ${CMD_PREFIX} gpg --armor --export-secret-keys    ${KEYID} > ${GPG_PRIVATE_KEY}
+    ${CMD_PREFIX} chmod 400 ${GPG_PRIVATE_KEY}
+fi
+if [ ! -f "${GPG_PRIVATE_SUBKEY}" ]; then
+    info "=> exports/backup your **private** subkeys"
+    ${CMD_PREFIX} gpg --armor --export-secret-subkeys ${KEYID} > ${GPG_PRIVATE_SUBKEY}
+    ${CMD_PREFIX} chmod 400 ${GPG_PRIVATE_SUBKEY}
+fi
+if [ -f "${GPG_REVOKE}" ]; then
+    info "=> revocation cerfificate for OpenPGP (master) key ${KEYID}:"
+    echo "   ${GPG_REVOKE}"
+# else
+#     info "=> generating revocation certificate for Key ID ${KEYID}"
+#     ${CMD_PREFIX} gpg --output ${GPG_REVOKE} --gen-revoke ${KEYID}
+#     warning "Better keep the $(basename ${GPG_REVOKE}) certificate file stored (or printed)"
+#     warning "in a (secondary) place that allows retrieval in case the main backup fails."
+fi
+info "=> export GPG's trustDB to a text file"
+${CMD_PREFIX} gpg --export-ownertrust > ${GPG_TRUSTDB}
+
+
+### Prepare SSH usage via the GPG subkey with 'A' usage
+GPG_KEYGRIP_SUBKEY_A=$(gpg -K --keyid-format long --with-keygrip ${GIT_AUTHOR_EMAIL} | grep -A1 '\[A\]' | grep Keygrip | sed 's/.*Keygrip\s*=\s*//')
+GPG_SSHCONTROL=${GNUPGHOME}/sshcontrol
+
+if [ ! -f "${GPG_SSHCONTROL}" ]; then
+    info "=> preparing for (optional) SSH support via the GPG subkey with 'A[uth]' usage"
+    echo "   assumes you specify the key to use in sshcontrol file via its keygrip internal identifier"
+    echo " Current keygrips in use: (gpg -K --with-keygrip [...])"
+    ${CMD_PREFIX} gpg -K --keyid-format long --with-keygrip ${GIT_AUTHOR_EMAIL}
+    info "   selected keygrip (subkey with 'A' usage): '${GPG_KEYGRIP_SUBKEY_A}'"
+    info "=> creating ${GPG_SSHCONTROL}"
+    echo "${GPG_KEYGRIP_SUBKEY_A}" > ${GPG_SSHCONTROL}
+    warning "To get gpg-agent to handle requests from SSH, you still need to:"
+    warning "- add 'enable-ssh-support' into \${GNUPGOME}/gpg-agent.conf"
+    warning "- change the value of the SSH_AUTH_SOCK environment variable in your favorite shell configuration (.bashrc,.zshrc etc.)"
+    warning "    export SSH_AUTH_SOCK=\$(gpgconf --list-dirs agent-ssh-socket)"
+    warning "    gpgconf --launch gpg-agent"
+fi
+
+
+
+warning "To cleanup the working directory (NOT done by default):"
+warning "         rm -rf ${GNUPGHOME}"
+#${CMD_PREFIX} rm -rf ${GNUPGHOME}/*

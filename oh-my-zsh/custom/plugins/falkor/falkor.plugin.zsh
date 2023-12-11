@@ -171,6 +171,12 @@ gm() {
 gma() {
     git commit -s -am "$*"
 }
+gms() {
+    git commit -s -S -m "$*"
+}
+gmas() {
+    git commit -s -S -am "$*"
+}
 alias p='git push'
 alias gp='git push'
 alias gpu='git push'
