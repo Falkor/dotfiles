@@ -522,14 +522,14 @@ __shell(){
   [ -z "${WITH_SHELL}" ] && return
   info "${ACTION} Common Shell configuration ~/.config/shell/"
   setup_configdir 'shell'
-  for n in ${SCRIPTDIR}/shell/available/*.sh; do
-    name=$(basename ${n} .sh)
-    if [[ "${AVAILABLE_DOTFILES}" == *${name}* ]]; then
-      warning "skipping ${name} custom shell setup as it comes bundled separately"
-      continue
-    fi
-    shell_custom_enable "${name}"
-  done
+  # for n in ${SCRIPTDIR}/shell/available/*.sh; do
+  #   name=$(basename ${n} .sh)
+  #   if [[ "${AVAILABLE_DOTFILES}" == *${name}* ]]; then
+  #     warning "skipping ${name} custom shell setup as it comes bundled separately"
+  #     continue
+  #   fi
+  #   shell_custom_enable "${name}"
+  # done
   clean_configdir 'shell'
 }
 ## Install/remove specific dotfiles
@@ -554,7 +554,7 @@ __zsh(){
   # specific Oh-my-zsh config dirs
   local omzsh_dir="${DATADIR}/oh-my-zsh"
   local configdir="${PREFIX}/zsh"
-  
+
   local omzsh_custom_dir="${configdir}/custom"
   local omzsh_custom_theme_dir="${configdir}/themes"
   # falkor's dotfiles config dirs for ZSH
