@@ -14,3 +14,6 @@
 # 	task
 # fi
 
+
+# Created by `pipx` on 2024-06-13 15:40:32
+export PATH="$PATH:/home/svarrette/.local/bin"

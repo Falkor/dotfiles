@@ -86,7 +86,7 @@ plugins+=(zsh-syntax-highlighting)
 # plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
 plugins+=(rake gem rvm)         # Ruby stuff
-plugins+=(pip)                  # Python stuff
+plugins+=(pip poetry)                  # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -166,3 +166,6 @@ bindkey "^[[1;2B" end-of-line
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# Created by `pipx` on 2024-06-13 15:40:32
+export PATH="$PATH:/home/svarrette/.local/bin"

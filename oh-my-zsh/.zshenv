@@ -94,3 +94,7 @@ export PATH
 export TERM="xterm-256color"
 
 # === Now ${ZDOTDIR}/.zshrc will be loaded.... ===
+
+# Begin added by argcomplete
+fpath=( /usr/lib/python3/dist-packages/argcomplete/bash_completion.d "${fpath[@]}" )
+# End added by argcomplete
