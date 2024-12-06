@@ -231,6 +231,11 @@ alias o='open'
 alias of='lsof -nP +c 15 | grep LISTEN'
 alias m='make -j8'
 alias skim='open -a Skim'
+nospace-in-filename(){
+  local f="$*"
+  echo "=> replacing ' ' (space) with '-' in '${f}'"
+  mv $f $(echo $f| tr ' ' '-')
+}
 if [[ -n ${ZSH_VERSION-}  ]]; then
 	zstyle ":completion:*:*:skim:*" file-patterns "*.pdf *(-/)"
   zcompclean() {
