@@ -1,0 +1,60 @@
+#compdef parallel
+###############################################################################
+# -*- mode:sh; -*-
+# Zsh completion for GNU parallel
+#
+# Adapted from https://github.com/cgjosephlee/GNU-parallel-zsh-completion/
+# (completed with my other options)
+###############################################################################
+# Enable this completion file by adding somewhere in your zsh configuration (most
+# probably ~/.zshrc):
+#     fpath=(/path/to/this/dir $fpath)
+#
+# Test modification of this file in live in your shell:
+#
+#  unfunction _parallel && autoload -U _parallel
+#
+
+
+local args
+
+args+=(
+    '(--bar)--bar[Show progress as a progress bar]'
+    '(--bg)--bg[Run command in background]'
+    '(--dry-run)--dry-run[Print the job to run and do nothing]'
+    '(--eta)--eta[Show the estimated number of seconds before finishing]'
+    '(-j --jobs --max-procs -P)'{-j+,--jobs,--max-procs,-P+}'[Run this many jobs in parallel (see manual)]:int:'
+    '(--joblog)--joblog[Logfile for executed jobs]::_files'
+    '(-k --keep-order)'{-k,--keep-order}'[Keep sequence of output same as the order of input]'
+    '(--fg)--fg[Run command in foreground]'
+    '(-C --colsep)'{-C,--colsep}'[Column separator]:regexp:'
+    '(--number-of-cores)--number-of-cores[Print  the  number  of  physical CPU cores and exit]'
+    '(--number-of-threads)--number-of-threads[Print  the  number  of  hyperthreaded  CPU cores and exit]'
+    '(--pipe --spreadstdin)'{--pipe,--spreadstdin}'[Spread input to jobs on stdin]'
+    '(-p --interactive)'{-p,--interactive}'[Prompt the user about whether to run each command line (implies -v)]'
+    '(--plus)--plus[Activate additional replacement strings]'
+    '(--progress)--progress[Show progress of computations]'
+    '(-r --no-run-if-empty)'{-r,--no-run-if-empty}'[Skip if the stdin only contains whitespace]'
+    '(--recstart)--recstart[String used to split at record start]:string:'
+    '(--recend)--recend[String used to split at record end]:string:'
+    '(--resume --resume-failed --retry-failed)'{--resume,--resume-failed,--retry-failed}'[Retry all failed jobs in joblog (see manual)]'
+    '(--retries)--retries[Retry n times]:int:'
+    '(--rpl)--rpl[Use tag as a replacement string for perl expression]:string:'
+    '(--regexp)--regexp[Interpret --recstart and --recend as regular expressions]:string:'
+    '(--semaphore)--semaphore[Work as a counting semaphore (implies --bg)]'
+    '(--tag)--tag[Tag lines with arguments as prefix and TAB (\t)]'
+    '(--tee)--tee[Pipe all data to all jobs]'
+    '(--trim)--trim[Trim white space in input]:string:((
+        n\:\ No\ trim
+        l\:\ Left\ trim
+        r\:\ Right\ trim
+        lr\:\ Both\ trim
+        rl\:\ Both\ trim
+    ))'
+    '(--use-cores-instead-of-threads)--use-cores-instead-of-threads[Use physical cores instead of hyperthreaded cores as parallelism degree]'
+    '(-v --verbose)'{-v,--verbose}'[Print the job to be run on stderr]'
+    '(-):command: _command_names -e'
+    '*::args: _normal'
+    )
+
+_arguments -s $args
