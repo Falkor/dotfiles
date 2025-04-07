@@ -94,6 +94,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
 fi
 # Misc
 plugins+=(cp taskwarrior)
+plugins+=(zsh-ssh)
+
 #__________________
 # - Custom plugins: '$ZSH_CUSTOM/plugins/*' i.e. ~/config./zsh/custom/plugins/
 #

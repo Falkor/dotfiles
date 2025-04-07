@@ -15,6 +15,10 @@ You can find more information on  the way I configured iTerm2 on [my blog](https
 
 ## Pre-requisites
 
+### Dependency packages
+
+Install [fzf](https://github.com/junegunn/fzf)
+
 ### Meslo Nerd Font patched for Powerlevel10k
 
 See [instructions from powerlevel10k](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k): if you are using iTerm2 or Termux, `p10k configure` can install the recommended font for you. Simply answer Yes when asked whether to install Meslo Nerd Font.
@@ -50,7 +54,7 @@ See [`falkor.plugin.zsh`](custom/plugins/falkor/falkor.plugin.zsh) for more deta
 
         $> git clone https://github.com/Falkor/dotfiles.git ~/.config/dotfiles.falkor.d
 
-Now run: 
+Now run:
 
 ``` bash
 $> cd ~/.config/dotfiles.falkor.d
@@ -62,7 +66,7 @@ This will configure the following components:
 
 * `~/.zshenv`
 * `~/.config/zsh`
-* `~/.local/share/oh-my-zsh` (Oh-My-ZSH) 
+* `~/.local/share/oh-my-zsh` (Oh-My-ZSH)
 * `$ZSH_CUSTOM`, pointing to `~/.config/zsh/custom`
 
 
@@ -80,6 +84,13 @@ you can define your own aliases under `~/.oh-my-zsh/custom/private_aliases.zsh` 
 
 Follow also [this guide from Oh-My-ZSH](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization) for more details.
 
+In particular, you can install the following completions:
+
+```bash
+git clone https://github.com/sunlei/zsh-ssh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-ssh
+```
+
+
 ## Note on [Powerlevel10k](https://github.com/romkatv/powerlevel10k) theme configuration
 
 You might wish to reproduce my configuration of [Powerlevel10k](https://github.com/romkatv/powerlevel10k) as depicted in the above screenshot yet without installing my dotfiles.
@@ -88,6 +99,10 @@ You might wish to reproduce my configuration of [Powerlevel10k](https://github.c
 * Install [Powerlevel10k for your plugin manager](https://github.com/romkatv/powerlevel10k#get-started)
     - Set `ZSH_THEME="powerlevel10k/powerlevel10k`
 * Copy [`p10k-falkor.zsh`](.p10k.zsh) into `$ZSH/.p10k.zsh`
-* Restart zsh 
+* Restart zsh
 
 See also [the official prompt customization guide](https://github.com/bhilburn/powerlevel9k#prompt-customization) for alternative segments you might wish to integrate.
+
+
+
+
