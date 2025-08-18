@@ -86,7 +86,7 @@ plugins+=(zsh-syntax-highlighting)
 # plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
 plugins+=(rake gem rvm)         # Ruby stuff
-plugins+=(pip poetry)                  # Python stuff
+plugins+=(pip)                  # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
 plugins+=(kubectl minikube)             # Kubernetes stuff
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -146,8 +146,8 @@ autoload -U compinit && compinit
 if [ -d "$HOME/bin" ]; then
   export PATH="$HOME/bin:$PATH"
 fi
-if [ -d "$HOME/Library/Python/3.9/bin" ]; then
-  export PATH="$PATH:$HOME/Library/Python/3.9/bin"
+if [ -d "/usr/local/bin" ]; then
+  export PATH="/usr/local/bin:$PATH"
 fi
 
 typeset -U PATH path
