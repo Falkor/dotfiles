@@ -48,18 +48,26 @@ See [`falkor.plugin.zsh`](custom/plugins/falkor/falkor.plugin.zsh) for more deta
 * [Install zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
 * [Install Oh-My-ZSH](http://ohmyz.sh/)
 
-        $> sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    ```bash
+    curl -fsSL --skip-existing  -o /tmp/oh-my-zsh-installer.sh \
+        https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    less /tmp/oh-my-zsh-installer.sh # review installer
+    # run it to install into $XDG_DATA_HOME/zsh
+    ZSH=$HOME/.local/share/oh-my-zsh sh /tmp/oh-my-zsh-installer.sh
+    ```
 
 * Clone [Falkor's dotfile](https://github.com/Falkor/dotfile) as suggested, _i.e._
 
-        $> git clone https://github.com/Falkor/dotfiles.git ~/.config/dotfiles.falkor.d
+    ```bash
+    git clone https://github.com/Falkor/dotfiles.git ~/.config/dotfiles.falkor.d
+    ```
 
 Now run:
 
 ``` bash
-$> cd ~/.config/dotfiles.falkor.d
-$> ./install.sh -n --zsh     # DRY_RUN - OR ./install.sh -n --with-zsh
-$> ./install.sh --zsh        # OR ./install.sh --with-zsh
+cd ~/.config/dotfiles.falkor.d
+./install.sh -n --zsh     # DRY_RUN
+./install.sh --zsh        
 ```
 
 This will configure the following components:
@@ -73,8 +81,8 @@ This will configure the following components:
 ## Uninstall
 
 ``` bash
-$> cd ~/.dotfiles.falkor.d
-$> ./install.sh --delete --zsh
+cd ~/.config/dotfiles.falkor.d
+./install.sh --delete --zsh
 ```
 
 
@@ -95,14 +103,33 @@ git clone https://github.com/sunlei/zsh-ssh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/p
 
 You might wish to reproduce my configuration of [Powerlevel10k](https://github.com/romkatv/powerlevel10k) as depicted in the above screenshot yet without installing my dotfiles.
 
-* Install the [recommended fonts](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k)
-* Install [Powerlevel10k for your plugin manager](https://github.com/romkatv/powerlevel10k#get-started)
-    - Set `ZSH_THEME="powerlevel10k/powerlevel10k`
+* Install the [recommended fonts](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k). I prepared a dedicated script to install nerd fonts in another repository so feel free to use it (see [`scripts/font-install`](https://gitlab.com/svarrette-anssi/tutorial-git/-/blob/main/scripts/font-install))
+
+    ```bash
+    wget -nv -P /tmp https://gitlab.com/svarrette-anssi/tutorial-git/-/raw/main/scripts/font-install
+    less /tmp/font-install # review the script 
+    /tmp/font-install -h  # help / usage
+    /tmp/font-install     # dry-run
+    /tmp/font-install  -x # => install FiraCode Meslo SourceCodePro
+    ```
+
+* Configure your favorite Terminal to use the patched Fonts with glyphs you just installed
+    
+    - also install your favorite [color scheme](https://gogh-co.github.io/Gogh/), in my case: DarkSide
+    
+* Install [Powerlevel10k for your plugin manager](https://github.com/romkatv/powerlevel10k#get-started) if not yet done:
+    
+    ```bash
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+    ```
+    
+    - In your zsh configuration, set `ZSH_THEME="powerlevel10k/powerlevel10k`
+    
 * Copy [`p10k-falkor.zsh`](.p10k.zsh) into `$ZSH/.p10k.zsh`
+
 * Restart zsh
 
 See also [the official prompt customization guide](https://github.com/bhilburn/powerlevel9k#prompt-customization) for alternative segments you might wish to integrate.
-
 
 
 
