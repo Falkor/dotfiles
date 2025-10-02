@@ -14,3 +14,6 @@
 [submodule "oh-my-zsh/custom/plugins/zsh-completions"]
 	path = oh-my-zsh/custom/plugins/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
+[submodule "oh-my-zsh/custom/plugins/nix-zsh-completions"]
+	path = oh-my-zsh/custom/plugins/nix-zsh-completions
+	url = https://github.com/nix-community/nix-zsh-completions.git
