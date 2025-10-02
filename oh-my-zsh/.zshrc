@@ -85,6 +85,7 @@ plugins=()
 plugins+=(zsh-syntax-highlighting)
 # plugins+=(git-flow git-extras git-remote-branch)  # Git
 plugins+=(git-flow git-extras)  # Git
+plugins+=(nix-zsh-completions)  # Nix
 plugins+=(rake gem rvm)         # Ruby stuff
 plugins+=(pip)                  # Python stuff
 plugins+=(docker docker-compose)        # Docker stuff
