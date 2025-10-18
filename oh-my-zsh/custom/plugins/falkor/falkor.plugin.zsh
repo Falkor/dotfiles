@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Sun 2017-03-19 11:56 svarrette>
+# Time-stamp: <Sat 2025-10-18 09:52 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -14,7 +14,7 @@
 #                         |_|   |_|\__,_|\__, |_|_| |_|
 #                                       |___/
 #####################################################################################
-# .       Copyright (c) 2016 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+# .       Copyright (c) 2016-2025 Sebastien Varrette <Sebastien.Varrette@gmail.com>
 #
 # Personal Custom plugin for Oh My Zsh, mainly designed to host my favorite
 # aliases and my theme specialization
@@ -42,82 +42,7 @@
 
 #####################################################################################
 
-
-# =========================================
-# ================ Color theme ============
-# =========================================
-# #
-# # Customization of the https://github.com/bhilburn/powerlevel9k
-# #
-# # To use this theme, add 'ZSH_THEME="powerlevel9k/powerlevel9k"' in ~/.zshrc
-# # Font taken from https://github.com/stefano-meschiari/dotemacs/blob/master/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf
-# #
-# # Eventually adapt (in custom.zshrc) the below P9K_MODE to match
-# # your font installation.
-# #P9K_MODE='awesome-patched' # OR 'awesome-fontconfig' or 'flat'
-# P9K_MODE='nerdfont-complete'
-# #P9K_MODE='awesome-patched'
-# # Disable dir/git icons
-# P9K_DIR_HOME_ICON=''
-# P9K_DIR_HOME_SUBFOLDER_ICON=''
-# P9K_DIR_DEFAULT_ICON=''
-#
-# #P9K_APPLE_ICON='\uE26E'
-# #P9K_LINUX_ICON='\uE271'
-# #P9K_RVM_ICON='\uE847 '
-# #P9K_PYENV_ICON='\U1F40D '
-#
-# #P9K_BACKGROUND_JOBS_ICON='\uE82F '
-# DISABLE_AUTO_TITLE="true"
-#
-# P9K_VCS_GIT_ICON=''
-# #P9K_VCS_GIT_GITHUB_ICON=''
-# #P9K_VCS_GIT_BITBUCKET_ICON=''
-# #P9K_VCS_GIT_GITLAB_ICON=''
-# #P9K_VCS_TAG_ICON='\uE817 '
-# P9K_VCS_STAGED_ICON='\u00b1'
-# #P9K_VCS_STASH_ICON='\uE133 '
-# P9K_VCS_UNTRACKED_ICON='\u25CF'
-# P9K_VCS_UNSTAGED_ICON='\u00b1'
-# P9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-# P9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-# #
-# P9K_VCS_MODIFIED_BACKGROUND='yellow'
-# P9K_VCS_UNTRACKED_BACKGROUND='yellow'
-# #P9K_VCS_UNTRACKED_ICON='?'
-# #
-# P9K_PROMPT_ON_NEWLINE=true
-# P9K_PROMPT_ADD_NEWLINE=true
-# #P9K_RPROMPT_ON_NEWLINE=false
-# #P9K_MULTILINE_FIRST_PROMPT_PREFIX_ICON='%F{blue}\u256D\u2500%f'
-# # P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-# #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%{%F{249}%}\u2517%{%F{default}%}❯ "
-# #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570'$'\U2500 ❯ '
-# P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON=$'\u2570❯ '
-#
-# P9K_LEFT_PROMPT_ELEMENTS=(status os_icon context dir vcs virtualenv rbenv rvm docker_machine kubecontext)
-# P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs time)
-#
-# P9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
-#
-# #P9K_SHORTEN_STRATEGY="truncate_middle"
-# P9K_DIR_SHORTEN_LENGTH=3
-# P9K_DIR_SHORTEN_STRATEGY=truncate_folders
-# #
-# #P9K_TIME_FORMAT="%D{%H:%M \uE868  %d.%m.%y}"
-# #P9K_TIME_FORMAT="%D{%H:%M \uF073  %d.%m.%y}"
-# P9K_TIME_FORMAT="%D{%H:%M  %d.%m.%y}"
-# #
-# # #P9K_VCS_MODIFIED_BACKGROUND='orange'
-# P9K_STATUS_VERBOSE=false
 export DEFAULT_USER="$USER"
-
-
-# P9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
-# P9K_RIGHT_PROMPT_ELEMENTS=(status rbenv)
-# P9K_STATUS_VERBOSE=false
-# P9K_SHORTEN_STRATEGY="truncate_middle"
-# P9K_SHORTEN_DIR_LENGTH=3
 
 # ===================================================================
 # ================== Falkor's Command Aliases =======================
@@ -177,6 +102,30 @@ gms() {
 gmas() {
     git commit -s -S -am "$*"
 }
+# Conventional commit helpers -- see https://www.conventionalcommits.org/
+__git-conventional-commit() {
+  local type="$1"
+  local scope="$2"
+  shift 2
+  if [ -z "$*" ]; then
+    echo "${type}: ${scope}"
+  else
+    echo "${type}(${scope}): $*"
+  fi
+}
+feat-gm()     { gm  "$(__git-conventional-commit 'feat'     $*)" }
+feat-gma()		{ gma "$(__git-conventional-commit 'feat'		  $*)" }
+fit-gm()			{ gm	"$(__git-conventional-commit 'fix'			$*)" }
+fit-gma()			{ gma "$(__git-conventional-commit 'fix'			$*)" }
+refactor-gm() { gm  "$(__git-conventional-commit 'refactor' $*)" }
+refactor-gma(){ gma "$(__git-conventional-commit 'refactor' $*)" }
+docs-gm()			{ gm  "$(__git-conventional-commit 'docs'		  $*)" }
+docs-gma()		{ gma "$(__git-conventional-commit 'docs'		  $*)" }
+# perf
+# revert
+# style
+# test
+
 alias p='git push'
 alias gp='git push'
 alias gpu='git push'
@@ -191,19 +140,19 @@ alias s='git status'
 alias gs='git status'
 alias gss='git status --short'
 function gsa() {
-    local url=$1
-    local dir=`basename $url .git`
+  local url=$1
+  local dir=`basename $url .git`
 	[ -d ".submodules" ] && dir=".submodules/$dir"
-    [ $# -eq 2 ] && dir=$2
-    echo "=> adding git submodule from '$url' in '$dir'"
-    git submodule add $url $dir
-    git commit -s -m "Add '$dir' as git submodule from '$url'" .gitmodules $dir
+  [ $# -eq 2 ] && dir=$2
+  echo "=> adding git submodule from '$url' in '$dir'"
+  git submodule add $url $dir
+  git commit -s -m "Add '$dir' as git submodule from '$url'" .gitmodules $dir
 }
 #alias gsa='git submodule add'
 alias gsi='git submodule init'
 alias gsu='git submodule update'
 gsupgrade() {
-    git submodule foreach 'git fetch origin; git checkout $(git rev-parse --abbrev-ref HEAD); git reset --hard origin/$(git rev-parse --abbrev-ref HEAD); git submodule update --recursive; git clean -dfx'
+  git submodule foreach 'git fetch origin; git checkout $(git rev-parse --abbrev-ref HEAD); git reset --hard origin/$(git rev-parse --abbrev-ref HEAD); git submodule update --recursive; git clean -dfx'
 }
 alias u='git pull'
 alias up='git pull'
