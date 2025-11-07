@@ -115,8 +115,8 @@ __git-conventional-commit() {
 }
 feat-gm()     { gm  "$(__git-conventional-commit 'feat'     $*)" }
 feat-gma()		{ gma "$(__git-conventional-commit 'feat'		  $*)" }
-fit-gm()			{ gm	"$(__git-conventional-commit 'fix'			$*)" }
-fit-gma()			{ gma "$(__git-conventional-commit 'fix'			$*)" }
+fix-gm()			{ gm	"$(__git-conventional-commit 'fix'			$*)" }
+fix-gma()			{ gma "$(__git-conventional-commit 'fix'			$*)" }
 refactor-gm() { gm  "$(__git-conventional-commit 'refactor' $*)" }
 refactor-gma(){ gma "$(__git-conventional-commit 'refactor' $*)" }
 docs-gm()			{ gm  "$(__git-conventional-commit 'docs'		  $*)" }
