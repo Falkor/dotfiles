@@ -144,12 +144,17 @@ done
 # Force re-completion
 autoload -U compinit && compinit
 
-if [ -d "$HOME/bin" ]; then
-  export PATH="$HOME/bin:$PATH"
-fi
-if [ -d "/usr/local/bin" ]; then
-  export PATH="/usr/local/bin:$PATH"
-fi
+# /!\ Reverse order (last $d below will be the first PATH entry!)
+for d in \
+  /usr/local/bin \
+  ${HOME}/.rvm/bin \
+  ${HOME}/.local/bin \
+  ${HOME}/bin
+do
+  if [ -d "${d}" ]; then
+   export PATH="${d}:$PATH"
+  fi
+done
 
 typeset -U PATH path
 
@@ -166,9 +171,3 @@ bindkey "^[[1;2B" end-of-line
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# Created by `pipx` on 2024-06-13 15:40:32
-export PATH="$PATH:/home/svarrette/.local/bin"

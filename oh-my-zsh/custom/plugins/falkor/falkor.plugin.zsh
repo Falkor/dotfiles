@@ -287,7 +287,7 @@ man() {
 }
 
 # TaskWarrior
-alias t='task'
+alias t='task list'
 
 # ---------------
 # Emacs business
