@@ -1,0 +1,11 @@
+# RTAgs Server Management
+# https://github.com/Andersbakken/rtags/wiki/Setup#integration-with-systemd-gnu-linux
+# See rtags-rc : default socket location is XDG_RUNTIME_DIR/rdm.socket
+[Unit]
+Description=RTags daemon socket
+
+[Socket]
+ListenStream=%t/rdm.socket
+
+[Install]
+WantedBy=default.target

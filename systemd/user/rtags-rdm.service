@@ -1,0 +1,14 @@
+# RTags Server Daemon
+# https://github.com/Andersbakken/rtags/wiki/Setup#integration-with-systemd-gnu-linux
+#
+[Unit]
+Description=RTags Daemon
+
+Requires=rtags-rdm.socket
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rtags-rdm -v --inactivity-timeout 300 --log-flush
+ExecStartPost=/bin/sh -c "echo +19 > /proc/$MAINPID/autogroup"
+Nice=19
+CPUSchedulingPolicy=idle
