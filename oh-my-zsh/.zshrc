@@ -129,14 +129,14 @@ source $ZSH/oh-my-zsh.sh
 # - common to all shells (from ~/.config/shell/[custom/]*.sh typically)
 # - specific custom to zsh (from ~/.config/zsh/custom/*.zsh
 for d in \
-${ZDOTDIR}/lib \
-${XDG_CONFIG_HOME}/shell \
-${XDG_CONFIG_HOME}/shell/custom \
-${ZDOTDIR}/custom
+  ${ZDOTDIR}/lib \
+  ${XDG_CONFIG_HOME}/shell \
+  ${XDG_CONFIG_HOME}/shell/custom \
+  ${ZDOTDIR}/custom
 do
   if [ -d "${d}" ]; then
     for f in ${d}/*.(sh|zsh)(N); do
-			[[ -r "$f" ]] && source $f
+	[[ -r "$f" ]] && source $f
     done
   fi
 done
@@ -148,6 +148,7 @@ autoload -U compinit && compinit
 for d in \
   /usr/local/bin \
   ${HOME}/.rvm/bin \
+  ${HOME}/.cargo/bin \
   ${HOME}/.local/bin \
   ${HOME}/bin
 do
