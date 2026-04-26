@@ -1,6 +1,6 @@
 # -*- mode: sh; -*-
 #####################################################################################
-# Time-stamp: <Sat 2025-10-18 09:52 svarrette>
+# Time-stamp: <Sun 2026-04-26 16:01 svarrette>
 #   _____     _ _              _        ___  _     __  __       _____    _
 #  |  ___|_ _| | | _____  _ __( )___   / _ \| |__ |  \/  |_   _|__  /___| |__
 #  | |_ / _` | | |/ / _ \| '__|// __| | | | | '_ \| |\/| | | | | / // __| '_ \
@@ -106,12 +106,22 @@ gmas() {
 __git-conventional-commit() {
   local type="$1"
   local scope="$2"
+  local ref=""
   shift 2
-  if [ -z "$*" ]; then
-    echo "${type}: ${scope}"
-  else
-    echo "${type}(${scope}): $*"
+  local body="$*"
+  local msg=""
+  # extract reference when applicable
+  if [[ "${body}" =~ 'ref[s]*:([0-9]+)' ]]; then
+    # ref="\nRefs: ${BASH_REMATCH[1]}" # Does not work ;(
+    ref="\n\nRefs: $(echo "${body}" | sed 's/.*ref[s]*:\([[:digit:]]\+\)/\#\1/' | sed 's/,/, \#/g')"
+    body=$(echo "${body}" | sed 's/ref[s]*:.*$//')
   fi
+  if [ -z "${body}" ]; then
+    msg="${type}: ${scope}${ref}"
+  else
+    msg="${type}(${scope}): ${body}${ref}"
+  fi
+  echo -e "${msg}"
 }
 feat-gm()     { gm  "$(__git-conventional-commit 'feat'     $*)" }
 feat-gma()		{ gma "$(__git-conventional-commit 'feat'		  $*)" }
