@@ -1,0 +1,68 @@
+###############################
+# tio - https://tio.github.io #
+###############################
+#
+# Place file in any of the following locations:
+#  $XDG_CONFIG_HOME/tio/config
+#  $HOME/.config/tio/config
+#  $HOME/.tioconfig
+
+[default]
+  baudrate = 115200
+  databits = 8
+  flow = none
+  stopbits = 1
+  parity = none
+  output-delay = 0
+  output-line-delay = 0
+  auto-connect = direct
+  no-reconnect = false
+  local-echo = false
+  input-mode = normal
+  output-mode = normal
+  timestamp = false
+  log = false
+  log-append = false
+  log-strip = false
+  color = bold
+  rs-485 = false
+  alert = none
+  script-run = always
+  prefix-ctrl-key = t
+
+[usb-devices]
+  pattern = ^usb([0-9]*)
+  device = /dev/ttyUSB%m1
+  color = 14
+
+[bp3]
+  device = /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A10LJJHV-if00-port0
+  baudrate = 115200
+  databits = 8
+  parity = none
+  stopbits = 1
+  color = 2
+  log = true
+
+[tigard]
+  device = /dev/serial/by-id/usb-SecuringHardware.com_Tigard_V1.1_TG1113f1-if00-port0
+  baudrate = 115200
+  databits = 8
+  parity = none
+  stopbits = 1
+  color = 10
+  log = true
+
+[rpi3]
+  device = /dev/serial/by-id/usb-FTDI_TTL232R-3V3_FTGQVXBL-if00-port0
+  no-reconnect = true
+  line-pulse-duration = DTR=200,RTS=150
+  color = 11
+  log-file = rpi3.log
+  log = true
+
+[esp32]
+  device = /dev/serial/by-id/usb-0403_6014-if00-port0
+  script = tio.set{DTR=high,RTS=low}; tio.msleep(100); tio.set{DTR=low,RTS=high}; tio.msleep(100); tio.set{RTS=low}
+  script-run = once
+  color = 12
