@@ -6,6 +6,14 @@ https://github.com/tio/tio
 
 Place the proposed `config` file under `~/.config/tio/`
 
+## Installation 
+
+```bash
+sudo apt install tio 
+mkdir ~/.config/tio
+curl https://raw.githubusercontent.com/Falkor/dotfiles/refs/heads/master/tio/config -o ~/.config/tio/config
+```
+
 ## Usage 
 
 Use [SHIFT] CTRL-t q to quit
